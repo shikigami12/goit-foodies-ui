@@ -2,6 +2,9 @@
 
 A food recipes site built with React - study project.
 
+## Deployed
+![Deploy](https://github.com/shikigami12/goit-foodies-ui/actions/workflows/deploy.yml/badge.svg)
+
 ## Project Information
 
 - **Project Name:** Foodies
@@ -85,3 +88,21 @@ foodies/
 ```
 
 For a detailed explanation of the project structure, see [PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md).
+
+## Deployment
+
+This project is configured for automatic deployment to GitHub Pages. See [DEPLOYMENT.md](DEPLOYMENT.md) for complete deployment instructions.
+
+### Quick Deploy
+
+1. Enable GitHub Pages in repository settings (Source: GitHub Actions)
+2. Push to `main` branch
+3. Your site will be live at: `https://shikigami12.github.io/goit-foodies-ui/`
+
+## Documentation
+
+- [SETUP_COMPLETE.md](SETUP_COMPLETE.md) - Setup summary and next steps
+- [PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md) - Detailed architecture guide
+- [COMPONENT_TEMPLATE.md](COMPONENT_TEMPLATE.md) - Component development patterns
+- [DEVELOPMENT_CHECKLIST.md](DEVELOPMENT_CHECKLIST.md) - Implementation tracker
+- [DEPLOYMENT.md](DEPLOYMENT.md) - Deployment guide
