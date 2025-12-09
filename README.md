@@ -97,7 +97,7 @@ This project is configured for automatic deployment to GitHub Pages. See [DEPLOY
 
 1. Enable GitHub Pages in repository settings (Source: GitHub Actions)
 2. Push to `main` branch
-3. Your site will be live at: `https://shikigami12.github.io/goit-foodies-ui/`
+3. Your site will be live at: `https://foodies.shikigame.me`
 
 ## Documentation
 
