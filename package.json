@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "type": "module",
   "description": "Food recipes site - study project",
+  "author": "Render party",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

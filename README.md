@@ -8,7 +8,7 @@ A food recipes site built with React - study project.
 ## Project Information
 
 - **Project Name:** Foodies
-- **Team Name:** TBD
+- **Team Name:** Render party
 - **Purpose:** Study project for learning React and web development
 
 ## Tech Stack
