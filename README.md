@@ -91,13 +91,13 @@ For a detailed explanation of the project structure, see [PROJECT_STRUCTURE.md](
 
 ## Deployment
 
-This project is configured for automatic deployment to GitHub Pages. See [DEPLOYMENT.md](DEPLOYMENT.md) for complete deployment instructions.
+This project is configured for automatic deployment to GitHub Pages.
 
 ### Quick Deploy
 
 1. Enable GitHub Pages in repository settings (Source: GitHub Actions)
 2. Push to `main` branch
-3. Your site will be live at: `https://foodies.shikigame.me`
+3. Your site will be live at: `https://foodies.shikigami.me`
 
 ## Documentation
 
