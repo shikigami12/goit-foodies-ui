@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none;">
+    <symbol id="icon-home" viewBox="0 0 24 24">
+        <path d="M12 3L2 12h3v9h14v-9h3z" />
+    </symbol>
+
+    <symbol id="icon-user" viewBox="0 0 24 24">
+        <path d="M12 12a5 5 0 100-10 5 5 0 000 10zm0 2c-4 0-7 2-7 4v2h14v-2c0-2-3-4-7-4z" />
+    </symbol>
+</svg>
