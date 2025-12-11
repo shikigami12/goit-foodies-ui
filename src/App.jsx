@@ -3,7 +3,6 @@ import { SharedLayout } from './components/layout/SharedLayout';
 import { HomePage, RecipePage, AddRecipePage, UserPage } from './pages';
 import { PrivateRoute } from './routes';
 import { ROUTES } from './constants';
-import './App.css';
 
 function App() {
   return (
