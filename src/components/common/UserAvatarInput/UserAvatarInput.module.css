@@ -1,0 +1,46 @@
+.wrapper {
+  position: relative;
+  border-radius: 90%;
+  background-color: #bfbebe;
+  width: 80px;
+  height: 80px;
+  margin: 0 auto;
+}
+
+.avatar {
+  height: 100%;
+  width: 100%;
+  border-radius: 90%;
+}
+
+.add-button {
+  position: absolute;
+  bottom: 0px;
+  left: 50%;
+  font-size: 16px;
+  background-color: #050505;
+  transform: translate(-50%, 50%);
+  border-radius: 90%;
+  margin: 0;
+  padding: 0;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  line-height: 0;
+  padding-bottom: 2px; /* TODO: Change "+" string to svg and remove this 2px*/
+  color: white; /* TODO: synch with svg color*/
+  border: none;
+}
+
+.add-button:hover {
+  border: none;
+}
+
+.add-button {
+}
+
+.input {
+  display: none;
+}

@@ -1,0 +1,54 @@
+.card {
+  height: 75px;
+  display: flex;
+  overflow: hidden;
+}
+
+.image-wrapper {
+  border-radius: 15px;
+  width: 75px;
+  min-width: 75px;
+  max-width: 75px;
+  height: 100%;
+  flex: 1;
+  overflow: hidden;
+}
+.description {
+  text-align: left;
+  margin-left: 10px;
+  margin-right: 16px;
+}
+.text-cut-off {
+  overflow: hidden;
+  display: -webkit-box; /* Use the WebKit box model */
+  -webkit-line-clamp: 2; /* Limits the text to 2 lines */
+  -webkit-box-orient: vertical; /* Stacks the content vertically */
+  /* Fallback/standard property (less common support than -webkit) */
+  line-clamp: 2;
+  margin: 0;
+}
+
+.title {
+  composes: text-cut-off;
+  font-weight: 800;
+  font-size: 16px;
+  line-height: 150%;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: #050505;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  composes: text-cut-off;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 143%;
+  letter-spacing: -0.02em;
+  color: #bfbebe;
+  /* max-height: 3rem; */
+}
+
+.buttons {
+  gap: 4px;
+}
