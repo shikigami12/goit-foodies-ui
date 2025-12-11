@@ -8,7 +8,7 @@ export default defineConfig({
         react(),
         tailwindcss(),
     ],
-    base: process.env.VITE_BASE_PATH || '/',
+    base: process.env.GITHUB_ACTIONS ? '/goit-foodies-ui/' : '/',
     build: {
         outDir: 'dist',
         assetsDir: 'assets',
