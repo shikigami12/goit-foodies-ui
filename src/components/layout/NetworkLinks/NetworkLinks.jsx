@@ -6,11 +6,13 @@ export const NetworkLinks = () => {
   ];
 
   return (
-    <ul>
+    <ul className="flex justify-between items-center space-x-4">
       {socialLinks.map((link) => (
-        <li key={link.name}>
+        <li key={link.name} className='border border-borders p-2.5 rounded-full'>
           <a href={link.url} target="_blank" rel="noopener noreferrer">
-            {link.name}
+              <svg className="w-5 h-5">
+                  <use href={`/sprite.svg#${link.name.toLowerCase()}`} />
+              </svg>
           </a>
         </li>
       ))}
