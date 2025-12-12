@@ -78,6 +78,7 @@ foodies/
 │   ├── redux/         # Redux store & slices
 │   ├── routes/        # Route configuration
 │   ├── services/      # API services
+│   ├── models/        # Request/Response type definitions (JSDoc)
 │   ├── hooks/         # Custom hooks
 │   ├── utils/         # Utility functions
 │   ├── constants/     # Constants & config
@@ -98,6 +99,38 @@ This project is configured for automatic deployment to GitHub Pages.
 1. Enable GitHub Pages in repository settings (Source: GitHub Actions)
 2. Push to `main` branch
 3. Your site will be live at: `https://foodies.shikigami.me`
+
+## API Services
+
+The project includes typed API services with JSDoc annotations for IntelliSense support:
+
+```js
+import { authService, recipeService, userService, referenceService } from './services';
+
+// Authentication
+await authService.register({ name, email, password });
+await authService.login({ email, password });
+await authService.logout();
+
+// Recipes
+const { recipes, total, totalPages } = await recipeService.searchRecipes({ page: 1, category: 'uuid' });
+const recipe = await recipeService.getRecipeById('uuid');
+await recipeService.createRecipe({ title, categoryId, areaId, instructions, ingredients, thumb });
+
+// Users
+const profile = await userService.getUserById('uuid');
+await userService.followUser('uuid');
+
+// Reference data
+const categories = await referenceService.getCategories();
+const areas = await referenceService.getAreas();
+const ingredients = await referenceService.getIngredients();
+```
+
+Type definitions are in `src/models/index.js` - import them for autocomplete:
+```js
+/** @param {import('../models').LoginRequest} credentials */
+```
 
 ## Documentation
 
