@@ -1,6 +1,6 @@
 /**
  * Define a list of allowed icon names
- * @typedef {"facebook" | "youtube" | "instagram" | "logo-footer" | "quote" | "burger" | "arrow-up-right" | "chevron-down-1" | "chevron-down" | "eye-off" | "eye" | "upload-photo" | "heart" | "minus" | "plus" | "trash" | "check" | "x"} IconName
+ * @typedef {"facebook" | "youtube" | "instagram" | "logo-footer" | "quote" | "burger" | "arrow-up-right" | "chevron-up" | "chevron-down" | "eye-off" | "eye" | "upload-photo" | "heart" | "minus" | "plus" | "trash" | "check" | "x"} IconName
  */
 
 /**
