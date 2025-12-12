@@ -5,6 +5,7 @@ import { Subtitle } from "../components/common/Subtitle/Subtitle";
 import UserInfo from "../components/common/UserInfo/";
 import UserTabList from "../components/common/UserTabList";
 import styles from "./UserPage.module.css";
+import { Icon } from "../components/common/Icon/Icon";
 
 export const UserPage = () => {
   const isCurrentUser = true; //TODO: need to take from storage
@@ -20,6 +21,7 @@ export const UserPage = () => {
             gastronomic masterpieces with us.
           </Subtitle>
         </div>
+        <Icon name="burger" color="red" />
 
         <div className={styles["left-column"]}>
           <UserInfo />
