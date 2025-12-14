@@ -52,7 +52,7 @@ export const UserBar = ({isDarkTheme = true}) => {
 
             {isOpen && (
                 <div
-                    className="absolute left-0 mt-1 rounded-3xl border border-white/20 bg-black px-8 sm:px-10 py-6 text-white shadow-lg">
+                    className="absolute left-0 mt-1 rounded-3xl border border-white/20 bg-black px-8 sm:px-10 py-6 z-30 text-white shadow-lg">
                     <Link
                         to={ROUTES.USER}
                         className="block text-sm font-semibold uppercase tracking-[0.2em]"

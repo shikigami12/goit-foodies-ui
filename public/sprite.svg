@@ -33,9 +33,6 @@
     <symbol id="icon-chevron-up" viewBox="0 0 32 32">
     <path stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="4" stroke-width="3.2" d="M8 20l8-8 8 8"></path>
     </symbol>
-    <symbol id="icon-chevron-down" viewBox="0 0 32 32">
-    <path stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="4" stroke-width="3.2" d="M8 12l8 8 8-8"></path>
-    </symbol>
     <symbol id="icon-eye-off" viewBox="0 0 32 32">
     <path stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="4" stroke-width="2.88" d="M23.92 23.92c-2.175 1.671-4.923 2.695-7.908 2.747l-0.012 0c-9.334 0-14.667-10.667-14.667-10.667 1.714-3.151 3.978-5.79 6.689-7.877l0.058-0.043M13.2 5.654c0.833-0.203 1.788-0.32 2.771-0.32 0.010 0 0.020 0 0.030 0h-0.002c9.333 0 14.666 10.666 14.666 10.666-0.871 1.616-1.826 3.009-2.91 4.291l0.030-0.036M18.826 18.827c-0.732 0.785-1.771 1.274-2.925 1.274-1.105 0-2.105-0.448-2.828-1.173l-0-0c-0.724-0.724-1.171-1.724-1.171-2.828 0-1.154 0.488-2.193 1.27-2.923l0.002-0.002M1.333 1.333l29.333 29.334"></path>
     </symbol>
@@ -63,10 +60,14 @@
     <path fill="none" stroke="currentColor"  stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="4" stroke-width="6.432" d="M1.786 18.176l9.6 6.4 17.6-19.2"></path>
     </symbol>
 
-    <svg id="icon-x" width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <symbol id="icon-x" width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M21 7L7 21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         <path d="M7 7L21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
+    </symbol>
+    <symbol id="icon-chevron-down" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M4.5 6.75L9 11.25L13.5 6.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+
 
 </defs>
 </svg>

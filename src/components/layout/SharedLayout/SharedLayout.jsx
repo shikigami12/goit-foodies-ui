@@ -4,14 +4,38 @@ import { Footer } from '../Footer/Footer';
 import {TextInput} from "../../common/TextInput/TextInput.jsx";
 import { useState } from "react";
 import {TextArea} from "../../common/TextArea/TextArea.jsx";
+import {SelectField} from "../../common/Select/SelectField.jsx";
 
 export const SharedLayout = () => {
     const [desc, setDesc] = useState("wedwedwedwedwedewdw");
+    const [category, setCategory] = useState("");
     return (
         <div className="min-h-screen flex flex-col bg-gray-50">
             <Header />
 
             <main className="flex-1 p-4">
+
+
+
+                <SelectField
+                    name="category"
+                    value={category}
+                    onChange={(e) => setCategory(e.target.value)}
+                    options={[
+                        { value: "seafood", label: "Seafood" },
+                        { value: "salads", label: "Salads" },
+                        { value: "desserts", label: "Desserts" },
+                    ]}
+                />
+
+                <SelectField
+                    name="category"
+                    value={category}
+                    onChange={(e) => setCategory(e.target.value)}
+                    options={[/* ... */]}
+                    error={!category ? "Select a category" : ""}
+                />
+
                 <TextArea
                     value={desc}
                     onChange={e => setDesc(e.target.value)}
