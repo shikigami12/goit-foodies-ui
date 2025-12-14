@@ -37,7 +37,7 @@ export const SelectField = ({
     };
 
     return (
-        <div className="flex flex-col gap-1 mb-2 relative" ref={wrapperRef}>
+        <div className="flex flex-col gap-1 mb-2 mx-2 relative" ref={wrapperRef}>
             <button
                 type="button"
                 disabled={disabled}
