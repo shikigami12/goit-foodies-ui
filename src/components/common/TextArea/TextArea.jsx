@@ -24,7 +24,7 @@ export const TextArea = ({
     useAutosizeTextArea(ref, value);
 
     return (
-        <div className="flex flex-col gap-1 mb-2">
+        <div className="flex flex-col gap-1 mb-2 mx-2">
             <div className={`border-b ${borderClass}`}>
                 <div className="flex items-start gap-2 py-2">
                     <textarea
