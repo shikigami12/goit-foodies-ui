@@ -1,35 +1,39 @@
-export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api';
+export const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api';
 
 export const API_ENDPOINTS = {
+  // Authentication
   AUTH: {
-    SIGNUP: '/auth/signup',
-    SIGNIN: '/auth/signin',
+    REGISTER: '/auth/register',
+    LOGIN: '/auth/login',
     LOGOUT: '/auth/logout',
     CURRENT: '/auth/current',
   },
-  RECIPES: {
-    ALL: '/recipes',
-    BY_ID: (id) => `/recipes/${id}`,
-    BY_CATEGORY: '/recipes/category',
-    POPULAR: '/recipes/popular',
-    CREATE: '/recipes',
-    DELETE: (id) => `/recipes/${id}`,
-  },
-  CATEGORIES: '/categories',
-  INGREDIENTS: '/ingredients',
-  AREAS: '/areas',
+
+  // Users
   USERS: {
+    CURRENT: '/users/current',
     BY_ID: (id) => `/users/${id}`,
-    RECIPES: (id) => `/users/${id}/recipes`,
-    FAVORITES: (id) => `/users/${id}/favorites`,
+    AVATAR: '/users/avatar',
     FOLLOWERS: (id) => `/users/${id}/followers`,
-    FOLLOWING: (id) => `/users/${id}/following`,
+    FOLLOWING: '/users/following',
     FOLLOW: (id) => `/users/${id}/follow`,
-    UNFOLLOW: (id) => `/users/${id}/unfollow`,
+    UNFOLLOW: (id) => `/users/${id}/follow`,
   },
-  FAVORITES: {
-    ADD: '/favorites',
-    REMOVE: (id) => `/favorites/${id}`,
+
+  // Recipes
+  RECIPES: {
+    BASE: '/recipes',
+    BY_ID: (id) => `/recipes/${id}`,
+    POPULAR: '/recipes/popular',
+    OWN: '/recipes/own',
+    FAVORITES: '/recipes/favorites',
+    FAVORITE: (id) => `/recipes/${id}/favorite`,
   },
+
+  // Reference data
+  CATEGORIES: '/categories',
+  AREAS: '/areas',
+  INGREDIENTS: '/ingredients',
   TESTIMONIALS: '/testimonials',
 };
