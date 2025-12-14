@@ -20,7 +20,7 @@
     <symbol id="icon-quote" viewBox="0 0 32 32">
     <path fill="#e8e8e8" d="M0 29.017v-8.71q0-4.881 1.719-8.997t5.827-8.327l4.968 3.924q-2.388 2.393-3.63 4.498-1.242 2.106-1.624 4.308h6.114v13.304zM18.627 29.017v-8.71q0-4.881 1.719-8.997t5.827-8.327l4.967 3.924q-2.388 2.393-3.63 4.498-1.241 2.106-1.624 4.308h6.114v13.304z"></path>
     </symbol>
-    <svg id="icon-burger" width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg id="icon-burger" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M24.5 11.6665H3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         <path d="M24.5 7H3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         <path d="M24.5 16.3335H3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
