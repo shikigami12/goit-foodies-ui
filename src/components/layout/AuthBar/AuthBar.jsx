@@ -1,20 +1,22 @@
 export const AuthBar = () => {
-  const handleSignIn = () => {
-    // TODO: Open SignInModal
-  };
+    const handleSignIn = () => {};
+    const handleSignUp = () => {};
 
-  const handleSignUp = () => {
-    // TODO: Open SignUpModal
-  };
+    return (
+        <div className="flex items-center rounded-full bg-white overflow-hidden">
+            <button
+                onClick={handleSignIn}
+                className="px-5 py-3 text-black font-semibold uppercase"
+            >
+                Sign in
+            </button>
 
-  return (
-    <div>
-      <button type="button" onClick={handleSignIn}>
-        Sign in
-      </button>
-      <button type="button" onClick={handleSignUp}>
-        Sign up
-      </button>
-    </div>
-  );
+            <button
+                onClick={handleSignUp}
+                className="px-5 py-3 bg-black border border-borders text-white font-semibold uppercase rounded-full"
+            >
+                Sign up
+            </button>
+        </div>
+    );
 };
