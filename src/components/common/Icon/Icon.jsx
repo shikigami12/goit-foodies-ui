@@ -1,3 +1,4 @@
+import styles from './Icon.module.css';
 /**
  * Define a list of allowed icon names
  * @typedef {"facebook" | "youtube" | "instagram" | "logo-footer" | "quote" | "burger" | "arrow-up-right" | "chevron-up" | "chevron-down" | "eye-off" | "eye" | "upload-photo" | "heart" | "minus" | "plus" | "trash" | "check" | "x"} IconName
@@ -10,11 +11,12 @@
  * @param {Object} props
  * @param {IconName} props.name - The unique name of the icon.
  * @param {string} [props.color] - The fill color.
+ * @param {string} [props.stroke] - The stroke color.
  * @param {number|string} [props.size=20] - Size in pixels.
  * @param {string} [props.className=""] - Additional classes.
  * @returns {JSX.Element}
  */
-export const Icon = ({ name, color, size = 20, className = '' }) => {
+export const Icon = ({ name, color, stroke, size = 20, className = '' }) => {
   const symbolId = `/sprite.svg#icon-${name}`;
 
   return (
@@ -23,8 +25,8 @@ export const Icon = ({ name, color, size = 20, className = '' }) => {
       width={size}
       height={size}
       fill={color}
-      className={className}
-      style={{ fill: color || 'currentColor' }}
+      className={styles['icon'] + (className || '')}
+      style={{ fill: color || 'currentColor', stroke: stroke || 'none' }}
     >
       <use href={symbolId} />
     </svg>

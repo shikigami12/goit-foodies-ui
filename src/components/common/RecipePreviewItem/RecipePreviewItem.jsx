@@ -1,6 +1,9 @@
-import { useLocation } from "react-router-dom";
-import styles from "./RecipePreviewItem.module.css";
-import { useState } from "react";
+import { Link, useLocation } from 'react-router-dom';
+import styles from './RecipePreviewItem.module.css';
+import { useState } from 'react';
+import Icon from '../Icon';
+import { ROUTES } from '../../../constants';
+import { useWindowWidth } from '../../../hooks';
 //  {
 //       id: "e14c977f-bfff-511a-a0d1-fba99c157626",
 //       title: "Fennel Dauphinoise",
@@ -32,19 +35,40 @@ import { useState } from "react";
 //     },
 
 export default function RecipePreviewItem({ recipe }) {
+  const windowWidth = useWindowWidth();
+  const iconSize = windowWidth < 768 ? 16 : 18;
+  const onTrashClick = id => {
+    console.log('TODO: Add delete handler, clicked ID: ' + id);
+  };
   return (
-    <div className={styles["card"]}>
+    <div className={styles['card']}>
       {/* Thumb */}
-      <div className={styles["image-wrapper"]}>
+      <div className={styles['image-wrapper']}>
         <img src={recipe.thumb} />
       </div>
       {/* Description */}
-      <div className={styles["description"]}>
-        <p className={styles["title"]}>{recipe.title}</p>
-        <p className={styles["subtitle"]}>{recipe.instructions}</p>
+      <div className={styles['description']}>
+        <p className={styles['title']}>{recipe.title}</p>
+        <p className={styles['subtitle']}>{recipe.instructions}</p>
       </div>
       {/* Buttons */}
-      <div className={styles["buttons"]}></div>
+      <div className={styles['buttons']}>
+        <Link
+          className={styles['button-round']}
+          to={ROUTES.RECIPE.replace(':id', recipe.id)}
+        >
+          <Icon name="arrow-up-right" size={iconSize} />
+        </Link>
+        <button
+          type="button"
+          className={styles['button-round']}
+          onClick={() => {
+            onTrashClick(recipe.id);
+          }}
+        >
+          <Icon name="trash" size={iconSize} />
+        </button>
+      </div>
     </div>
   );
 }

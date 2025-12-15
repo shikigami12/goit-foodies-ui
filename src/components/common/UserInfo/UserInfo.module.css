@@ -16,6 +16,14 @@
   line-height: 133%;
   letter-spacing: -0.02em;
   text-transform: uppercase;
+  text-align: center;
+}
+
+@media screen and (min-width: 768) {
+  .title-H3 {
+    font-size: 20px;
+    line-height: 120%;
+  }
 }
 
 .stats {
@@ -37,6 +45,13 @@
   color: #1a1a1a;
 }
 
+@media screen and (min-width: 768) {
+  .stat-item {
+    font-size: 16px;
+    line-height: 150%;
+  }
+}
+
 .stat-title {
   display: inline-block;
   margin-right: 8px;
@@ -45,4 +60,11 @@
   line-height: 150%;
   letter-spacing: -0.02em;
   color: #bfbebe;
+}
+
+@media screen and (min-width: 768) {
+  .stat-title {
+    font-size: 14px;
+    line-height: 143%;
+  }
 }

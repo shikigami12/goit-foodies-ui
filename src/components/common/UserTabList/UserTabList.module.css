@@ -8,11 +8,29 @@
   line-height: 133%;
   letter-spacing: -0.02em;
   border-bottom: #bfbebe 1px solid;
+  max-width: 100%;
+  overflow-x: scroll;
+  margin-bottom: 32px;
 }
+
+@media screen and (min-width: 768) {
+  .list {
+    gap: 40px;
+    font-size: 20px;
+    line-height: 120%;
+    margin-bottom: 40px;
+  }
+}
+
+.list::-webkit-scrollbar {
+  display: none;
+}
+
 .link {
   padding-bottom: 14px;
   display: inline-block;
   cursor: pointer;
+  white-space: nowrap;
 }
 .link.active {
   color: #050505;

@@ -1,10 +1,17 @@
 .wrapper {
+  --avatar-size: 80px;
   position: relative;
   border-radius: 90%;
   background-color: #bfbebe;
-  width: 80px;
-  height: 80px;
+  width: var(--avatar-size);
+  height: var(--avatar-size);
   margin: 0 auto;
+}
+
+@media screen and (min-width: 768) {
+  .wrapper {
+    --avatar-size: 120px;
+  }
 }
 
 .avatar {
@@ -14,6 +21,7 @@
 }
 
 .add-button {
+  --button-size: 28px;
   position: absolute;
   bottom: 0px;
   left: 50%;
@@ -23,15 +31,20 @@
   border-radius: 90%;
   margin: 0;
   padding: 0;
-  width: 28px;
-  height: 28px;
+  width: var(--button-size);
+  height: var(--button-size);
   display: flex;
   justify-content: center;
   align-items: center;
   line-height: 0;
-  padding-bottom: 2px; /* TODO: Change "+" string to svg and remove this 2px*/
   color: white; /* TODO: synch with svg color*/
   border: none;
+}
+
+@media screen and (min-width: 768) {
+  .add-button {
+    --button-size: 38px;
+  }
 }
 
 .add-button:hover {
