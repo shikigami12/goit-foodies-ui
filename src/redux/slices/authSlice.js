@@ -108,12 +108,12 @@ const authSlice = createSlice({
         state.isAuthenticated = false;
         state.error = null;
       })
-      .addCase(logout.rejected, (state, action) => {
+      .addCase(logout.rejected, (state) => {
         // Clear local auth even if server logout failed
         state.user = null;
         state.token = null;
         state.isAuthenticated = false;
-        state.error = action.payload;
+        state.error = null; // Always clear error on logout
       })
       // CURRENT USER
       .addCase(getCurrentUser.pending, (state) => {

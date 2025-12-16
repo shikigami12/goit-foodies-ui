@@ -22,4 +22,36 @@
 
 html {
     font-family: var(--font-sans);
+    /* Always show scrollbar to prevent layout shifts */
+    overflow-y: scroll;
+}
+
+body {
+    /* Scrollbar width will be set via JavaScript to prevent jumps */
+    margin: 0;
+    padding: 0;
+}
+
+/* Customize scrollbar appearance */
+::-webkit-scrollbar {
+    width: 15px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #BFBEBE;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #9a9999;
+}
+
+/* For Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #BFBEBE transparent;
 }

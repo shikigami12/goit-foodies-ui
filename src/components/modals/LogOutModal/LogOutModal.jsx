@@ -3,18 +3,18 @@ import { Button } from "../../common/Button/Button";
 
 export const LogOutModal = ({ onCancel, onLogOut }) => {
     return (
-        <section className="relative w-[560px] max-w-full px-10 py-20 rounded-[30px] bg-white flex justify-center">
-            <div className="flex flex-col items-center gap-10 w-full max-w-[400px]">
-                <div className="flex flex-col items-center gap-5">
-                    <h2 className="text-[32px] leading-10 font-extrabold tracking-[-0.02em] uppercase text-center text-black">
+        <section className="relative w-[343px] sm:w-[560px] max-w-full px-[30px] py-[60px] sm:px-10 sm:py-20 rounded-[20px] sm:rounded-[30px] bg-white flex justify-center">
+            <div className="flex flex-col items-center gap-8 sm:gap-10 w-full max-w-[283px] sm:max-w-[400px]">
+                <div className="flex flex-col items-center gap-4 sm:gap-5">
+                    <h2 className="text-[28px] sm:text-[32px] leading-8 sm:leading-10 font-extrabold tracking-[-0.02em] uppercase text-center text-black">
                         Are you logging out?
                     </h2>
-                    <p className="text-base leading-6 font-medium tracking-[-0.02em] text-center text-black">
+                    <p className="text-sm sm:text-base leading-5 sm:leading-6 font-medium tracking-[-0.02em] text-center text-borders sm:text-black">
                         You can always log back in at any time.
                     </p>
                 </div>
 
-                <div className="flex flex-col gap-5 w-full">
+                <div className="flex flex-col gap-4 sm:gap-5 w-full">
                     <Button
                         label="Log out"
                         type="button"

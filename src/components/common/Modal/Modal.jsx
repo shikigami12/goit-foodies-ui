@@ -15,21 +15,13 @@ export const Modal = ({ isOpen, onClose, children }) => {
             document.addEventListener("keydown", handleEscape);
             setIsVisible(true);
 
-            // Prevent background scroll without causing layout jump
-            const scrollBarWidth =
-                window.innerWidth - document.documentElement.clientWidth;
+            // Prevent background scroll - padding is already set globally
             const originalOverflow = document.body.style.overflow;
-            const originalPaddingRight = document.body.style.paddingRight;
-
             document.body.style.overflow = "hidden";
-            if (scrollBarWidth > 0) {
-                document.body.style.paddingRight = `${scrollBarWidth}px`;
-            }
 
             return () => {
                 document.removeEventListener("keydown", handleEscape);
                 document.body.style.overflow = originalOverflow || "unset";
-                document.body.style.paddingRight = originalPaddingRight || "";
                 setIsVisible(false);
             };
         }
@@ -50,13 +42,13 @@ export const Modal = ({ isOpen, onClose, children }) => {
 
     return (
         <div
-            className={`fixed inset-0 z-40 flex items-center justify-center bg-black/40 px-4 transition-opacity duration-200 ease-out ${
+            className={`fixed inset-0 z-40 flex items-center justify-center bg-black/40 px-4 sm:px-4 transition-opacity duration-200 ease-out ${
                 isVisible ? "opacity-100" : "opacity-0"
             }`}
             onClick={handleBackdropClick}
         >
             <div
-                className={`relative bg-white rounded-3xl shadow-xl transform transition-transform duration-200 ease-out ${
+                className={`relative bg-white rounded-[20px] sm:rounded-3xl shadow-xl transform transition-transform duration-200 ease-out ${
                     isVisible ? "scale-100" : "scale-95"
                 }`}
                 onClick={(e) => e.stopPropagation()}
@@ -66,7 +58,7 @@ export const Modal = ({ isOpen, onClose, children }) => {
                 <button
                     type="button"
                     onClick={onClose}
-                    className="absolute right-5 top-5 h-8 w-8 flex items-center justify-center text-black rounded-full hover:bg-gray-100 transition-colors z-[100]"
+                    className="absolute right-4 top-4 sm:right-5 sm:top-5 h-6 w-6 sm:h-8 sm:w-8 flex items-center justify-center text-black rounded-full hover:bg-gray-100 transition-colors z-[100]"
                     aria-label="Close modal"
                 >
                     <svg 
