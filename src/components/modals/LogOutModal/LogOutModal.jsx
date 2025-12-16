@@ -1,7 +1,9 @@
 import PropTypes from "prop-types";
+import { useSelector } from "react-redux";
 import { Button } from "../../common/Button/Button";
 
 export const LogOutModal = ({ onCancel, onLogOut }) => {
+    const { isLoading } = useSelector((state) => state.auth);
     return (
         <section className="relative w-[343px] sm:w-[560px] max-w-full px-[30px] py-[60px] sm:px-10 sm:py-20 rounded-[20px] sm:rounded-[30px] bg-white flex justify-center">
             <div className="flex flex-col items-center gap-8 sm:gap-10 w-full max-w-[283px] sm:max-w-[400px]">
@@ -20,6 +22,8 @@ export const LogOutModal = ({ onCancel, onLogOut }) => {
                         type="button"
                         fullWidth
                         onClick={onLogOut}
+                        isLoading={isLoading}
+                        disabled={isLoading}
                     />
 
                     <Button
@@ -28,6 +32,7 @@ export const LogOutModal = ({ onCancel, onLogOut }) => {
                         variant="light"
                         fullWidth
                         onClick={onCancel}
+                        disabled={isLoading}
                     />
                 </div>
             </div>

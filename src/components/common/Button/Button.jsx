@@ -1,4 +1,5 @@
 import PropTypes from "prop-types";
+import Icon from "../Icon";
 
 export const Button = ({
     label,
@@ -59,9 +60,11 @@ export const Button = ({
             ) : (
                 <>
                     {iconId && (
-                        <svg className="w-5 h-5">
-                            <use href={`/sprite.svg#${iconId}`} />
-                        </svg>
+                        <Icon 
+                            name={iconId.replace(/^icon-/, "")} 
+                            size={20}
+                            className="w-5 h-5"
+                        />
                     )}
                     {label && <span>{label}</span>}
                 </>

@@ -5,6 +5,7 @@ import { signup, clearError } from "../../../redux/slices/authSlice";
 import { TextInput } from "../../common/TextInput/TextInput";
 import { Button } from "../../common/Button/Button";
 import { showError, showSuccess } from "../../../utils/notification";
+import { validateSignUp, MAX_NAME_LENGTH, MAX_EMAIL_LENGTH, MAX_PASSWORD_LENGTH, MIN_NAME_LENGTH, MIN_PASSWORD_LENGTH } from "../../../utils/validation";
 
 export const SignUpModal = ({ onSwitchToSignIn, onClose }) => {
     const dispatch = useDispatch();
@@ -41,29 +42,10 @@ export const SignUpModal = ({ onSwitchToSignIn, onClose }) => {
         }
     }, [error, dispatch]);
 
-    const errors = useMemo(() => {
-        const fieldErrors = {};
-
-        if (!name.trim()) {
-            fieldErrors.name = "Name is required";
-        } else if (name.trim().length < 2) {
-            fieldErrors.name = "Name must be at least 2 characters";
-        }
-
-        if (!email.trim()) {
-            fieldErrors.email = "Email is required";
-        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
-            fieldErrors.email = "Enter a valid email address";
-        }
-
-        if (!password) {
-            fieldErrors.password = "Password is required";
-        } else if (password.length < 6) {
-            fieldErrors.password = "Password must be at least 6 characters";
-        }
-
-        return fieldErrors;
-    }, [name, email, password]);
+    const errors = useMemo(
+        () => validateSignUp({ name, email, password }),
+        [name, email, password]
+    );
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -98,7 +80,6 @@ export const SignUpModal = ({ onSwitchToSignIn, onClose }) => {
                             placeholder="Name*"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
-                            maxLength={100}
                             onBlur={() => setTouchedName(true)}
                             error={
                                 (touchedName || submitAttempted) ? errors.name || "" : ""
@@ -112,7 +93,7 @@ export const SignUpModal = ({ onSwitchToSignIn, onClose }) => {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             type="email"
-                            maxLength={100}
+                            maxLength={MAX_EMAIL_LENGTH}
                             onBlur={() => setTouchedEmail(true)}
                             error={
                                 (touchedEmail || submitAttempted) ? errors.email || "" : ""
@@ -126,7 +107,6 @@ export const SignUpModal = ({ onSwitchToSignIn, onClose }) => {
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             type="password"
-                            maxLength={100}
                             onBlur={() => setTouchedPassword(true)}
                             error={
                                 (touchedPassword || submitAttempted)

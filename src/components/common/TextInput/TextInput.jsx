@@ -1,10 +1,12 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
+import Icon from "../Icon";
 
 export const TextInput = ({
     value,
     onChange,
     placeholder = "Enter a description of the dish",
+    minLength,
     maxLength = 200,
     error = "",
     disabled = false,
@@ -34,6 +36,7 @@ export const TextInput = ({
                     value={value}
                     onChange={onChange}
                     onBlur={onBlur}
+                    minLength={minLength}
                     maxLength={maxLength}
                     disabled={disabled}
                     className={`flex-1 bg-transparent outline-none text-sm sm:text-base leading-5 sm:leading-6 tracking-[-0.02em] ${textClass} placeholder:text-borders sm:placeholder:text-dark disabled:text-gray-400 ${isPassword ? "pr-8 sm:pr-10" : ""}`}
@@ -48,18 +51,11 @@ export const TextInput = ({
                         aria-label={showPassword ? "Hide password" : "Show password"}
                         tabIndex={-1}
                     >
-                        <svg
+                        <Icon
+                            name={showPassword ? "eye-off" : "eye"}
+                            size={18}
                             className="w-[18px] h-[18px] sm:w-5 sm:h-5"
-                            viewBox="0 0 20 20"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                        >
-                            {showPassword ? (
-                                <use href="/sprite.svg#icon-eye-off" />
-                            ) : (
-                                <use href="/sprite.svg#icon-eye" />
-                            )}
-                        </svg>
+                        />
                     </button>
                 )}
             </div>
@@ -79,6 +75,7 @@ TextInput.propTypes = {
     value: PropTypes.string,
     onChange: PropTypes.func.isRequired,
     placeholder: PropTypes.string,
+    minLength: PropTypes.number,
     maxLength: PropTypes.number,
     error: PropTypes.string,
     disabled: PropTypes.bool,

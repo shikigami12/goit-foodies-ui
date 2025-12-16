@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
+import Icon from "../Icon";
 
 export const Modal = ({ isOpen, onClose, children }) => {
     const [isVisible, setIsVisible] = useState(false);
@@ -58,20 +59,15 @@ export const Modal = ({ isOpen, onClose, children }) => {
                 <button
                     type="button"
                     onClick={onClose}
-                    className="absolute right-4 top-4 sm:right-5 sm:top-5 h-6 w-6 sm:h-8 sm:w-8 flex items-center justify-center text-black rounded-full hover:bg-gray-100 transition-colors z-[100]"
+                    className="group absolute right-4 top-4 sm:right-5 sm:top-5 h-6 w-6 sm:h-8 sm:w-8 flex items-center justify-center rounded-full transition-colors z-[100]"
                     aria-label="Close modal"
                 >
-                    <svg 
-                        className="h-6 w-6" 
-                        aria-hidden="true" 
-                        width="24" 
-                        height="24" 
-                        viewBox="0 0 28 28"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                    >
-                        <use href="/sprite.svg#icon-x" />
-                    </svg>
+                    <Icon
+                        name="x"
+                        size={24}
+                        color="currentColor"
+                        className="h-6 w-6 sm:h-8 sm:w-8 text-black group-hover:text-gray-500 transition-colors"
+                    />
                 </button>
             </div>
         </div>

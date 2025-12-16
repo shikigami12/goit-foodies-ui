@@ -5,6 +5,7 @@ import { signin, clearError } from "../../../redux/slices/authSlice";
 import { TextInput } from "../../common/TextInput/TextInput";
 import { Button } from "../../common/Button/Button";
 import { showError, showSuccess } from "../../../utils/notification";
+import { validateSignIn, MAX_EMAIL_LENGTH, MAX_PASSWORD_LENGTH, MIN_PASSWORD_LENGTH } from "../../../utils/validation";
 
 export const SignInModal = ({ onSwitchToSignUp, onClose }) => {
     const dispatch = useDispatch();
@@ -39,23 +40,10 @@ export const SignInModal = ({ onSwitchToSignUp, onClose }) => {
         }
     }, [error, dispatch]);
 
-    const errors = useMemo(() => {
-        const fieldErrors = {};
-
-        if (!email.trim()) {
-            fieldErrors.email = "Email is required";
-        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
-            fieldErrors.email = "Enter a valid email address";
-        }
-
-        if (!password) {
-            fieldErrors.password = "Password is required";
-        } else if (password.length < 6) {
-            fieldErrors.password = "Password must be at least 6 characters";
-        }
-
-        return fieldErrors;
-    }, [email, password]);
+    const errors = useMemo(
+        () => validateSignIn({ email, password }),
+        [email, password]
+    );
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -92,7 +80,7 @@ export const SignInModal = ({ onSwitchToSignUp, onClose }) => {
                             onChange={(e) => setEmail(e.target.value)}
                             onBlur={() => setTouchedEmail(true)}
                             type="email"
-                            maxLength={100}
+                            maxLength={MAX_EMAIL_LENGTH}
                             error={
                                 (touchedEmail || submitAttempted) ? errors.email || "" : ""
                             }
@@ -106,7 +94,6 @@ export const SignInModal = ({ onSwitchToSignUp, onClose }) => {
                             onChange={(e) => setPassword(e.target.value)}
                             onBlur={() => setTouchedPassword(true)}
                             type="password"
-                            maxLength={100}
                             error={
                                 (touchedPassword || submitAttempted)
                                     ? errors.password || ""

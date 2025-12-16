@@ -40,6 +40,16 @@ export const Header = ({ isDarkTheme = false }) => {
         }
     }, [dispatch, isAuthenticated]);
 
+    const handleSwitchToSignUp = () => {
+        closeSignInModal();
+        openSignUpModal();
+    };
+
+    const handleSwitchToSignIn = () => {
+        closeSignUpModal();
+        openSignInModal();
+    };
+
     const handleLogout = async () => {
         await dispatch(logout());
         closeLogoutModal();
@@ -60,9 +70,6 @@ export const Header = ({ isDarkTheme = false }) => {
                                     ? "opacity-100 translate-x-0 scale-100"
                                     : "opacity-0 translate-x-8 scale-95 absolute inset-0 pointer-events-none"
                             }`}
-                            style={{
-                                transition: "opacity 0.5s ease-in-out, transform 0.5s ease-in-out",
-                            }}
                         >
                             {isAuthenticated && (
                                 <UserBar
@@ -78,9 +85,6 @@ export const Header = ({ isDarkTheme = false }) => {
                                     ? "opacity-100 translate-x-0 scale-100"
                                     : "opacity-0 -translate-x-8 scale-95 absolute inset-0 pointer-events-none"
                             }`}
-                            style={{
-                                transition: "opacity 0.5s ease-in-out, transform 0.5s ease-in-out",
-                            }}
                         >
                             {!isAuthenticated && (
                                 <AuthBar
@@ -95,20 +99,14 @@ export const Header = ({ isDarkTheme = false }) => {
 
             <Modal isOpen={isSignInOpen} onClose={closeSignInModal}>
                 <SignInModal
-                    onSwitchToSignUp={() => {
-                        closeSignInModal();
-                        openSignUpModal();
-                    }}
+                    onSwitchToSignUp={handleSwitchToSignUp}
                     onClose={closeSignInModal}
                 />
             </Modal>
 
             <Modal isOpen={isSignUpOpen} onClose={closeSignUpModal}>
                 <SignUpModal
-                    onSwitchToSignIn={() => {
-                        closeSignUpModal();
-                        openSignInModal();
-                    }}
+                    onSwitchToSignIn={handleSwitchToSignIn}
                     onClose={closeSignUpModal}
                 />
             </Modal>

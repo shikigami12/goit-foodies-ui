@@ -9,22 +9,30 @@
  * @component
  * @param {Object} props
  * @param {IconName} props.name - The unique name of the icon.
- * @param {string} [props.color] - The fill color.
+ * @param {string} [props.color] - The fill or stroke color.
  * @param {number|string} [props.size=20] - Size in pixels.
  * @param {string} [props.className=""] - Additional classes.
+ * @param {string} [props.stroke] - Stroke color (for stroke-based icons).
  * @returns {JSX.Element}
  */
-export const Icon = ({ name, color, size = 20, className = '' }) => {
+export const Icon = ({ name, color, size = 20, className = '', stroke }) => {
   const symbolId = `/sprite.svg#icon-${name}`;
+  const isStrokeIcon = stroke !== undefined || name === 'arrow-up-right';
+  const strokeColor = stroke || color || 'currentColor';
+  const fillColor = color || 'currentColor';
 
   return (
     <svg
       aria-hidden="true"
       width={size}
       height={size}
-      fill={color}
+      fill={isStrokeIcon ? 'none' : fillColor}
+      stroke={isStrokeIcon ? strokeColor : undefined}
       className={className}
-      style={{ fill: color || 'currentColor' }}
+      style={{
+        fill: isStrokeIcon ? 'none' : (fillColor || 'currentColor'),
+        stroke: isStrokeIcon ? (strokeColor || 'currentColor') : undefined,
+      }}
     >
       <use href={symbolId} />
     </svg>
