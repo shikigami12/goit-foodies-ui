@@ -1,3 +1,5 @@
+import { Categories } from "../components/layout/Categories";
+
 export const HomePage = () => {
   return (
     <div>
@@ -7,6 +9,7 @@ export const HomePage = () => {
         </button>
 
         {/* TODO: Add Hero, Categories, Recipes, Testimonials */}
+        <Categories />
     </div>
   );
 };
