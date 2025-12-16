@@ -3,7 +3,8 @@ import { API_ENDPOINTS } from '../constants';
 import '../models';
 
 /**
- * Register a new user
+ * Register a new user.
+ * Handles token persistence when backend returns a JWT.
  * @param {import('../models').RegisterRequest} userData
  * @returns {Promise<import('../models').AuthResponse>}
  */
@@ -16,7 +17,8 @@ const register = async (userData) => {
 };
 
 /**
- * Login with email and password
+ * Login with email and password.
+ * Handles token persistence when backend returns a JWT.
  * @param {import('../models').LoginRequest} credentials
  * @returns {Promise<import('../models').AuthResponse>}
  */
@@ -29,7 +31,8 @@ const login = async (credentials) => {
 };
 
 /**
- * Logout current user
+ * Logout current user.
+ * Always clears the local token after a successful API call.
  * @returns {Promise<void>}
  */
 const logout = async () => {
@@ -38,7 +41,7 @@ const logout = async () => {
 };
 
 /**
- * Get current authenticated user
+ * Get current authenticated user.
  * @returns {Promise<import('../models').UserResponse>}
  */
 const getCurrentUser = async () => {

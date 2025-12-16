@@ -1,6 +1,13 @@
-export const AuthBar = () => {
-    const handleSignIn = () => {};
-    const handleSignUp = () => {};
+import PropTypes from "prop-types";
+
+export const AuthBar = ({ onSignInClick, onSignUpClick }) => {
+    const handleSignIn = () => {
+        if (onSignInClick) onSignInClick();
+    };
+
+    const handleSignUp = () => {
+        if (onSignUpClick) onSignUpClick();
+    };
 
     return (
         <div className="flex items-center rounded-full bg-white overflow-hidden">
@@ -19,4 +26,9 @@ export const AuthBar = () => {
             </button>
         </div>
     );
+};
+
+AuthBar.propTypes = {
+    onSignInClick: PropTypes.func,
+    onSignUpClick: PropTypes.func,
 };

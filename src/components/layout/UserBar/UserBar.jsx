@@ -1,12 +1,12 @@
-import {useState} from "react";
-import {Link} from "react-router-dom";
-import {ROUTES} from "../../../constants";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { ROUTES } from "../../../constants";
 import PropTypes from "prop-types";
-import {BurgerMenu} from "../BurgerMenu/index.js";
+import { BurgerMenu } from "../BurgerMenu/index.js";
 
-export const UserBar = ({isDarkTheme = true}) => {
+export const UserBar = ({ isDarkTheme = true, user, onLogoutClick }) => {
     const [isOpen, setIsOpen] = useState(false);
-    const user = {name: "VICTORIA", avatar: null};
+    const currentUser = user || { name: "VICTORIA", avatar: null };
 
     const toggle = () => setIsOpen((prev) => !prev);
     const BASE_AUTH_CLASS = 'flex items-center gap-1 sm:gap-3 rounded-full bg-black px-4 py-2 text-white cursor-pointer';
@@ -21,12 +21,12 @@ export const UserBar = ({isDarkTheme = true}) => {
                     className={`${BASE_AUTH_CLASS} ${themeClass}`}
                 >
                     <img
-                        src={user.avatar || "/default-avatar.png"}
-                        alt={user.name}
+                        src={currentUser.avatar || "/default-avatar.png"}
+                        alt={currentUser.name}
                         className="w-6 h-6 sm:h-10 sm:w-10 rounded-full object-cover"
                     />
                     <span className="text-xs sm:text-sm font-semibold uppercase tracking-[0.15em]">
-                  {user.name}
+                  {currentUser.name}
                 </span>
                     <svg
                         className={`h-3 w-3 transition-transform ${
@@ -63,6 +63,12 @@ export const UserBar = ({isDarkTheme = true}) => {
                     <button
                         type="button"
                         className="mt-4 flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.2em]"
+                        onClick={() => {
+                            setIsOpen(false);
+                            if (onLogoutClick) {
+                                onLogoutClick();
+                            }
+                        }}
                     >
                         <span>LOG OUT</span>
                         <span aria-hidden="true">↗</span>
@@ -74,4 +80,9 @@ export const UserBar = ({isDarkTheme = true}) => {
 };
 UserBar.propTypes = {
     isDarkTheme: PropTypes.bool,
+    user: PropTypes.shape({
+        name: PropTypes.string,
+        avatar: PropTypes.string,
+    }),
+    onLogoutClick: PropTypes.func,
 };
