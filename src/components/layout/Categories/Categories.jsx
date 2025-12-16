@@ -1,24 +1,13 @@
-import { useEffect, useState } from "react";
 import { CategoryList } from "../CategoryList";
-import { categoriesService } from "../../../services";
+import { MainTitle } from "../../common/MainTitle/MainTitle";
+import { Subtitle } from "../../common/Subtitle/Subtitle";
 
-export const Categories = () => {
-  const [categories, setCategories] = useState([]);
-  
-  useEffect(() => {
-    // Fetch categories from the service when the component mounts
-    const fetchCategories = async () => {
-      // Placeholder for actual service call
-      const categories = await categoriesService.getCategories();
-      setCategories(categories);
-    };
-
-    fetchCategories();
-  }, []);
-
+export const Categories = ({ meta, categories }) => {
   return (
-    <div>
-      <CategoryList categories={categories} />
-    </div>
+    <section>
+      {meta.title && <MainTitle>{meta.title}</MainTitle>}
+      {meta.text && <Subtitle>{meta.text}</Subtitle>}
+      {categories.length > 0 && <CategoryList categories={categories} />}
+    </section>
   );
 };
