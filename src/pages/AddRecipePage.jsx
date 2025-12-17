@@ -1,251 +1,42 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-
 import { Button } from "../components/common/Button/Button";
 import { SelectField } from "../components/common/Select/SelectField";
 import { TextInput } from "../components/common/TextInput/TextInput";
 import { TextArea } from "../components/common/TextArea/TextArea";
-
-import { referenceService } from "../services/referenceService";
-import { recipeService } from "../services/recipeService";
+import { useAddRecipe } from "./AddRecipePage.useAddRecipe";
 
 export const AddRecipePage = () => {
-  const fileInputRef = useRef(null);
+  const {
+    fileInputRef,
+    isDragging,
+    isSubmitting,
+    isLoadingRefs,
+    refsError,
+    submitError,
+    thumb,
+    previewUrl,
+    form,
+    ingredientDraft,
+    ingredients,
 
-  const [isDragging, setIsDragging] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+    categoryOptions,
+    areaOptions,
+    ingredientOptions,
 
-  const [isLoadingRefs, setIsLoadingRefs] = useState(true);
-  const [refsError, setRefsError] = useState("");
-  const [submitError, setSubmitError] = useState("");
-
-  const [categories, setCategories] = useState([]);
-  const [areas, setAreas] = useState([]);
-  const [ingredientsRef, setIngredientsRef] = useState([]);
-
-  const [thumb, setThumb] = useState(null); // File | null
-
-  const [form, setForm] = useState({
-    title: "",
-    categoryId: "",
-    areaId: "",
-    instructions: "",
-    cookingTimeMin: 10,
-  });
-
-  const [ingredientDraft, setIngredientDraft] = useState({
-    ingredientId: "",
-    measure: "",
-  });
-
-  // list for UI; on submit we stringify to `ingredients` field
-  const [ingredients, setIngredients] = useState([]); // { ingredientId, label, measure }
-
-  // -------- Load reference data --------
-  useEffect(() => {
-    let alive = true;
-
-    const loadRefs = async () => {
-      setIsLoadingRefs(true);
-      setRefsError("");
-
-      try {
-        const [cats, ars, ings] = await Promise.all([
-          referenceService.getCategories(),
-          referenceService.getAreas(),
-          referenceService.getIngredients(),
-        ]);
-
-        if (!alive) return;
-
-        setCategories(Array.isArray(cats) ? cats : []);
-        setAreas(Array.isArray(ars) ? ars : []);
-        setIngredientsRef(Array.isArray(ings) ? ings : []);
-      } catch (e) {
-        if (!alive) return;
-        setRefsError(e instanceof Error ? e.message : "Failed to load reference data");
-      } finally {
-        if (!alive) return;
-        setIsLoadingRefs(false);
-      }
-    };
-
-    loadRefs();
-    return () => {
-      alive = false;
-    };
-  }, []);
-
-  // -------- Map to Select options (adjust key names if your models differ) --------
-  const categoryOptions = useMemo(
-    () =>
-      categories.map((c) => ({
-        value: c.id,
-        label: c.name, // change if your model uses `title`
-      })),
-    [categories]
-  );
-
-  const areaOptions = useMemo(
-    () =>
-      areas.map((a) => ({
-        value: a.id,
-        label: a.name,
-      })),
-    [areas]
-  );
-
-  const ingredientOptions = useMemo(
-    () =>
-      ingredientsRef.map((i) => ({
-        value: i.id,
-        label: i.name,
-      })),
-    [ingredientsRef]
-  );
-
-  const ingredientLabelById = useMemo(() => {
-    const map = new Map();
-    for (const i of ingredientsRef) map.set(i.id, i.name);
-    return map;
-  }, [ingredientsRef]);
-
-  // -------- Thumb preview --------
-  const previewUrl = useMemo(() => {
-    if (!thumb) return null;
-    return URL.createObjectURL(thumb);
-  }, [thumb]);
-
-  const removeThumb = () => {
-    if (previewUrl) URL.revokeObjectURL(previewUrl);
-    setThumb(null);
-  };
-
-  // -------- Handlers --------
-  const onFieldChange = (e) => {
-    const { name, value } = e.target;
-    setForm((p) => ({ ...p, [name]: value }));
-  };
-
-  const onDraftChange = (e) => {
-    const { name, value } = e.target;
-    setIngredientDraft((p) => ({ ...p, [name]: value }));
-  };
-
-  const acceptThumb = (f) => {
-    setSubmitError("");
-    if (!f) return;
-
-    if (!f.type?.startsWith("image/")) return setSubmitError("Please select an image file.");
-
-    const maxMb = 10;
-    if (f.size > maxMb * 1024 * 1024) return setSubmitError(`Image is too large. Max ${maxMb}MB.`);
-
-    setThumb(f);
-  };
-
-  const onThumbInput = (e) => {
-    acceptThumb(e.target.files?.[0]);
-    e.currentTarget.value = "";
-  };
-
-  const onDrop = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragging(false);
-    acceptThumb(e.dataTransfer.files?.[0]);
-  };
-
-  const decTime = () =>
-    setForm((p) => ({ ...p, cookingTimeMin: Math.max(0, p.cookingTimeMin - 5) }));
-  const incTime = () =>
-    setForm((p) => ({ ...p, cookingTimeMin: Math.min(600, p.cookingTimeMin + 5) }));
-
-  const addIngredient = () => {
-    setSubmitError("");
-
-    const { ingredientId, measure } = ingredientDraft;
-
-    if (!ingredientId) return setSubmitError("Select an ingredient.");
-    if (!measure.trim()) return setSubmitError("Enter measure (e.g. 100g, 2 cups).");
-
-    const exists = ingredients.some((x) => x.ingredientId === ingredientId);
-    if (exists) return setSubmitError("This ingredient is already added.");
-
-    const label = ingredientLabelById.get(ingredientId) ?? ingredientId;
-
-    setIngredients((p) => [...p, { ingredientId, label, measure: measure.trim() }]);
-    setIngredientDraft({ ingredientId: "", measure: "" });
-  };
-
-  const removeIngredientAt = (idx) => {
-    setIngredients((p) => p.filter((_, i) => i !== idx));
-  };
-
-  const clearAll = () => {
-    setForm({
-      title: "",
-      categoryId: "",
-      areaId: "",
-      instructions: "",
-      cookingTimeMin: 10,
-    });
-    setIngredientDraft({ ingredientId: "", measure: "" });
-    setIngredients([]);
-    removeThumb();
-    setSubmitError("");
-  };
-
-  const validate = () => {
-    if (!form.title.trim() || form.title.trim().length < 3) return "Title must be at least 3 chars.";
-    if (!form.categoryId) return "Category is required.";
-    if (!form.areaId) return "Area is required.";
-    if (!form.instructions.trim() || form.instructions.trim().length < 10)
-      return "Instructions must be at least 10 chars.";
-    if (ingredients.length === 0) return "Add at least one ingredient.";
-    return "";
-  };
-
-  const onSubmit = async (e) => {
-    e.preventDefault();
-    setSubmitError("");
-
-    const err = validate();
-    if (err) return setSubmitError(err);
-
-    setIsSubmitting(true);
-    try {
-      // IMPORTANT: your BE expects `ingredients` as a JSON STRING
-      const ingredientsString = JSON.stringify(
-        ingredients.map((x) => ({
-          ingredientId: x.ingredientId,
-          measure: x.measure,
-        }))
-      );
-
-      await recipeService.createRecipe({
-        title: form.title.trim(),
-        categoryId: form.categoryId,
-        areaId: form.areaId,
-        instructions: form.instructions.trim(),
-        time: `${form.cookingTimeMin} mins`,
-        ingredients: ingredientsString,
-        thumb: thumb ?? undefined,
-      });
-
-      clearAll();
-      alert("Recipe published ✅");
-    } catch (error) {
-      // axios-style error safety
-      const msg =
-        error?.response?.data?.message ||
-        error?.response?.data?.error ||
-        error?.message ||
-        "Publish failed";
-      setSubmitError(msg);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+    onFieldChange,
+    onDraftChange,
+    onThumbInput,
+    onDrop,
+    onDragEnter,
+    onDragOver,
+    onDragLeave,
+    removeThumb,
+    decTime,
+    incTime,
+    addIngredient,
+    removeIngredientAt,
+    clearAll,
+    onSubmit,
+  } = useAddRecipe();
 
   return (
     <div className="mx-auto w-full max-w-6xl px-4 py-10">
@@ -271,21 +62,9 @@ export const AddRecipePage = () => {
               "rounded-3xl border-2 border-dashed p-6 transition",
               isDragging ? "border-neutral-400 bg-neutral-50" : "border-neutral-200 bg-white",
             ].join(" ")}
-            onDragEnter={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              setIsDragging(true);
-            }}
-            onDragOver={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              setIsDragging(true);
-            }}
-            onDragLeave={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              setIsDragging(false);
-            }}
+            onDragEnter={onDragEnter}
+            onDragOver={onDragOver}
+            onDragLeave={onDragLeave}
             onDrop={onDrop}
           >
             <input
@@ -324,10 +103,18 @@ export const AddRecipePage = () => {
                   <div className="mt-4 flex items-center justify-between gap-3">
                     <div className="min-w-0">
                       <div className="truncate text-sm font-semibold text-neutral-900">{thumb.name}</div>
-                      <div className="text-xs text-neutral-500">{(thumb.size / 1024 / 1024).toFixed(2)} MB</div>
+                      <div className="text-xs text-neutral-500">
+                        {(thumb.size / 1024 / 1024).toFixed(2)} MB
+                      </div>
                     </div>
 
-                    <Button type="button" variant="light" label="Remove" onClick={removeThumb} disabled={isSubmitting} />
+                    <Button
+                      type="button"
+                      variant="light"
+                      label="Remove"
+                      onClick={removeThumb}
+                      disabled={isSubmitting}
+                    />
                   </div>
                 </div>
               )}
@@ -339,9 +126,7 @@ export const AddRecipePage = () => {
         <div className="space-y-8">
           {/* Title */}
           <div>
-            <div className="mb-4 text-xl font-bold leading-none text-neutral-900">
-              THE NAME OF THE RECIPE
-            </div>
+            <div className="mb-4 text-xl font-bold leading-none text-neutral-900">THE NAME OF THE RECIPE</div>
 
             <TextInput
               id="title"
@@ -353,6 +138,7 @@ export const AddRecipePage = () => {
               disabled={isSubmitting}
             />
           </div>
+
           {/* Category + Cooking time */}
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
             <div>
@@ -478,9 +264,7 @@ export const AddRecipePage = () => {
 
           {/* Instructions */}
           <div>
-            <div className="mb-4 text-xl font-bold leading-none text-neutral-900">
-              RECIPE PREPARATION
-            </div>
+            <div className="mb-4 text-xl font-bold leading-none text-neutral-900">RECIPE PREPARATION</div>
             <TextArea
               id="instructions"
               name="instructions"
@@ -514,7 +298,12 @@ export const AddRecipePage = () => {
               </svg>
             </button>
 
-            <Button type="submit" variant="dark" label={isSubmitting ? "PUBLISHING..." : "PUBLISH"} disabled={isSubmitting || isLoadingRefs} />
+            <Button
+              type="submit"
+              variant="dark"
+              label={isSubmitting ? "PUBLISHING..." : "PUBLISH"}
+              disabled={isSubmitting || isLoadingRefs}
+            />
           </div>
         </div>
       </form>
