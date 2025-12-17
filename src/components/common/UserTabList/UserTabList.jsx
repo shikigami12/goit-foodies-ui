@@ -1,45 +1,28 @@
-import { act, useEffect, useState } from 'react';
-import styles from './UserTabList.module.css';
-import {
-  NavLink,
-  Outlet,
-  useLocation,
-  useNavigate,
-  useParams,
-} from 'react-router-dom';
+import { NavLink, Outlet } from 'react-router-dom';
 import { capitalizeFirstLetter } from '../../../helpers/capitalizeFirstLetter';
 import { TABS } from '../../../constants';
 
 export default function UserTabList() {
-  const navigate = useNavigate();
-  const location = useLocation();
-
-  const [activeTab, setActiveTab] = useState(TABS[0]);
-
-  useEffect(() => {
-    navigate(activeTab);
-  }, []);
-
-  useEffect(() => {
-    setActiveTab(location.pathname.split('/').pop());
-  }, [location]);
-
   return (
     <>
-      <ul className={styles['list']}>
-        {TABS.map(tab => (
-          <li key={tab}>
-            <NavLink
-              to={tab}
-              className={({ isActive }) => {
-                return styles['link'] + ' ' + (isActive && styles['active']);
-              }}
-            >
-              {capitalizeFirstLetter(tab.replace('_', ' '))}
-            </NavLink>
-          </li>
-        ))}
-      </ul>
+      <div className="mb-8 md:mb-10 xl:flex-1">
+        <ul className="flex gap-[30px] md:gap-10 uppercase text-[#bfbebe] font-extrabold text-lg md:text-xl leading-[133%] md:leading-[120%] tracking-[-0.02em] border-b border-[#bfbebe] w-full overflow-x-scroll [&::-webkit-scrollbar]:hidden">
+          {TABS.map(tab => (
+            <li key={tab}>
+              <NavLink
+                to={tab}
+                className={({ isActive }) => {
+                  return `pb-3.5 inline-block cursor-pointer whitespace-nowrap ${
+                    isActive ? '!text-[#050505] border-b-[3px] border-[#050505]' : ''
+                  }`;
+                }}
+              >
+                {capitalizeFirstLetter(tab.replace('_', ' '))}
+              </NavLink>
+            </li>
+          ))}
+        </ul>
+      </div>
 
       <Outlet />
     </>

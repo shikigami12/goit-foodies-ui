@@ -1,7 +1,8 @@
 import { useLocation } from 'react-router-dom';
-import styles from './RecipeList.module.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import RecipePreviewItem from '../RecipePreviewItem/RecipePreviewItem';
+import { EMPTY_LIST_MESSAGES } from '../../../constants/messages';
+import { ROUTES, TABS } from '../../../constants';
 
 const mockData = {
   recipes: [
@@ -238,7 +239,7 @@ const mockData = {
       id: '3bfd1bbc-8457-5ff9-b55a-96eef99e2047',
       title: 'Rosół (Polish Chicken Soup)',
       instructions:
-        'Add chicken to a large Dutch oven or stock pot \r\nCover with water\r\nBring to a boil and simmer for 2 to 2 1/2 hours, skimming any impurities off the top to insure a clear broth\r\nIf your pot is big enough, add the vegetables and spices for the last hour of the cooking time\r\nMy Dutch oven wasn’t big enough to hold everything, just the chicken and other bones filled the pot, so I cooked the meat/bones for the full cooking time, then removed them, and cooked the vegetables and spices separately\r\nStrain everything out of the broth\r\nBone the chicken, pulling the meat into large chunks\r\nSlice the carrots\r\nReturn the chicken and carrots to the broth\r\nCook noodles according to package instructions if you’re using them\r\nAdd noodles to bowl and then top with hot soup',
+        'Add chicken to a large Dutch oven or stock pot \r\nCover with water\r\nBring to a boil and simmer for 2 to 2 1/2 hours, skimming any impurities off the top to insure a clear broth\r\nIf your pot is big enough, add the vegetables and spices for the last hour of the cooking time\r\nMy Dutch oven wasn\'t big enough to hold everything, just the chicken and other bones filled the pot, so I cooked the meat/bones for the full cooking time, then removed them, and cooked the vegetables and spices separately\r\nStrain everything out of the broth\r\nBone the chicken, pulling the meat into large chunks\r\nSlice the carrots\r\nReturn the chicken and carrots to the broth\r\nCook noodles according to package instructions if you\'re using them\r\nAdd noodles to bowl and then top with hot soup',
       thumb:
         'https://ftp.goit.study/img/so-yummy/preview/Rosół%20(Polish%20Chicken%20Soup).jpg',
       time: '150 min',
@@ -266,8 +267,7 @@ const mockData = {
     {
       id: '2168aa32-0aac-5680-a2a7-694fe0fe7434',
       title: 'Corned Beef and Cabbage',
-      instructions:
-        '1\r\n\r\nPlace corned beef in large pot or Dutch oven and cover with water. Add the spice packet that came with the corned beef. Cover pot and bring to a boil, then reduce to a simmer. Simmer approximately 50 minutes per pound or until tender.\r\n\r\n2\r\n\r\nAdd whole potatoes and peeled and cut carrots, and cook until the vegetables are almost tender. Add cabbage and cook for 15 more minutes. Remove meat and let rest 15 minutes.\r\n\r\n3\r\n\r\nPlace vegetables in a bowl and cover. Add as much broth (cooking liquid reserved in the Dutch oven or large pot) as you want. Slice meat across the grain.',
+      instructions: '1\r\n\r\nPlace corned beef in large pot or Dutch oven and cover with water. Add the spice packet that came with the corned beef. Cover pot and bring to a boil, then reduce to a simmer. Simmer approximately 50 minutes per pound or until tender.\r\n\r\n2\r\n\r\nAdd whole potatoes and peeled and cut carrots, and cook until the vegetables are almost tender. Add cabbage and cook for 15 more minutes. Remove meat and let rest 15 minutes.\r\n\r\n3\r\n\r\nPlace vegetables in a bowl and cover. Add as much broth (cooking liquid reserved in the Dutch oven or large pot) as you want. Slice meat across the grain.',
       thumb:
         'https://ftp.goit.study/img/so-yummy/preview/Corned%20Beef%20and%20Cabbage.jpg',
       time: '80 min',
@@ -299,13 +299,29 @@ const mockData = {
   totalPages: 29,
 };
 
+// mockData.recipes.length = 0;
+
 export default function RecipeList() {
   const location = useLocation();
-  const currentPath = location.pathname;
-  const [data, setData] = useState(mockData);
+  const [data, setData] = useState({ recipes: [], total: 0 });
+  const currentRoute = location.pathname.split('/').pop();
+
+  useEffect(() => {
+    if (currentRoute.endsWith(ROUTES.RECIPES_MY)) setData(mockData);
+    else if (currentRoute.endsWith(ROUTES.RECIPES_FAVORITES)) setData(mockData);
+  }, [location]);
+
+  if (data.total === 0)
+    return (
+      <p className="font-medium text-sm md:text-base leading-[143%] md:leading-[150%] tracking-[-0.02em] text-center text-[#bfbebe] md:text-[#1a1a1a] mt-20 md:mt-[100px]">
+        {currentRoute.endsWith(ROUTES.RECIPES_MY)
+          ? EMPTY_LIST_MESSAGES.RECIPES_MY
+          : EMPTY_LIST_MESSAGES.FAVORITES_MY}
+      </p>
+    );
 
   return (
-    <ul className={styles['list']}>
+    <ul className="flex flex-col gap-8 md:gap-10">
       {data.recipes.map(recipe => (
         <li key={recipe.id}>
           <RecipePreviewItem recipe={recipe} />

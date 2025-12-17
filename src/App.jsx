@@ -1,10 +1,10 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { SharedLayout } from "./components/layout/SharedLayout";
-import { HomePage, RecipePage, AddRecipePage, UserPage } from "./pages";
-import { PrivateRoute } from "./routes";
-import { ROUTES } from "./constants";
-import RecipeList from "./components/common/RecipeList";
-import FollowersList from "./components/common/FollowersList";
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { SharedLayout } from './components/layout/SharedLayout';
+import { HomePage, RecipePage, AddRecipePage, UserPage } from './pages';
+import { PrivateRoute } from './routes';
+import { ROUTES } from './constants';
+import RecipeList from './components/common/RecipeList';
+import FollowersList from './components/common/FollowersList';
 
 function App() {
   return (
@@ -21,6 +21,7 @@ function App() {
               </PrivateRoute>
             }
           />
+
           <Route
             path={ROUTES.USER}
             element={
@@ -29,6 +30,10 @@ function App() {
               </PrivateRoute>
             }
           >
+            <Route
+              index
+              element={<Navigate to={ROUTES.RECIPES_MY} replace />}
+            />
             <Route element={<RecipeList />} path={ROUTES.RECIPES_MY} />
             <Route element={<RecipeList />} path={ROUTES.RECIPES_FAVORITES} />
             <Route element={<FollowersList />} path={ROUTES.FOLLOWERS_LIST} />

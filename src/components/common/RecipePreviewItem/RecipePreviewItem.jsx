@@ -1,9 +1,9 @@
 import { Link, useLocation } from 'react-router-dom';
-import styles from './RecipePreviewItem.module.css';
 import { useState } from 'react';
 import Icon from '../Icon';
 import { ROUTES } from '../../../constants';
 import { useWindowWidth } from '../../../hooks';
+import {RoundButton} from '../RoundButton';
 //  {
 //       id: "e14c977f-bfff-511a-a0d1-fba99c157626",
 //       title: "Fennel Dauphinoise",
@@ -40,34 +40,37 @@ export default function RecipePreviewItem({ recipe }) {
   const onTrashClick = id => {
     console.log('TODO: Add delete handler, clicked ID: ' + id);
   };
+  
+  // Replace newlines with spaces for proper line-clamp behavior
+  const cleanInstructions = recipe.instructions.replace(/\r\n|\r|\n/g, ' ');
+  
   return (
-    <div className={styles['card']}>
+    <div className="h-[75px] md:h-[100px] flex overflow-hidden">
       {/* Thumb */}
-      <div className={styles['image-wrapper']}>
+      <div className="rounded-[15px] w-[75px] min-w-[75px] max-w-[75px] md:w-[100px] md:min-w-[100px] md:max-w-[100px] h-full flex-1 overflow-hidden">
         <img src={recipe.thumb} />
       </div>
       {/* Description */}
-      <div className={styles['description']}>
-        <p className={styles['title']}>{recipe.title}</p>
-        <p className={styles['subtitle']}>{recipe.instructions}</p>
+      <div className="text-left pl-2.5 pr-4 md:pr-8">
+        <p className="font-extrabold text-base md:text-xl leading-[150%] md:leading-[120%] tracking-[-0.02em] uppercase text-[#050505] mb-2 overflow-hidden text-ellipsis line-clamp-1">{recipe.title}</p>
+        <p className="font-medium text-sm md:text-base leading-[143%] md:leading-[150%] tracking-[-0.02em] text-[#bfbebe] md:text-[#1a1a1a] overflow-hidden text-ellipsis line-clamp-2">{cleanInstructions}</p>
       </div>
       {/* Buttons */}
-      <div className={styles['buttons']}>
+      <div className="gap-1 flex-1 flex flex-row">
         <Link
-          className={styles['button-round']}
           to={ROUTES.RECIPE.replace(':id', recipe.id)}
         >
-          <Icon name="arrow-up-right" size={iconSize} />
+          <RoundButton>
+            <Icon name="arrow-up-right" size={iconSize} />
+          </RoundButton>
         </Link>
-        <button
-          type="button"
-          className={styles['button-round']}
+        <RoundButton
           onClick={() => {
             onTrashClick(recipe.id);
           }}
         >
           <Icon name="trash" size={iconSize} />
-        </button>
+        </RoundButton>
       </div>
     </div>
   );
