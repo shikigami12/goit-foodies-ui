@@ -4,16 +4,15 @@
     /* Fonts */
     --font-sans: "Mulish", system-ui, sans-serif;
 
-    /* Brand Colors */
-    --color-brand: #6366f1;
-    --color-brand-dark: #4f46e5;
-
+    /*colors*/
+    --color-brand: #050505;
+    --color-brand-dark: #1A1A1A;
+    --color-borders: #BFBEBE;
+    --color-dark: #1A1A1A;
+    --color-white: #FFFFFF;
     /* Base Colors */
     --color-black: #050505;
-    --color-white: #ffffff;
     --color-light-gray: #e8e8e8;
-    --color-borders: #bfbebe;
-    --color-dark: #1a1a1a;
 
     /* Black Variations */
     --color-black-90: #050505e6;
@@ -53,4 +52,67 @@
 
 html {
     font-family: var(--font-sans);
+    /* Always show scrollbar to prevent layout shifts */
+    overflow-y: scroll;
+}
+
+body {
+    /* Scrollbar width will be set via JavaScript to prevent jumps */
+    margin: 0;
+    padding: 0;
+}
+
+/* Customize scrollbar appearance */
+::-webkit-scrollbar {
+    width: 15px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--color-borders);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: color-mix(in srgb, var(--color-borders) 80%, black);
+}
+
+/* For Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-borders) transparent;
+}
+
+/* Auth animations - standardized timing and easing */
+@keyframes auth-fade-in {
+    0% {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes auth-slide-down {
+    0% {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-auth-fade {
+    animation: auth-fade-in 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.animate-auth-slide {
+    animation: auth-slide-down 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }

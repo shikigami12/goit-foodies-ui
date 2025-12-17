@@ -1,76 +1,86 @@
-import styles from "./Button.module.css";
-import cx from "classnames";
-import { useEffect } from "react";
-import { Icon } from "../Icon/Icon";
+import PropTypes from "prop-types";
+import Icon from "../Icon";
 
-const Button = ({
-                    disabled = false,
-                    text = "Button",
-                    onClick = () => {},
-                    variant = "button",
-                    type = "button",
-                    classname,
-                    id,
-                    iconId,
-                    iconWidth = "20",
-                    iconHeight = "20",
-                    stroke = "var(--black)",
-                    iconStyle,
-                }) => {
-    useEffect(() => {
-        if (id) {
-            const btn = document.querySelector(`#${id}`);
-            if (btn) {
-                const updateCoordinates = (x, y) => {
-                    const rect = btn.getBoundingClientRect();
-                    const relativeX = x - rect.left;
-                    const relativeY = y - rect.top;
-                    btn.style.setProperty("--x", `${relativeX}px`);
-                    btn.style.setProperty("--y", `${relativeY}px`);
-                };
+export const Button = ({
+    label,
+    iconId,
+    variant = "dark",// "dark" | "light"
+    fullWidth = false,
+    onClick,
+    disabled = false,
+    type = "button",
+    isLoading = false,
+    }) => {
+    const baseClasses =
+        "inline-flex items-center justify-center gap-2 rounded-full px-[14px] sm:px-8 py-[14px] sm:py-4 " +
+        "text-sm sm:text-base font-bold sm:font-semibold uppercase tracking-[-0.02em] " +
+        "transition-colors duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] cursor-pointer h-12 sm:h-14 " +
+        "leading-[20px] sm:leading-[24px]";
 
-                const onMouseMove = (e) => {
-                    updateCoordinates(e.clientX, e.clientY);
-                };
+    const isDark = variant === "dark";
+    const isDisabled = disabled || isLoading;
 
-                const onTouchMove = (e) => {
-                    if (e.touches.length > 0) {
-                        const touch = e.touches[0];
-                        updateCoordinates(touch.clientX, touch.clientY);
-                    }
-                };
+    const variantClasses = isDark
+        ? isDisabled
+            ? "bg-borders text-white border border-transparent cursor-not-allowed"
+            : "bg-brand text-white border border-transparent hover:bg-brand/90"
+        : isDisabled
+            ? "bg-white text-gray-400 border border-borders sm:border-gray-200 cursor-not-allowed"
+            : "bg-white text-brand border border-borders sm:border-gray-300 hover:bg-gray-50";
 
-                btn.addEventListener("mousemove", onMouseMove);
-                btn.addEventListener("touchmove", onTouchMove);
-
-                return () => {
-                    btn.removeEventListener("mousemove", onMouseMove);
-                    btn.removeEventListener("touchmove", onTouchMove);
-                };
-            }
-        }
-    }, [id]);
+    const widthClass = fullWidth ? "w-full" : "";
 
     return (
         <button
             type={type}
-            className={cx(styles.button, styles[variant], classname)}
             onClick={onClick}
-            id={id}
-            disabled={disabled}
+            disabled={isDisabled}
+            className={`${baseClasses} ${variantClasses} ${widthClass}`}
         >
-            {text}
-            {iconId && (
-                <Icon
-                    iconId={iconId}
-                    width={iconWidth}
-                    height={iconHeight}
-                    stroke={stroke}
-                    customStyle={iconStyle}
-                />
+            {isLoading ? (
+                <svg
+                    className="animate-spin h-5 w-5"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                >
+                    <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                    />
+                    <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    />
+                </svg>
+            ) : (
+                <>
+                    {iconId && (
+                        <Icon 
+                            name={iconId.replace(/^icon-/, "")} 
+                            size={20}
+                            className="w-5 h-5"
+                        />
+                    )}
+                    {label && <span>{label}</span>}
+                </>
             )}
         </button>
     );
 };
 
-export default Button;
+Button.propTypes = {
+    label: PropTypes.string,
+    iconId: PropTypes.string,
+    variant: PropTypes.oneOf(["dark", "light"]),
+    fullWidth: PropTypes.bool,
+    onClick: PropTypes.func,
+    disabled: PropTypes.bool,
+    type: PropTypes.oneOf(["button", "submit", "reset"]),
+    isLoading: PropTypes.bool,
+};
