@@ -6,8 +6,6 @@ export const IngredientsList = ({ ingredients }) => {
         return <p>No ingredients available</p>;
     }
 
-    console.log(ingredients);
-
     return (
         <ul className={styles.ingredients_list}>
             {ingredients.map(({ ingredient, measure }) => (

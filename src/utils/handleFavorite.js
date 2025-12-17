@@ -1,16 +1,28 @@
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 
-const customId = "toastId";
+const customId = "favorite-toast";
 
 const handleFavorite = async (funcName, recipeID, action, setFunc) => {
     try {
-        await funcName(recipeID).unwrap();
-        toast.success(`Recipe ${action === "add" ? "added to" : "deleted from"} favorites!`, {
-            toastId: customId,
-        });
-        action === "add" ? setFunc(true) : setFunc(false);
+        await funcName(recipeID);
+
+        toast.success(
+            `Recipe ${action === "add" ? "added to" : "removed from"} favorites!`,
+            { id: customId }
+        );
+
+        setFunc(action === "add");
     } catch (error) {
-        console.error("Failed to add recipe to favorites: ", error);
+        console.error("Failed to update favorites:", error);
+
+        if (error?.response?.data?.message === "Recipe already in favorites") {
+            toast("Recipe is already in your favorites!", { id: customId });
+        } else {
+            toast.error(
+                `Failed to ${action === "add" ? "add to" : "remove from"} favorites`,
+                { id: customId }
+            );
+        }
     }
 };
 

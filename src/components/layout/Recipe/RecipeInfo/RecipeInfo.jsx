@@ -14,10 +14,10 @@ import recipe_without_img from "../../../../images/recipe_without_img.jpg";
 import { selectFavoriteRecipes } from "../../../../redux/selectors/selectors.js";
 
 export const RecipeInfo = ({ recipe }) => {
-    const { thumb, title, instructions, ingredients, _id } = recipe;
+    const { thumb, title, instructions, ingredients, id } = recipe;
     const favoritesRecipe = useSelector(selectFavoriteRecipes);
     const { isAuthenticated } = useSelector((state) => state.auth);
-    const [isFavorite, setIsFavorite] = useState(favoritesRecipe.includes(_id));
+    const [isFavorite, setIsFavorite] = useState(favoritesRecipe.includes(id));
     const [isLoading, setIsLoading] = useState(false);
 
     const {
@@ -61,8 +61,8 @@ export const RecipeInfo = ({ recipe }) => {
     };
 
     useEffect(() => {
-        setIsFavorite(favoritesRecipe.includes(_id));
-    }, [favoritesRecipe, _id]);
+        setIsFavorite(favoritesRecipe.includes(id));
+    }, [favoritesRecipe, id]);
 
     return (
         <>
@@ -81,15 +81,15 @@ export const RecipeInfo = ({ recipe }) => {
                             <Button
                                 label="Add to favorites"
                                 variant="light"
-                                onClick={() => handleFavorite(addFavoriteRecipe, _id, "add", setIsFavorite)}
+                                onClick={() => handleFavorite(addFavoriteRecipe, id, "add", setIsFavorite)}
                                 isLoading={isLoading}
                                 disabled={isLoading}
                             />
                         ) : (
                             <Button
                                 label="Remove from favorites"
-                                variant="light"
-                                onClick={() => handleFavorite(removeFavoriteRecipe, _id, "delete", setIsFavorite)}
+                                variant="dark"
+                                onClick={() => handleFavorite(removeFavoriteRecipe, id, "delete", setIsFavorite)}
                                 isLoading={isLoading}
                                 disabled={isLoading}
                             />
