@@ -1,6 +1,15 @@
 import axios from 'axios';
 import { API_BASE_URL } from '../constants';
-import { tokenManager } from './tokenManager';
+/**
+ * Token management utilities for JWT authentication
+ * TODO: Implement persistent storage (e.g., SessionStorage)
+ */
+export const tokenManager = {
+  getToken: () => {},
+  setToken: (token) => {},
+  removeToken: () => {},
+  hasToken: () => Boolean(false),
+};
 
 /**
  * Axios instance configured for the Foodies API
@@ -53,10 +62,9 @@ api.interceptors.response.use(
   (error) => {
     const { response } = error;
 
-    // Handle 401 Unauthorized - token expired or invalid
+    // Handle 401 Unauthorized - clear token and redirect to home
     if (response?.status === 401) {
       tokenManager.removeToken();
-      // Only redirect if not already on home page
       if (window.location.pathname !== '/') {
         window.location.href = '/';
       }

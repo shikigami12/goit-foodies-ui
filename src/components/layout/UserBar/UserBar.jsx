@@ -1,100 +1,72 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { ROUTES } from "../../../constants";
+import {useState} from "react";
+import {Link} from "react-router-dom";
+import {ROUTES} from "../../../constants";
 import PropTypes from "prop-types";
-import { BurgerMenu } from "../BurgerMenu/index.js";
-import Icon from "../../common/Icon";
-import styles from "./UserBar.module.css";
+import {BurgerMenu} from "../BurgerMenu/index.js";
 
-const DEFAULT_AVATAR =
-  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='50' height='50' viewBox='0 0 50 50'%3E%3Ccircle cx='25' cy='25' r='25' fill='%23FFFFFF'/%3E%3Cg transform='translate(8 8) scale(1.4)'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z' fill='%23000000'/%3E%3C/g%3E%3C/svg%3E";
-
-export const UserBar = ({ isDarkTheme = true, user, onLogoutClick }) => {
+export const UserBar = ({isDarkTheme = true}) => {
     const [isOpen, setIsOpen] = useState(false);
-    const [imageError, setImageError] = useState(false);
-    const displayName = user?.name ? user.name.toUpperCase() : "";
-    const avatarUrl = user?.avatar || DEFAULT_AVATAR;
+    const user = {name: "VICTORIA", avatar: null};
 
     const toggle = () => setIsOpen((prev) => !prev);
+    const BASE_AUTH_CLASS = 'flex items-center gap-1 sm:gap-3 rounded-full bg-black px-4 py-2 text-white cursor-pointer';
+    const themeClass = isDarkTheme ? 'bg-dark' : 'bg-black';
 
     return (
-        <div className={styles.userBar}>
-            <div className={styles.userBarContainer}>
+        <div className="relative">
+            <div className="flex justify-between items-center">
                 <button
                     type="button"
                     onClick={toggle}
-                    className={styles.button}
+                    className={`${BASE_AUTH_CLASS} ${themeClass}`}
                 >
-                    {/* Avatar */}
-                    <div className={styles.avatarContainer}>
-                        <img
-                            src={imageError ? DEFAULT_AVATAR : avatarUrl}
-                            alt={displayName}
-                            className={styles.avatarImage}
-                            onError={() => {
-                                if (avatarUrl !== DEFAULT_AVATAR) {
-                                    setImageError(true);
-                                }
-                            }}
-                        />
-                    </div>
-
-                    {/* Name */}
-                    <div className={styles.nameContainer}>
-                        <span className={styles.name}>
-                            {displayName}
-                        </span>
-                    </div>
-
-                    {/* Chevron */}
-                    <div className={styles.chevronContainer}>
-                        <Icon
-                            key={isOpen ? "up" : "down"}
-                            name={isOpen ? "chevron-up" : "chevron-down"}
-                            size={18}
+                    <img
+                        src={user.avatar || "/default-avatar.png"}
+                        alt={user.name}
+                        className="w-6 h-6 sm:h-10 sm:w-10 rounded-full object-cover"
+                    />
+                    <span className="text-xs sm:text-sm font-semibold uppercase tracking-[0.15em]">
+                  {user.name}
+                </span>
+                    <svg
+                        className={`h-3 w-3 transition-transform ${
+                            isOpen ? "rotate-180" : ""
+                        }`}
+                        viewBox="0 0 12 8"
+                        aria-hidden="true"
+                    >
+                        <path
+                            d="M1 6.5L6 1.5L11 6.5"
+                            fill="none"
                             stroke="currentColor"
-                            color="currentColor"
-                            className={styles.chevronIcon}
+                            strokeWidth="1.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
                         />
-                    </div>
+                    </svg>
                 </button>
 
-                <BurgerMenu isDarkTheme={isDarkTheme} />
+                <BurgerMenu isDarkTheme={isDarkTheme}/>
             </div>
 
-            {/* Dropdown Menu */}
-            {isOpen && (
-                <div className={styles.dropdown}>
-                    <div className={styles.dropdownContent}>
-                        {/* Profile Link */}
-                        <Link
-                            to={ROUTES.USER}
-                            className={styles.profileLink}
-                            onClick={() => setIsOpen(false)}
-                        >
-                            PROFILE
-                        </Link>
 
-                        {/* Log Out Button */}
-                        <button
-                            type="button"
-                            className={styles.logoutButton}
-                            onClick={() => {
-                                setIsOpen(false);
-                                if (onLogoutClick) {
-                                    onLogoutClick();
-                                }
-                            }}
-                        >
-                            <span>LOG OUT</span>
-                            <Icon
-                                name="arrow-up-right"
-                                size={18}
-                                stroke="white"
-                                className={styles.logoutIcon}
-                            />
-                        </button>
-                    </div>
+            {isOpen && (
+                <div
+                    className="absolute left-0 mt-1 rounded-3xl border border-white/20 bg-black px-8 sm:px-10 py-6 z-30 text-white shadow-lg">
+                    <Link
+                        to={ROUTES.USER}
+                        className="block text-sm font-semibold uppercase tracking-[0.2em]"
+                    >
+                        PROFILE
+                    </Link>
+
+                    <button
+                        type="button"
+                        className="mt-4 flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.2em]"
+                    >
+                        <span>LOG OUT</span>
+                        <span aria-hidden="true">↗</span>
+                    </button>
                 </div>
             )}
         </div>
@@ -102,9 +74,4 @@ export const UserBar = ({ isDarkTheme = true, user, onLogoutClick }) => {
 };
 UserBar.propTypes = {
     isDarkTheme: PropTypes.bool,
-    user: PropTypes.shape({
-        name: PropTypes.string,
-        avatar: PropTypes.string,
-    }),
-    onLogoutClick: PropTypes.func,
 };
