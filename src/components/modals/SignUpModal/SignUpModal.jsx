@@ -6,6 +6,7 @@ import { TextInput } from "../../common/TextInput/TextInput";
 import { Button } from "../../common/Button/Button";
 import { showError, showSuccess } from "../../../utils/notification";
 import { validateSignUp, MAX_NAME_LENGTH, MAX_EMAIL_LENGTH, MAX_PASSWORD_LENGTH, MIN_NAME_LENGTH, MIN_PASSWORD_LENGTH } from "../../../utils/validation";
+import styles from "./SignUpModal.module.css";
 
 export const SignUpModal = ({ onSwitchToSignIn, onClose }) => {
     const dispatch = useDispatch();
@@ -21,11 +22,12 @@ export const SignUpModal = ({ onSwitchToSignIn, onClose }) => {
     
     const previousErrorRef = useRef(null);
     const isMountedRef = useRef(false);
+    const errorShownRef = useRef(false);
 
     useEffect(() => {
-        // Clear any previous auth errors when modal opens
         dispatch(clearError());
         previousErrorRef.current = null;
+        errorShownRef.current = false;
         isMountedRef.current = true;
         
         return () => {
@@ -34,10 +36,11 @@ export const SignUpModal = ({ onSwitchToSignIn, onClose }) => {
     }, [dispatch]);
 
     useEffect(() => {
-        // Only show notification for NEW errors that occur after modal is mounted
-        if (error && isMountedRef.current && error !== previousErrorRef.current) {
-            showError(error);
-            previousErrorRef.current = error;
+        if (error && isMountedRef.current && !errorShownRef.current) {
+            const errorMessage = typeof error === 'string' ? error : error?.message || String(error);
+            showError(errorMessage);
+            previousErrorRef.current = errorMessage;
+            errorShownRef.current = true;
             dispatch(clearError());
         }
     }, [error, dispatch]);
@@ -51,6 +54,8 @@ export const SignUpModal = ({ onSwitchToSignIn, onClose }) => {
         e.preventDefault();
         setSubmitAttempted(true);
         dispatch(clearError());
+        previousErrorRef.current = null;
+        errorShownRef.current = false;
 
         if (Object.keys(errors).length) {
             return;
@@ -61,19 +66,19 @@ export const SignUpModal = ({ onSwitchToSignIn, onClose }) => {
             showSuccess("Account created successfully!");
             onClose?.();
         } catch {
-            // Error is handled via Redux state and shown as notification
+            // Error handled via Redux state in useEffect
         }
     };
 
     return (
-        <section className="relative w-[343px] sm:w-[561px] max-w-full px-[30px] py-[60px] sm:px-10 sm:py-20 rounded-[20px] sm:rounded-[30px] bg-white flex justify-center">
-            <div className="flex flex-col gap-8 sm:gap-10 w-full max-w-[283px] sm:max-w-[401px]">
-                <h2 className="text-[28px] sm:text-[32px] leading-8 sm:leading-10 font-extrabold tracking-[-0.02em] uppercase text-center text-black">
+        <section className={styles.section}>
+            <div className={styles.container}>
+                <h2 className={styles.title}>
                     Sign up
                 </h2>
 
-                <form className="flex flex-col gap-8 sm:gap-8" onSubmit={handleSubmit}>
-                    <div className="flex flex-col gap-[14px]">
+                <form className={styles.form} onSubmit={handleSubmit}>
+                    <div className={styles.inputsContainer}>
                         <TextInput
                             id="signup-name"
                             name="name"
@@ -116,7 +121,7 @@ export const SignUpModal = ({ onSwitchToSignIn, onClose }) => {
                         />
                     </div>
 
-                    <div className="flex flex-col items-center gap-4 sm:gap-5 mt-2">
+                    <div className={styles.buttonsContainer}>
                         <Button
                             type="submit"
                             label="Create"
@@ -125,13 +130,18 @@ export const SignUpModal = ({ onSwitchToSignIn, onClose }) => {
                             isLoading={isLoading}
                         />
 
-                        <button
-                            type="button"
-                            onClick={onSwitchToSignIn}
-                            className="text-xs sm:text-sm font-medium text-borders hover:text-dark"
-                        >
-                            I already have an account? Sign in
-                        </button>
+                        <div className={styles.switchTextContainer}>
+                            <span className={styles.staticText}>
+                                I already have an account?
+                            </span>
+                            <button
+                                type="button"
+                                onClick={onSwitchToSignIn}
+                                className={styles.linkText}
+                            >
+                                Sign in
+                            </button>
+                        </div>
                     </div>
                 </form>
             </div>

@@ -13,8 +13,9 @@ export const Button = ({
     }) => {
     const baseClasses =
         "inline-flex items-center justify-center gap-2 rounded-full px-[14px] sm:px-8 py-[14px] sm:py-4 " +
-        "text-sm sm:text-base font-bold sm:font-semibold uppercase tracking-[-0.02em] sm:tracking-[0.15em] " +
-        "transition-colors duration-200 cursor-pointer h-12 sm:h-14";
+        "text-sm sm:text-base font-bold sm:font-semibold uppercase tracking-[-0.02em] " +
+        "transition-colors duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] cursor-pointer h-12 sm:h-14 " +
+        "leading-[20px] sm:leading-[24px]";
 
     const isDark = variant === "dark";
     const isDisabled = disabled || isLoading;
@@ -22,10 +23,10 @@ export const Button = ({
     const variantClasses = isDark
         ? isDisabled
             ? "bg-borders text-white border border-transparent cursor-not-allowed"
-            : "bg-black text-white border border-transparent hover:bg-black/90"
+            : "bg-brand text-white border border-transparent hover:bg-brand/90"
         : isDisabled
             ? "bg-white text-gray-400 border border-borders sm:border-gray-200 cursor-not-allowed"
-            : "bg-white text-black border border-borders sm:border-gray-300 hover:bg-gray-50";
+            : "bg-white text-brand border border-borders sm:border-gray-300 hover:bg-gray-50";
 
     const widthClass = fullWidth ? "w-full" : "";
 

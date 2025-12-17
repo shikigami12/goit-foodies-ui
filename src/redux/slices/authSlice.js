@@ -3,24 +3,37 @@ import { authService } from '../../services';
 
 const initialState = {
   user: null,
-  token: localStorage.getItem('token') || null,
+  token: (() => {
+    try {
+      const token = localStorage.getItem('token');
+      if (token) {
+        try {
+          const parts = token.split('.');
+          if (parts.length === 3) {
+            const payload = JSON.parse(atob(parts[1].replace(/-/g, '+').replace(/_/g, '/')));
+            if (payload.exp && payload.exp * 1000 < Date.now()) {
+              localStorage.removeItem('token');
+              return null;
+            }
+          }
+        } catch {
+          localStorage.removeItem('token');
+          return null;
+        }
+      }
+      return token;
+    } catch {
+      return null;
+    }
+  })(),
   isAuthenticated: false,
   isLoading: false,
   error: null,
 };
 
-/**
- * Extracts error message from error object
- * @param {Error} error - Error object
- * @param {string} fallbackMessage - Fallback message if error message not found
- * @returns {string} Error message
- */
 const getErrorMessage = (error, fallbackMessage) =>
   error?.response?.data?.message || error?.message || fallbackMessage;
 
-/**
- * Helper to handle auth success state
- */
 const handleAuthSuccess = (state, action) => {
   state.isLoading = false;
   state.user = action.payload.user;
@@ -29,17 +42,11 @@ const handleAuthSuccess = (state, action) => {
   state.error = null;
 };
 
-/**
- * Helper to handle auth failure state
- */
 const handleAuthFailure = (state, action) => {
   state.isLoading = false;
   state.error = action.payload;
 };
 
-/**
- * Helper to clear auth state
- */
 const clearAuthState = (state) => {
   state.user = null;
   state.token = null;
@@ -47,7 +54,6 @@ const clearAuthState = (state) => {
   state.error = null;
 };
 
-// SIGN UP
 export const signup = createAsyncThunk(
   'auth/signup',
   async (userData, { rejectWithValue }) => {
@@ -59,7 +65,6 @@ export const signup = createAsyncThunk(
   }
 );
 
-// SIGN IN
 export const signin = createAsyncThunk(
   'auth/signin',
   async (credentials, { rejectWithValue }) => {
@@ -71,20 +76,17 @@ export const signin = createAsyncThunk(
   }
 );
 
-// LOGOUT
 export const logout = createAsyncThunk(
   'auth/logout',
   async (_, { rejectWithValue }) => {
     try {
       await authService.logout();
     } catch (error) {
-      // Even if backend logout fails, clear local auth state
       return rejectWithValue(getErrorMessage(error, 'Logout failed'));
     }
   }
 );
 
-// FETCH CURRENT USER
 export const getCurrentUser = createAsyncThunk(
   'auth/getCurrentUser',
   async (_, { rejectWithValue }) => {
@@ -103,27 +105,26 @@ const authSlice = createSlice({
     clearError: (state) => {
       state.error = null;
     },
+    updateUser: (state, action) => {
+      state.user = { ...state.user, ...action.payload };
+    },
   },
   extraReducers: (builder) => {
     builder
-      // SIGNUP
       .addCase(signup.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
       .addCase(signup.fulfilled, handleAuthSuccess)
       .addCase(signup.rejected, handleAuthFailure)
-      // SIGNIN
       .addCase(signin.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
       .addCase(signin.fulfilled, handleAuthSuccess)
       .addCase(signin.rejected, handleAuthFailure)
-      // LOGOUT
       .addCase(logout.fulfilled, clearAuthState)
       .addCase(logout.rejected, clearAuthState)
-      // CURRENT USER
       .addCase(getCurrentUser.pending, (state) => {
         state.isLoading = true;
       })
@@ -142,9 +143,8 @@ const authSlice = createSlice({
   },
 });
 
-export const { clearError } = authSlice.actions;
+export const { clearError, updateUser } = authSlice.actions;
 
-// Selectors
 export const selectAuth = (state) => state.auth;
 export const selectCurrentUser = (state) => state.auth.user;
 export const selectIsAuthenticated = (state) => state.auth.isAuthenticated;

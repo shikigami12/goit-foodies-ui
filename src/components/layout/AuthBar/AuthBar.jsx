@@ -6,7 +6,7 @@ export const AuthBar = ({ onSignInClick, onSignUpClick }) => {
             <button
                 type="button"
                 onClick={onSignInClick}
-                className="px-5 py-3 text-black font-semibold uppercase hover:opacity-80 transition-opacity"
+                className="px-5 py-3 text-black font-semibold uppercase hover:opacity-80 transition-opacity duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]"
             >
                 Sign in
             </button>
@@ -14,7 +14,7 @@ export const AuthBar = ({ onSignInClick, onSignUpClick }) => {
             <button
                 type="button"
                 onClick={onSignUpClick}
-                className="px-5 py-3 bg-black border border-borders text-white font-semibold uppercase rounded-full hover:bg-black/90 transition-colors"
+                className="px-5 py-3 bg-black border border-borders text-white font-semibold uppercase rounded-full hover:bg-black/90 transition-colors duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]"
             >
                 Sign up
             </button>

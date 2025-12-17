@@ -17,7 +17,7 @@
  */
 export const Icon = ({ name, color, size = 20, className = '', stroke }) => {
   const symbolId = `/sprite.svg#icon-${name}`;
-  const isStrokeIcon = stroke !== undefined || name === 'arrow-up-right';
+  const isStrokeIcon = stroke !== undefined || name === 'arrow-up-right' || name === 'chevron-up' || name === 'chevron-down';
   const strokeColor = stroke || color || 'currentColor';
   const fillColor = color || 'currentColor';
 
@@ -28,10 +28,10 @@ export const Icon = ({ name, color, size = 20, className = '', stroke }) => {
       height={size}
       fill={isStrokeIcon ? 'none' : fillColor}
       stroke={isStrokeIcon ? strokeColor : undefined}
+      strokeWidth={isStrokeIcon ? '1.8' : undefined}
       className={className}
       style={{
-        fill: isStrokeIcon ? 'none' : (fillColor || 'currentColor'),
-        stroke: isStrokeIcon ? (strokeColor || 'currentColor') : undefined,
+        stroke: isStrokeIcon ? strokeColor : undefined,
       }}
     >
       <use href={symbolId} />

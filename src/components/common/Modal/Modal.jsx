@@ -1,20 +1,33 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import PropTypes from "prop-types";
 import Icon from "../Icon";
+import styles from "./Modal.module.css";
 
 export const Modal = ({ isOpen, onClose, children }) => {
     const [isVisible, setIsVisible] = useState(false);
+    const [shouldRender, setShouldRender] = useState(false);
+
+    const handleClose = useCallback(() => {
+        setIsVisible(false);
+        // Wait for animation to complete before calling onClose
+        setTimeout(() => {
+            onClose();
+        }, 300);
+    }, [onClose]);
 
     useEffect(() => {
         const handleEscape = (e) => {
             if (e.key === "Escape") {
-                onClose();
+                handleClose();
             }
         };
 
         if (isOpen) {
+            setShouldRender(true);
             document.addEventListener("keydown", handleEscape);
-            setIsVisible(true);
+            
+            // Trigger animation after render
+            setTimeout(() => setIsVisible(true), 10);
 
             // Prevent background scroll - padding is already set globally
             const originalOverflow = document.body.style.overflow;
@@ -23,50 +36,47 @@ export const Modal = ({ isOpen, onClose, children }) => {
             return () => {
                 document.removeEventListener("keydown", handleEscape);
                 document.body.style.overflow = originalOverflow || "unset";
-                setIsVisible(false);
             };
-        }
-
-        return () => {
-            document.removeEventListener("keydown", handleEscape);
+        } else {
             setIsVisible(false);
-        };
-    }, [isOpen, onClose]);
+            // Wait for animation to complete before unmounting
+            const timer = setTimeout(() => {
+                setShouldRender(false);
+            }, 300);
+            return () => clearTimeout(timer);
+        }
+    }, [isOpen, handleClose]);
 
-    if (!isOpen) return null;
+    if (!shouldRender) return null;
 
     const handleBackdropClick = (e) => {
         if (e.target === e.currentTarget) {
-            onClose();
+            handleClose();
         }
     };
 
     return (
         <div
-            className={`fixed inset-0 z-40 flex items-center justify-center bg-black/40 px-4 sm:px-4 transition-opacity duration-200 ease-out ${
-                isVisible ? "opacity-100" : "opacity-0"
-            }`}
+            className={`${styles.backdrop} ${isVisible ? styles.backdropVisible : styles.backdropHidden}`}
             onClick={handleBackdropClick}
         >
             <div
-                className={`relative bg-white rounded-[20px] sm:rounded-3xl shadow-xl transform transition-transform duration-200 ease-out ${
-                    isVisible ? "scale-100" : "scale-95"
-                }`}
+                className={`${styles.content} ${isVisible ? styles.contentVisible : styles.contentHidden}`}
                 onClick={(e) => e.stopPropagation()}
             >
                 {children}
                 
                 <button
                     type="button"
-                    onClick={onClose}
-                    className="group absolute right-4 top-4 sm:right-5 sm:top-5 h-6 w-6 sm:h-8 sm:w-8 flex items-center justify-center rounded-full transition-colors z-[100]"
+                    onClick={handleClose}
+                    className={styles.closeButton}
                     aria-label="Close modal"
                 >
                     <Icon
                         name="x"
                         size={24}
                         color="currentColor"
-                        className="h-6 w-6 sm:h-8 sm:w-8 text-black group-hover:text-gray-500 transition-colors"
+                        className={styles.closeIcon}
                     />
                 </button>
             </div>

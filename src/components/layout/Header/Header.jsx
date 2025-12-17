@@ -36,7 +36,19 @@ export const Header = ({ isDarkTheme = false }) => {
     useEffect(() => {
         const token = localStorage.getItem("token");
         if (token && !isAuthenticated) {
-            dispatch(getCurrentUser());
+            try {
+                const parts = token.split('.');
+                if (parts.length === 3) {
+                    const payload = JSON.parse(atob(parts[1].replace(/-/g, '+').replace(/_/g, '/')));
+                    if (payload.exp && payload.exp * 1000 < Date.now()) {
+                        localStorage.removeItem("token");
+                        return;
+                    }
+                }
+                dispatch(getCurrentUser());
+            } catch {
+                localStorage.removeItem("token");
+            }
         }
     }, [dispatch, isAuthenticated]);
 
@@ -65,7 +77,7 @@ export const Header = ({ isDarkTheme = false }) => {
                     )}
                     <div className="relative">
                         <div
-                            className={`transition-all duration-500 ease-in-out ${
+                            className={`transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] ${
                                 isAuthenticated
                                     ? "opacity-100 translate-x-0 scale-100"
                                     : "opacity-0 translate-x-8 scale-95 absolute inset-0 pointer-events-none"
@@ -80,7 +92,7 @@ export const Header = ({ isDarkTheme = false }) => {
                             )}
                         </div>
                         <div
-                            className={`transition-all duration-500 ease-in-out ${
+                            className={`transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] ${
                                 !isAuthenticated
                                     ? "opacity-100 translate-x-0 scale-100"
                                     : "opacity-0 -translate-x-8 scale-95 absolute inset-0 pointer-events-none"

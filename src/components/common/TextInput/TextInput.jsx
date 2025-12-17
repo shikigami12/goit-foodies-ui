@@ -39,7 +39,7 @@ export const TextInput = ({
                     minLength={minLength}
                     maxLength={maxLength}
                     disabled={disabled}
-                    className={`flex-1 bg-transparent outline-none text-sm sm:text-base leading-5 sm:leading-6 tracking-[-0.02em] ${textClass} placeholder:text-borders sm:placeholder:text-dark disabled:text-gray-400 ${isPassword ? "pr-8 sm:pr-10" : ""}`}
+                    className={`flex-1 bg-transparent outline-none text-sm sm:text-base leading-[20px] sm:leading-[24px] tracking-[-0.02em] ${textClass} placeholder:text-borders sm:placeholder:text-dark disabled:text-gray-400 ${isPassword ? "pr-8 sm:pr-10" : ""}`}
                     placeholder={placeholder}
                 />
                 
@@ -47,7 +47,7 @@ export const TextInput = ({
                     <button
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-[14px] sm:right-[18px] flex items-center justify-center w-[18px] h-[18px] sm:w-5 sm:h-5 text-dark hover:opacity-70 transition-opacity"
+                        className="absolute right-[14px] sm:right-[18px] flex items-center justify-center w-[18px] h-[18px] sm:w-5 sm:h-5 text-dark hover:opacity-70 transition-opacity duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]"
                         aria-label={showPassword ? "Hide password" : "Show password"}
                         tabIndex={-1}
                     >

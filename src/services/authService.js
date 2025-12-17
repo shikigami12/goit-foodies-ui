@@ -1,13 +1,11 @@
-import api, { tokenManager } from './api';
+import api from './api';
+import { tokenManager } from './tokenManager';
 import { API_ENDPOINTS } from '../constants';
 import '../models';
 
 /**
- * Register a new user.
- * Handles token persistence when backend returns a JWT.
- * @param {import('../models').RegisterRequest} userData - User registration data
- * @returns {Promise<import('../models').AuthResponse>} Auth response with user and token
- * @throws {Error} If registration fails
+ * @param {import('../models').RegisterRequest} userData
+ * @returns {Promise<import('../models').AuthResponse>}
  */
 const register = async (userData) => {
   const { data } = await api.post(API_ENDPOINTS.AUTH.REGISTER, userData);
@@ -18,11 +16,8 @@ const register = async (userData) => {
 };
 
 /**
- * Login with email and password.
- * Handles token persistence when backend returns a JWT.
- * @param {import('../models').LoginRequest} credentials - Login credentials
- * @returns {Promise<import('../models').AuthResponse>} Auth response with user and token
- * @throws {Error} If login fails
+ * @param {import('../models').LoginRequest} credentials
+ * @returns {Promise<import('../models').AuthResponse>}
  */
 const login = async (credentials) => {
   const { data } = await api.post(API_ENDPOINTS.AUTH.LOGIN, credentials);
@@ -33,10 +28,7 @@ const login = async (credentials) => {
 };
 
 /**
- * Logout current user.
- * Always clears the local token after a successful API call.
  * @returns {Promise<void>}
- * @throws {Error} If logout fails (but local token is still cleared)
  */
 const logout = async () => {
   await api.post(API_ENDPOINTS.AUTH.LOGOUT);
@@ -44,9 +36,7 @@ const logout = async () => {
 };
 
 /**
- * Get current authenticated user.
- * @returns {Promise<import('../models').UserResponse>} Current user data
- * @throws {Error} If user fetch fails
+ * @returns {Promise<import('../models').UserResponse>}
  */
 const getCurrentUser = async () => {
   const { data } = await api.get(API_ENDPOINTS.AUTH.CURRENT);
