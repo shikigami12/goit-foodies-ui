@@ -1,0 +1,87 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.4);
+  padding: 1rem;
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.backdropVisible {
+  opacity: 1;
+}
+
+.backdropHidden {
+  opacity: 0;
+}
+
+.content {
+  position: relative;
+  background-color: var(--color-white);
+  border-radius: 20px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  transform: scale(0.95);
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (min-width: 640px) {
+  .content {
+    border-radius: 1.5rem;
+  }
+}
+
+.contentVisible {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.contentHidden {
+  transform: scale(0.95);
+  opacity: 0;
+}
+
+.closeButton {
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+  height: 1.5rem;
+  width: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  transition: color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 100;
+}
+
+@media (min-width: 640px) {
+  .closeButton {
+    right: 1.25rem;
+    top: 1.25rem;
+    height: 2rem;
+    width: 2rem;
+  }
+}
+
+.closeButton:hover {
+  color: #6b7280;
+}
+
+.closeIcon {
+  height: 1.5rem;
+  width: 1.5rem;
+  color: var(--color-brand);
+  transition: color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (min-width: 640px) {
+  .closeIcon {
+    height: 2rem;
+    width: 2rem;
+  }
+}
+

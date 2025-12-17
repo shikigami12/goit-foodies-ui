@@ -15,7 +15,11 @@ export const NetworkLinks = () => {
           className="border border-borders p-2.5 rounded-full"
         >
           <a href={link.url} target="_blank" rel="noopener noreferrer">
-            <Icon name={link.name.toLowerCase()} color={'#050505'} />
+            <Icon
+              name={link.name.toLowerCase()}
+              color="currentColor"
+              className="text-brand"
+            />
           </a>
         </li>
       ))}
