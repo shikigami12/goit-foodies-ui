@@ -313,7 +313,7 @@ export default function RecipeList() {
 
   if (data.total === 0)
     return (
-      <p className="font-medium text-sm md:text-base leading-[143%] md:leading-[150%] tracking-[-0.02em] text-center text-[#bfbebe] md:text-[#1a1a1a] mt-20 md:mt-[100px]">
+      <p className="font-medium text-sm md:text-base leading-[143%] md:leading-[150%] tracking-[-0.02em] text-center text-borders md:text-brand-dark mt-20 md:mt-[100px]">
         {currentRoute.endsWith(ROUTES.RECIPES_MY)
           ? EMPTY_LIST_MESSAGES.RECIPES_MY
           : EMPTY_LIST_MESSAGES.FAVORITES_MY}

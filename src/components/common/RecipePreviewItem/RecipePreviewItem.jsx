@@ -52,8 +52,8 @@ export default function RecipePreviewItem({ recipe }) {
       </div>
       {/* Description */}
       <div className="text-left pl-2.5 pr-4 md:pr-8">
-        <p className="font-extrabold text-base md:text-xl leading-[150%] md:leading-[120%] tracking-[-0.02em] uppercase text-[#050505] mb-2 overflow-hidden text-ellipsis line-clamp-1">{recipe.title}</p>
-        <p className="font-medium text-sm md:text-base leading-[143%] md:leading-[150%] tracking-[-0.02em] text-[#bfbebe] md:text-[#1a1a1a] overflow-hidden text-ellipsis line-clamp-2">{cleanInstructions}</p>
+        <p className="font-extrabold text-base md:text-xl leading-[150%] md:leading-[120%] tracking-[-0.02em] uppercase text-brand mb-2 overflow-hidden text-ellipsis line-clamp-1">{recipe.title}</p>
+        <p className="font-medium text-sm md:text-base leading-[143%] md:leading-[150%] tracking-[-0.02em] text-borders md:text-brand-dark overflow-hidden text-ellipsis line-clamp-2">{cleanInstructions}</p>
       </div>
       {/* Buttons */}
       <div className="gap-1 flex-1 flex flex-row">
