@@ -50,6 +50,12 @@
   }
 }
 
+@layer utilities {
+    .h3-mobile {
+        @apply text-lg leading-6 font-extrabold font-sans tracking-tight uppercase;
+    }
+}
+
 html {
   font-family: var(--font-sans);
   /* Always show scrollbar to prevent layout shifts */
@@ -116,47 +122,3 @@ body {
 .animate-auth-slide {
   animation: auth-slide-down 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
-
-/* Start CSS Reset */
-img {
-  display: inline-block;
-  max-width: 100%;
-  height: auto;
-}
-
-a {
-  text-decoration: none;
-  color: inherit;
-}
-
-ul,
-li {
-  margin: 0;
-  padding: 0;
-  list-style-type: none;
-}
-
-textarea {
-  resize: none;
-}
-
-input,
-textarea,
-select,
-button {
-  color: inherit;
-  outline: none;
-}
-
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border-width: 0;
-}
-/* End CSS Reset */
