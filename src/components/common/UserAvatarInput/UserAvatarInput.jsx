@@ -1,21 +1,38 @@
 import React, { useEffect, useState } from 'react';
 import { Icon } from '../Icon/Icon';
 import { useWindowWidth } from '../../../hooks';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  currentUserProfileSelector,
+  updateAvatar,
+} from '../../../redux/slices/usersSlice';
+import { authUserSelector } from '../../../redux/slices/authSlice';
 
 export default function UserAvatarInput() {
-  const isCurrentUser = true; //TODO: need to take from storage
+  const user = useSelector(currentUserProfileSelector);
+
+  const authUser = useSelector(authUserSelector);
+  const isCurrentUser = authUser.id === user.id;
+
   const [selectedFile, setSelectedFile] = useState(null);
-  const [previewImage, setPreviewImage] = useState(null);
+  const [previewImage, setPreviewImage] = useState(user?.avatar);
   const windowWidth = useWindowWidth();
+  const dispatch = useDispatch();
 
   const inputRef = React.useRef();
   console.log(inputRef);
   useEffect(() => {
     console.log(selectedFile);
 
-    previewImage && URL.revokeObjectURL(previewImage);
-    selectedFile && setPreviewImage(URL.createObjectURL(selectedFile));
+    // previewImage && URL.revokeObjectURL(previewImage);
+    // selectedFile && setPreviewImage(URL.createObjectURL(selectedFile));
+
+    if (selectedFile) dispatch(updateAvatar(selectedFile));
   }, [selectedFile]);
+
+  useEffect(() => {
+    setPreviewImage(user.avatar);
+  }, [user.avatar]);
 
   const handleAddButton = () => {
     inputRef.current.click();
@@ -27,7 +44,9 @@ export default function UserAvatarInput() {
 
   return (
     <div className="relative rounded-[90%] bg-borders w-20 h-20 md:w-[120px] md:h-[120px] mx-auto">
-      {previewImage && <img className="w-full h-full rounded-[90%]" src={previewImage} />}
+      {previewImage && (
+        <img className="w-full h-full rounded-[90%]" src={previewImage} />
+      )}
       {isCurrentUser && (
         <>
           {' '}

@@ -25,7 +25,7 @@ const handleAuthFailure = (state, action) => {
   state.error = action.payload;
 };
 
-const clearAuthState = (state) => {
+const clearAuthState = state => {
   state.user = null;
   state.isAuthenticated = false;
   state.error = null;
@@ -79,22 +79,22 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    clearError: (state) => {
+    clearError: state => {
       state.error = null;
     },
     updateUser: (state, action) => {
       state.user = { ...state.user, ...action.payload };
     },
   },
-  extraReducers: (builder) => {
+  extraReducers: builder => {
     builder
-      .addCase(signup.pending, (state) => {
+      .addCase(signup.pending, state => {
         state.isLoading = true;
         state.error = null;
       })
       .addCase(signup.fulfilled, handleAuthSuccess)
       .addCase(signup.rejected, handleAuthFailure)
-      .addCase(signin.pending, (state) => {
+      .addCase(signin.pending, state => {
         state.isLoading = true;
         state.error = null;
       })
@@ -102,7 +102,7 @@ const authSlice = createSlice({
       .addCase(signin.rejected, handleAuthFailure)
       .addCase(logout.fulfilled, clearAuthState)
       .addCase(logout.rejected, clearAuthState)
-      .addCase(getCurrentUser.pending, (state) => {
+      .addCase(getCurrentUser.pending, state => {
         state.isLoading = true;
       })
       .addCase(getCurrentUser.fulfilled, (state, action) => {
@@ -133,11 +133,11 @@ const persistedReducer = persistReducer(persistConfig, authSlice.reducer);
 
 const authReducer = (state = initialState, action) => {
   const result = persistedReducer(state, action);
-  
+
   if (action.type === 'persist/REHYDRATE' && action.payload) {
     const hasToken = tokenManager.hasToken();
     const hasUser = Boolean(result.user);
-    
+
     if (!hasToken) {
       return {
         ...initialState,
@@ -145,7 +145,7 @@ const authReducer = (state = initialState, action) => {
         isAuthenticated: false,
       };
     }
-    
+
     return {
       ...result,
       isAuthenticated: hasToken && hasUser,
@@ -153,8 +153,10 @@ const authReducer = (state = initialState, action) => {
       error: null,
     };
   }
-  
+
   return result;
 };
 
 export default authReducer;
+
+export const authUserSelector = state => state.auth.user;

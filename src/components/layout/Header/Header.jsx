@@ -37,6 +37,7 @@ export const Header = ({ isDarkTheme = false }) => {
   useEffect(() => {
     const token = tokenManager.getToken();
     if (token && !isAuthenticated) {
+      // TODO: recheck, looks like this line never run because always one of 2 values never be true in one time
       dispatch(getCurrentUser());
     }
   }, [dispatch, isAuthenticated]);

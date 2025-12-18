@@ -7,19 +7,36 @@ import UserTabList from '../components/common/UserTabList';
 import { Icon } from '../components/common/Icon/Icon';
 import { useEffect } from 'react';
 import { userService } from '../services/userService';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  currentUserProfileSelector,
+  getCurrentUser,
+} from '../redux/slices/usersSlice';
 
 export const UserPage = () => {
+  const navigate = useNavigate();
   const { id } = useParams();
-  const isCurrentUser = true; //TODO: need to take from storage
+  const user = useSelector(currentUserProfileSelector);
+  const authUser = useSelector(state => state.auth.user);
+  const dispatch = useDispatch();
+
+  console.log('user', user);
+
+  const isCurrentUser = authUser.id === id;
+  const isLoaded = user && user.id === id;
 
   useEffect(() => {
-    // const getData = async () => {
-    //   debugger;
-    //   const response = await userService.getCurrentUser();
-    //   console.log({ response });
-    // };
-    // getData();
+    if (typeof id === 'undefined')
+      navigate(`/user/${authUser.id}`, { replace: true });
   }, []);
+
+  useEffect(() => {
+    if (!user) {
+      if (isCurrentUser) dispatch(getCurrentUser());
+    }
+  }, [dispatch, isCurrentUser]);
+
+  if (!isLoaded) return <p>Loading...</p>;
 
   return (
     <>
