@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom";
 import { Icon } from "../../common/Icon/Icon";
+import clsx from "clsx";
 
-export const RecipeList = ({ recipes }) => {
+export const RecipeList = ({ recipes, className }) => {
   return (
-    <ul className="grid gap-8 md:grid-cols-2 md:gap-x-5 md:gap-y-8 xl:grid-cols-3">
+    <ul className={clsx("grid gap-8 md:grid-cols-2 md:gap-x-5 md:gap-y-8 xl:grid-cols-3", className)}>
       {recipes.map(({ id, title, thumb, instructions, owner }) => (
         <li key={id} className="">
           <Link to={`/recipe/${id}`} className="block">
@@ -21,7 +22,7 @@ export const RecipeList = ({ recipes }) => {
             <div className="flex justify-between items-center gap-2">
               <div className="flex items-center gap-2">
                 {<img 
-                  src={owner.avatar ?? "https://i.pravatar.cc/32"} 
+                  src={owner.avatar ?? "https://i.pravatar.cc/32?u=" + owner.id} 
                   alt={owner.name}
                   width={32}
                   height={32}

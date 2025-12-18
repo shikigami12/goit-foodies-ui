@@ -1,3 +1,5 @@
+import clsx from "clsx";
+
 export const RecipePagination = ({ currentPage, totalPages, onPageChange }) => {
   const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
   
@@ -18,16 +20,7 @@ export const RecipePagination = ({ currentPage, totalPages, onPageChange }) => {
   const visiblePages = getVisiblePages();
 
   return (
-    <div className="flex justify-center items-center gap-2 mt-8">
-      <button
-        onClick={() => onPageChange(currentPage - 1)}
-        disabled={currentPage === 1}
-        className="w-10 h-10 flex items-center justify-center rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100 transition-colors"
-        aria-label="Попередня сторінка"
-      >
-        ‹
-      </button>
-      
+    <div className="flex justify-center items-center gap-1.5">
       {visiblePages.map((page, index) => (
         page === "..." ? (
           <span key={`ellipsis-${index}`} className="px-2">...</span>
@@ -35,25 +28,15 @@ export const RecipePagination = ({ currentPage, totalPages, onPageChange }) => {
           <button
             key={page}
             onClick={() => onPageChange(page)}
-            className={`w-10 h-10 rounded-lg border transition-colors ${
-              currentPage === page
-                ? "bg-green-600 text-white border-green-600"
-                : "border-gray-300 hover:bg-gray-100"
-            }`}
+            className={clsx("size-10 rounded-full border text-sm text-center transition-colors", {
+              "border-[#050505]": currentPage === page,
+              "border-transparent hover:border-gray-300 cursor-pointer": currentPage !== page
+            })}
           >
             {page}
           </button>
         )
       ))}
-      
-      <button
-        onClick={() => onPageChange(currentPage + 1)}
-        disabled={currentPage === totalPages}
-        className="w-10 h-10 flex items-center justify-center rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100 transition-colors"
-        aria-label="Наступна сторінка"
-      >
-        ›
-      </button>
     </div>
   );
 };
