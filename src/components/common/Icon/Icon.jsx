@@ -1,3 +1,4 @@
+import styles from './Icon.module.css';
 /**
  * Define a list of allowed icon names
  * @typedef {"facebook" | "youtube" | "instagram" | "logo-footer" | "quote" | "burger" | "arrow-up-right" | "chevron-up" | "chevron-down" | "eye-off" | "eye" | "upload-photo" | "heart" | "minus" | "plus" | "trash" | "check" | "x"} IconName
@@ -17,7 +18,11 @@
  */
 export const Icon = ({ name, color, size = 20, className = '', stroke }) => {
   const symbolId = `/sprite.svg#icon-${name}`;
-  const isStrokeIcon = stroke !== undefined || name === 'arrow-up-right' || name === 'chevron-up' || name === 'chevron-down';
+  const isStrokeIcon =
+    stroke !== undefined ||
+    name === 'arrow-up-right' ||
+    name === 'chevron-up' ||
+    name === 'chevron-down';
   const strokeColor = stroke || color || 'currentColor';
   const fillColor = color || 'currentColor';
 

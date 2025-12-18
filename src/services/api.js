@@ -37,20 +37,20 @@ const api = axios.create({
 
 // Request interceptor - auto-attach auth token
 api.interceptors.request.use(
-  (config) => {
+  config => {
     const token = tokenManager.getToken();
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
-  (error) => Promise.reject(error)
+  error => Promise.reject(error)
 );
 
 // Response interceptor - error handling
 api.interceptors.response.use(
-  (response) => response,
-  (error) => {
+  response => response,
+  error => {
     const { response } = error;
 
     // Handle 401 Unauthorized - token expired or invalid
@@ -65,7 +65,8 @@ api.interceptors.response.use(
     // Normalize error for consistent handling across the app
     const normalizedError = {
       status: response?.status || 0,
-      message: response?.data?.message || error.message || 'Something went wrong',
+      message:
+        response?.data?.message || error.message || 'Something went wrong',
       data: response?.data || null,
       originalError: error,
     };
@@ -82,7 +83,7 @@ api.interceptors.response.use(
  *   const query = buildQueryString({ page: 1, limit: 10, category: undefined });
  *   // Returns: "page=1&limit=10"
  */
-export const buildQueryString = (params) => {
+export const buildQueryString = params => {
   const searchParams = new URLSearchParams();
 
   Object.entries(params).forEach(([key, value]) => {
@@ -106,7 +107,7 @@ export const buildQueryString = (params) => {
  *     thumb: fileObject
  *   });
  */
-export const createFormData = (data) => {
+export const createFormData = data => {
   const formData = new FormData();
 
   Object.entries(data).forEach(([key, value]) => {
@@ -125,3 +126,14 @@ export const createFormData = (data) => {
 };
 
 export default api;
+[
+  {
+    id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+    measure: 'string',
+    ingredient: {
+      id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+      name: 'string',
+      img: 'string',
+    },
+  },
+];

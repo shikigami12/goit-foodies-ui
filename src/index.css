@@ -1,89 +1,133 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @theme {
-    /*fonts*/
-    --font-sans: "Mulish", system-ui, sans-serif;
+  /*fonts*/
+  --font-sans: 'Mulish', system-ui, sans-serif;
 
-    /*colors*/
-    --color-brand: #050505;
-    --color-brand-dark: #1A1A1A;
-    --color-borders: #BFBEBE;
-    --color-dark: #1A1A1A;
-    --color-white: #FFFFFF;
+  /*colors*/
+  --color-brand: #050505;
+  --color-brand-dark: #1a1a1a;
+  --color-borders: #bfbebe;
+  --color-dark: #1a1a1a;
+  --color-white: #ffffff;
 
-    /*spacing*/
-    --spacing-128: 32rem;
+  /*spacing*/
+  --spacing-128: 32rem;
 }
 
 @layer components {
-    .btn {
-        @apply px-4 py-2 rounded-xl bg-brand text-white;
-    }
+  .btn {
+    @apply px-4 py-2 rounded-xl bg-brand text-white;
+  }
 }
 
 html {
-    font-family: var(--font-sans);
-    /* Always show scrollbar to prevent layout shifts */
-    overflow-y: scroll;
+  font-family: var(--font-sans);
+  /* Always show scrollbar to prevent layout shifts */
+  overflow-y: scroll;
 }
 
 body {
-    /* Scrollbar width will be set via JavaScript to prevent jumps */
-    margin: 0;
-    padding: 0;
+  /* Scrollbar width will be set via JavaScript to prevent jumps */
+  margin: 0;
+  padding: 0;
 }
 
 /* Customize scrollbar appearance */
 ::-webkit-scrollbar {
-    width: 15px;
+  width: 15px;
 }
 
 ::-webkit-scrollbar-track {
-    background: transparent;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-    background: var(--color-borders);
-    border-radius: 10px;
+  background: var(--color-borders);
+  border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: color-mix(in srgb, var(--color-borders) 80%, black);
+  background: color-mix(in srgb, var(--color-borders) 80%, black);
 }
 
 /* For Firefox */
 * {
-    scrollbar-width: thin;
-    scrollbar-color: var(--color-borders) transparent;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-borders) transparent;
 }
 
 /* Auth animations - standardized timing and easing */
 @keyframes auth-fade-in {
-    0% {
-        opacity: 0;
-        transform: scale(0.95);
-    }
-    100% {
-        opacity: 1;
-        transform: scale(1);
-    }
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 @keyframes auth-slide-down {
-    0% {
-        opacity: 0;
-        transform: translateY(-8px);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  0% {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .animate-auth-fade {
-    animation: auth-fade-in 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: auth-fade-in 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .animate-auth-slide {
-    animation: auth-slide-down 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: auth-slide-down 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
+/* Start CSS Reset */
+img {
+  display: inline-block;
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+ul,
+li {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+textarea {
+  resize: none;
+}
+
+input,
+textarea,
+select,
+button {
+  color: inherit;
+  outline: none;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+/* End CSS Reset */
