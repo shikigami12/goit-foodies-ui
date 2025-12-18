@@ -1,9 +1,9 @@
 import { useLocation } from 'react-router-dom';
 import { ROUTES } from '../../../constants';
 import { EMPTY_LIST_MESSAGES } from '../../../constants/messages';
-import { UserRelationsList } from '../UserRelationsList/UserRelationsList'; // 👈 шлях підкоригуй під себе
+import { UserRelationsList } from '../UserRelationsList/UserRelationsList';
 
-const MOCK_FOLLOWERS = [
+const UserFollowersList = [
   {
     id: '1',
     name: 'Victoria',
@@ -19,7 +19,7 @@ const MOCK_FOLLOWERS = [
   },
 ];
 
-const MOCK_FOLLOWING = [
+const UserFollowingList = [
   {
     id: '2',
     name: 'Andrew',
@@ -45,7 +45,7 @@ export default function FollowersList() {
   const isFollowersTab = currentRoute === followersSlug;
   const isFollowingTab = currentRoute === followingSlug;
 
-  const items = isFollowersTab ? MOCK_FOLLOWERS : MOCK_FOLLOWING;
+  const items = isFollowersTab ? UserFollowersList : UserFollowingList;
   const actionLabel = isFollowersTab ? 'Follow' : 'Unfollow';
   const emptyMessage = isFollowersTab
     ? EMPTY_LIST_MESSAGES.FOLLOWERS
