@@ -63,12 +63,10 @@ export const SignInModal = ({ onSwitchToSignUp, onClose }) => {
             await dispatch(signin({ email, password })).unwrap();
             showSuccess("Successfully signed in!");
             onClose?.();
-        } catch {
-            // Error handled via Redux state in useEffect
-        }
+        } catch {}
     };
 
-    return (
+  return (
         <section className={styles.section}>
             <div className={styles.container}>
                 <h2 className={styles.title}>
@@ -125,14 +123,14 @@ export const SignInModal = ({ onSwitchToSignUp, onClose }) => {
                                 onClick={onSwitchToSignUp}
                                 className={styles.linkText}
                             >
-                                Create an account
-                            </button>
-                        </div>
+        Create an account
+      </button>
+    </div>
                     </div>
                 </form>
             </div>
         </section>
-    );
+  );
 };
 
 SignInModal.propTypes = {

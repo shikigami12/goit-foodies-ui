@@ -65,9 +65,7 @@ export const SignUpModal = ({ onSwitchToSignIn, onClose }) => {
             await dispatch(signup({ name, email, password })).unwrap();
             showSuccess("Account created successfully!");
             onClose?.();
-        } catch {
-            // Error handled via Redux state in useEffect
-        }
+        } catch {}
     };
 
     return (

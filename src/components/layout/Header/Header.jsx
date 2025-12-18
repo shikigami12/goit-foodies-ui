@@ -10,6 +10,7 @@ import { Modal } from '../../common/Modal/Modal';
 import { useModal } from '../../../hooks';
 import { SignInModal, SignUpModal, LogOutModal } from '../../modals';
 import { getCurrentUser, logout } from '../../../redux/slices/authSlice';
+import { tokenManager } from '../../../services';
 
 export const Header = ({ isDarkTheme = false }) => {
   const dispatch = useDispatch();
@@ -34,34 +35,24 @@ export const Header = ({ isDarkTheme = false }) => {
   } = useModal();
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = tokenManager.getToken();
     if (token && !isAuthenticated) {
-      try {
-        const parts = token.split('.');
-        if (parts.length === 3) {
-          const payload = JSON.parse(
-            atob(parts[1].replace(/-/g, '+').replace(/_/g, '/'))
-          );
-          if (payload.exp && payload.exp * 1000 < Date.now()) {
-            localStorage.removeItem('token');
-            return;
-          }
-        }
-        dispatch(getCurrentUser());
-      } catch {
-        localStorage.removeItem('token');
-      }
+      dispatch(getCurrentUser());
     }
   }, [dispatch, isAuthenticated]);
 
   const handleSwitchToSignUp = () => {
     closeSignInModal();
-    openSignUpModal();
+    setTimeout(() => {
+      openSignUpModal();
+    }, 300);
   };
 
   const handleSwitchToSignIn = () => {
     closeSignUpModal();
-    openSignInModal();
+    setTimeout(() => {
+      openSignInModal();
+    }, 300);
   };
 
   const handleLogout = async () => {

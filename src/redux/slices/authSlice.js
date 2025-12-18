@@ -1,31 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { authService } from '../../services';
+import { persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
+import { authService, tokenManager } from '../../services';
 
 const initialState = {
   user: null,
-  token: (() => {
-    try {
-      const token = localStorage.getItem('token');
-      if (token) {
-        try {
-          const parts = token.split('.');
-          if (parts.length === 3) {
-            const payload = JSON.parse(atob(parts[1].replace(/-/g, '+').replace(/_/g, '/')));
-            if (payload.exp && payload.exp * 1000 < Date.now()) {
-              localStorage.removeItem('token');
-              return null;
-            }
-          }
-        } catch {
-          localStorage.removeItem('token');
-          return null;
-        }
-      }
-      return token;
-    } catch {
-      return null;
-    }
-  })(),
   isAuthenticated: false,
   isLoading: false,
   error: null,
@@ -37,7 +16,6 @@ const getErrorMessage = (error, fallbackMessage) =>
 const handleAuthSuccess = (state, action) => {
   state.isLoading = false;
   state.user = action.payload.user;
-  state.token = action.payload.token;
   state.isAuthenticated = true;
   state.error = null;
 };
@@ -49,7 +27,6 @@ const handleAuthFailure = (state, action) => {
 
 const clearAuthState = (state) => {
   state.user = null;
-  state.token = null;
   state.isAuthenticated = false;
   state.error = null;
 };
@@ -139,14 +116,45 @@ const authSlice = createSlice({
         state.error = action.payload;
         state.user = null;
         state.isAuthenticated = false;
+        tokenManager.removeToken();
       });
   },
 });
 
 export const { clearError, updateUser } = authSlice.actions;
 
-export const selectAuth = (state) => state.auth;
-export const selectCurrentUser = (state) => state.auth.user;
-export const selectIsAuthenticated = (state) => state.auth.isAuthenticated;
+const persistConfig = {
+  key: 'auth',
+  storage,
+  whitelist: ['user', 'isAuthenticated'],
+};
 
-export default authSlice.reducer;
+const persistedReducer = persistReducer(persistConfig, authSlice.reducer);
+
+const authReducer = (state = initialState, action) => {
+  const result = persistedReducer(state, action);
+  
+  if (action.type === 'persist/REHYDRATE' && action.payload) {
+    const hasToken = tokenManager.hasToken();
+    const hasUser = Boolean(result.user);
+    
+    if (!hasToken) {
+      return {
+        ...initialState,
+        user: null,
+        isAuthenticated: false,
+      };
+    }
+    
+    return {
+      ...result,
+      isAuthenticated: hasToken && hasUser,
+      isLoading: false,
+      error: null,
+    };
+  }
+  
+  return result;
+};
+
+export default authReducer;
