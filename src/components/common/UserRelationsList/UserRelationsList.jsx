@@ -1,4 +1,4 @@
-export const UserRelationsList = ({ items, actionLabel }) => {
+export const UserRelationsList = ({ items, actionLabel, onAction }) => {
   return (
     <div className="space-y-6">
       {items.map((item, index) => (
@@ -30,6 +30,7 @@ export const UserRelationsList = ({ items, actionLabel }) => {
 
                 <button
                   type="button"
+                  onClick={() => onAction?.(item.id)}
                   className="
                     w-[139px] h-11
                     px-6 py-2.5
@@ -61,12 +62,7 @@ export const UserRelationsList = ({ items, actionLabel }) => {
                 return (
                   <div
                     key={idx}
-                    className={`
-          ${visibilityClasses}
-          shrink-0
-          w-[100px] aspect-square
-          rounded-2xl overflow-hidden bg-gray-100
-        `}
+                    className={`${visibilityClasses} w-[100px] h-[100px] rounded-2xl overflow-hidden bg-gray-100`}
                   >
                     <img
                       src={thumb}
