@@ -233,33 +233,43 @@ export const AddRecipePage = () => {
               />
             </div>
 
-            {ingredients.length > 0 && (
-              <div className="mx-2 mt-4 space-y-2">
-                {ingredients.map((ing, idx) => (
-                  <div
-                    key={`${ing.ingredientId}-${idx}`}
-                    className="flex items-center justify-between rounded-2xl border border-neutral-200 bg-white px-4 py-3"
-                  >
-                    <div className="min-w-0">
-                      <div className="truncate text-sm font-semibold text-neutral-900">{ing.label}</div>
-                      <div className="text-xs text-neutral-500">{ing.measure}</div>
-                    </div>
+        {ingredients.length > 0 && (
+          <div className="mx-2 mt-6 flex flex-wrap gap-4">
+            {ingredients.map((ing, idx) => (
+              <div
+                key={`${ing.ingredientId}-${idx}`}
+                className="relative flex items-center gap-3 rounded-2xl border border-neutral-200 bg-white px-4 py-3"
+              >
+                {/* remove X */}
+                <button
+                  type="button"
+                  onClick={() => removeIngredientAt(idx)}
+                  disabled={isSubmitting}
+                  className="absolute -right-2 -top-2 flex h-7 w-7 items-center justify-center rounded-full border border-neutral-200 bg-white text-neutral-500 shadow-sm hover:bg-neutral-50 disabled:opacity-60"
+                  aria-label="Remove ingredient"
+                  title="Remove"
+                >
+                  ×
+                </button>
 
-                    <button
-                      type="button"
-                      onClick={() => removeIngredientAt(idx)}
-                      disabled={isSubmitting}
-                      className="rounded-full border border-neutral-200 p-2 hover:bg-neutral-50 disabled:opacity-60"
-                      aria-label="Remove ingredient"
-                    >
-                      <svg className="h-4 w-4">
-                        <use href="/sprite.svg#icon-trash" />
-                      </svg>
-                    </button>
-                  </div>
-                ))}
+                {/* image */}
+                <div className="flex h-14 w-14 items-center justify-center overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-50">
+                  {ing.img ? (
+                    <img src={ing.img} alt={ing.label} className="h-full w-full object-cover" />
+                  ) : (
+                    <div className="text-xs text-neutral-400">No image</div>
+                  )}
+                </div>
+
+                {/* text */}
+                <div className="min-w-[90px]">
+                  <div className="text-sm font-medium text-neutral-900">{ing.label}</div>
+                  <div className="text-xs text-neutral-400">{ing.measure}</div>
+                </div>
               </div>
-            )}
+            ))}
+          </div>
+        )}
           </div>
 
           {/* Instructions */}

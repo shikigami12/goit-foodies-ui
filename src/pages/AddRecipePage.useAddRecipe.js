@@ -81,11 +81,13 @@ export const useAddRecipe = () => {
     [ingredientsRef]
   );
 
-  const ingredientLabelById = useMemo(() => {
-    const map = new Map();
-    for (const i of ingredientsRef) map.set(i.id, i.name);
-    return map;
-  }, [ingredientsRef]);
+const ingredientMetaById = useMemo(() => {
+  const map = new Map();
+  for (const i of ingredientsRef) {
+    map.set(i.id, { name: i.name, img: i.img || i.image || i.thumb || "" });
+  }
+  return map;
+}, [ingredientsRef]);
 
   // -------- Thumb preview --------
   const previewUrl = useMemo(() => {
@@ -164,10 +166,11 @@ export const useAddRecipe = () => {
 
     const exists = ingredients.some((x) => x.ingredientId === ingredientId);
     if (exists) return setSubmitError("This ingredient is already added.");
+    const meta = ingredientMetaById.get(ingredientId);
+    const label = meta?.name ?? ingredientId;
+    const img = meta?.img ?? "";
 
-    const label = ingredientLabelById.get(ingredientId) ?? ingredientId;
-
-    setIngredients((p) => [...p, { ingredientId, label, measure: measure.trim() }]);
+    setIngredients((p) => [...p, { ingredientId, label, img, measure: measure.trim() }]);
     setIngredientDraft({ ingredientId: "", measure: "" });
   };
 
