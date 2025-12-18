@@ -1,4 +1,4 @@
 export * from './HomePage';
-export * from './RecipePage';
+export * from './Recipe/RecipePage.jsx';
 export * from './AddRecipePage';
 export * from './UserPage';
