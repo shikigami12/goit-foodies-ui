@@ -9,9 +9,6 @@ export default function FollowersList() {
   const location = useLocation();
   const { id } = useParams();
 
-  console.log('PARAM ID:', id);
-  console.log('FULL URL:', location.pathname);
-
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
