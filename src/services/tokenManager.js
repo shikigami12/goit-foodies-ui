@@ -1,8 +1,5 @@
 const JWT_UTILS = {
-  /**
-   * @param {string} token
-   * @returns {Object|null}
-   */
+  // Decodes JWT token payload
   decode: (token) => {
     try {
       if (!token) return null;
@@ -19,10 +16,7 @@ const JWT_UTILS = {
     }
   },
 
-  /**
-   * @param {string} token
-   * @returns {boolean}
-   */
+  // Checks if JWT token is expired
   isExpired: (token) => {
     try {
       const decoded = JWT_UTILS.decode(token);
@@ -36,10 +30,7 @@ const JWT_UTILS = {
     }
   },
 
-  /**
-   * @param {string} token
-   * @returns {Date|null}
-   */
+  // Returns token expiration date
   getExpiration: (token) => {
     try {
       const decoded = JWT_UTILS.decode(token);
@@ -54,9 +45,7 @@ const JWT_UTILS = {
 };
 
 export const tokenManager = {
-  /**
-   * @returns {string|null}
-   */
+  // Retrieves valid token from localStorage
   getToken: () => {
     try {
       const token = localStorage.getItem('token');
@@ -74,9 +63,7 @@ export const tokenManager = {
     }
   },
 
-  /**
-   * @param {string} token
-   */
+  // Stores token in localStorage if valid
   setToken: (token) => {
     try {
       if (!token) {
@@ -96,6 +83,7 @@ export const tokenManager = {
     }
   },
 
+  // Removes token from localStorage
   removeToken: () => {
     try {
       localStorage.removeItem('token');
@@ -104,22 +92,17 @@ export const tokenManager = {
     }
   },
 
-  /**
-   * @returns {boolean}
-   */
+  // Checks if valid token exists
   hasToken: () => {
     try {
-      const token = tokenManager.getToken();
-      return Boolean(token && !JWT_UTILS.isExpired(token));
+      return Boolean(tokenManager.getToken());
     } catch (error) {
       console.error('Error checking token in localStorage:', error);
       return false;
     }
   },
 
-  /**
-   * @returns {Date|null}
-   */
+  // Returns token expiration date from localStorage
   getTokenExpiration: () => {
     try {
       const token = localStorage.getItem('token');
