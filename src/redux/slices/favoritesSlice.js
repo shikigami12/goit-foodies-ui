@@ -1,26 +1,35 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 
 const initialState = {
-  items: [],
-  isLoading: false,
-  error: null,
+    favorites: [],
+    isLoading: false,
+    error: null,
 };
 
 const favoritesSlice = createSlice({
-  name: 'favorites',
-  initialState,
-  reducers: {
-    setFavorites: (state, action) => {
-      state.items = action.payload;
+    name: 'favorites',
+    initialState,
+    reducers: {
+        setFavorites: (state, action) => {
+            state.favorites = action.payload;
+        },
+        addToFavorites: (state, action) => {
+            state.favorites.push(action.payload);
+        },
+        removeFromFavorites: (state, action) => {
+            state.favorites = state.favorites.filter((item) => item !== action.payload);
+        },
     },
-    addFavorite: (state, action) => {
-      state.items.push(action.payload);
-    },
-    removeFavorite: (state, action) => {
-      state.items = state.items.filter((item) => item.id !== action.payload);
-    },
-  },
 });
 
-export const { setFavorites, addFavorite, removeFavorite } = favoritesSlice.actions;
-export default favoritesSlice.reducer;
+export const { setFavorites, addToFavorites, removeFromFavorites } = favoritesSlice.actions;
+
+// Persist config
+const persistConfig = {
+    key: 'favoriteRecipes',
+    storage,
+};
+
+export default persistReducer(persistConfig, favoritesSlice.reducer);

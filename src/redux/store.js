@@ -1,4 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
+import { persistStore, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist';
 import authReducer from './slices/authSlice';
 import recipesReducer from './slices/recipesSlice';
 import categoriesReducer from './slices/categoriesSlice';
@@ -8,13 +9,21 @@ import usersReducer from './slices/usersSlice';
 import favoritesReducer from './slices/favoritesSlice';
 
 export const store = configureStore({
-  reducer: {
-    auth: authReducer,
-    recipes: recipesReducer,
-    categories: categoriesReducer,
-    ingredients: ingredientsReducer,
-    areas: areasReducer,
-    users: usersReducer,
-    favorites: favoritesReducer,
-  },
+    reducer: {
+        auth: authReducer,
+        recipes: recipesReducer,
+        categories: categoriesReducer,
+        ingredients: ingredientsReducer,
+        areas: areasReducer,
+        users: usersReducer,
+        favorites: favoritesReducer,
+    },
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware({
+            serializableCheck: {
+                ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+            },
+        }),
 });
+
+export const persistor = persistStore(store);
