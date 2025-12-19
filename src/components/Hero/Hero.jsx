@@ -19,7 +19,7 @@ export const Hero = () => {
     if (!isAuthenticated) {
       setIsModalOpen(true);
     } else {
-      navigate("/add-recipe");
+      navigate("/add");
     }
   };
 
