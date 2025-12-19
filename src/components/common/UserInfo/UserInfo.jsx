@@ -16,8 +16,7 @@ const stats = {
 export default function UserInfo() {
   const user = useSelector(currentUserProfileSelector);
   return (
-    // TODO: add gap-5 (20px) when for Tab version
-    <div className="border border-borders rounded-[30px] px-[54px] py-[30px] flex flex-col gap-4 w-full">
+    <div className="border border-borders rounded-[30px] px-[54px] py-[30px] flex flex-col gap-4 md:gap-5 w-full">
       <UserAvatarInput />
       <p className="font-extrabold text-[18px] md:text-[20px] leading-[133%] md:leading-[120%] tracking-[-0.02em] uppercase text-center">
         {user.name}

@@ -80,6 +80,16 @@ const usersSlice = createSlice({
     setCurrentUserProfile: (state, action) => {
       state.currentUserProfile = action.payload;
     },
+    decrementRecipesCount: (state) => {
+      if (state.currentUserProfile) {
+        state.currentUserProfile.recipesCount -= 1;
+      }
+    },
+    decrementFavoritesCount: (state) => {
+      if (state.currentUserProfile) {
+        state.currentUserProfile.favoritesCount -= 1;
+      }
+    },
   },
   extraReducers: builder => {
     builder
@@ -91,19 +101,13 @@ const usersSlice = createSlice({
       .addCase(getUserById.rejected, handleUserFailure)
       .addCase(updateAvatar.pending, handlePending)
       .addCase(updateAvatar.fulfilled, (state, { payload }) => {
-        // console.log(payload);
-        // state.currentUserProfile = {
-        //   ...state.currentUserProfile,
-        //   avatar: payload.avatar,
-        // };
-
         state.currentUserProfile.avatar = payload.avatar;
       })
       .addCase(updateAvatar.rejected, handleUserFailure);
   },
 });
 
-export const { setCurrentUserProfile } = usersSlice.actions;
+export const { setCurrentUserProfile, decrementRecipesCount, decrementFavoritesCount } = usersSlice.actions;
 export default usersSlice.reducer;
 
 export const currentUserProfileSelector = state =>
