@@ -4,6 +4,7 @@ import { ROUTES } from '../../../constants';
 import { EMPTY_LIST_MESSAGES } from '../../../constants/messages';
 import { userService } from '../../../services/userService';
 import { UserRelationsList } from '../UserRelationsList/UserRelationsList';
+import { Loader } from '../Loader';
 
 export default function FollowersList() {
   const location = useLocation();
@@ -32,6 +33,8 @@ export default function FollowersList() {
         setLoading(true);
         setError('');
 
+        // TODO: Підгружати дані чужого акаунта для таба Followers (якщо ця сторінка не поточного користувача)
+        
         if (isFollowersTab && id) {
           const data = await userService.getFollowers(id);
           const list = (data.followers ?? data ?? []).map(u => ({
@@ -83,7 +86,7 @@ export default function FollowersList() {
   };
 
   if (loading) {
-    return <p className="mt-10 text-center text-[#bfbebe]">Loading...</p>;
+    return <Loader />;
   }
 
   if (error) {

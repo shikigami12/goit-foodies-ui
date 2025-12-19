@@ -73,6 +73,29 @@ export const updateAvatar = createAsyncThunk(
   }
 );
 
+export const followUser = createAsyncThunk(
+  'users/follow',
+  async (id, { rejectWithValue }) => {
+    try {
+      return await userService.followUser(id);
+    } catch (error) {
+      return rejectWithValue(getErrorMessage(error, 'Follow user failed'));
+    }
+  }
+);
+
+export const unfollowUser = createAsyncThunk(
+  'users/unfollow',
+  async (id, { rejectWithValue }) => {
+    try {
+      await userService.unfollowUser(id);
+      return id;
+    } catch (error) {
+      return rejectWithValue(getErrorMessage(error, 'Unfollow user failed'));
+    }
+  }
+);
+
 const usersSlice = createSlice({
   name: 'users',
   initialState,
@@ -103,7 +126,19 @@ const usersSlice = createSlice({
       .addCase(updateAvatar.fulfilled, (state, { payload }) => {
         state.currentUserProfile.avatar = payload.avatar;
       })
-      .addCase(updateAvatar.rejected, handleUserFailure);
+      .addCase(updateAvatar.rejected, handleUserFailure)
+      .addCase(followUser.fulfilled, (state) => {
+        if (state.currentUserProfile) {
+          state.currentUserProfile.isFollowing = true;
+          state.currentUserProfile.followersCount += 1;
+        }
+      })
+      .addCase(unfollowUser.fulfilled, (state) => {
+        if (state.currentUserProfile) {
+          state.currentUserProfile.isFollowing = false;
+          state.currentUserProfile.followersCount -= 1;
+        }
+      });
   },
 });
 

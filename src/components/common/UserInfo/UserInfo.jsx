@@ -13,8 +13,15 @@ const stats = {
   followers: 'followersCount',
   following: 'followingCount',
 };
-export default function UserInfo() {
+
+export default function UserInfo({ isCurrentUser }) {
   const user = useSelector(currentUserProfileSelector);
+
+  const filteredStatsOrder = statsOrder.filter(key => {
+    if (isCurrentUser) return true;
+    return key !== 'favorites' && key !== 'following';
+  });
+
   return (
     <div className="border border-borders rounded-[30px] px-[54px] py-[30px] flex flex-col gap-4 md:gap-5 w-full">
       <UserAvatarInput />
@@ -24,7 +31,7 @@ export default function UserInfo() {
 
       {/** stats */}
       <ul className="flex flex-col justify-start items-start gap-1.5 list-none m-0 p-0">
-        {statsOrder.map(key => (
+        {filteredStatsOrder.map(key => (
           <li
             key={key}
             className="font-bold text-[14px] md:text-[16px] leading-[143%] md:leading-[150%] tracking-[-0.02em] text-brand-dark"

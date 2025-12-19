@@ -7,6 +7,7 @@ import {
   updateAvatar,
 } from '../../../redux/slices/usersSlice';
 import { authUserSelector } from '../../../redux/slices/authSlice';
+import withoutAvatar from "../../../images/user_without_avatar.jpg";
 
 export default function UserAvatarInput() {
   const user = useSelector(currentUserProfileSelector);
@@ -15,7 +16,7 @@ export default function UserAvatarInput() {
   const isCurrentUser = authUser.id === user.id;
 
   const [selectedFile, setSelectedFile] = useState(null);
-  const [previewImage, setPreviewImage] = useState(user?.avatar);
+  const [previewImage, setPreviewImage] = useState(user?.avatar || withoutAvatar);
   const windowWidth = useWindowWidth();
   const dispatch = useDispatch();
 
@@ -31,7 +32,7 @@ export default function UserAvatarInput() {
   }, [selectedFile]);
 
   useEffect(() => {
-    setPreviewImage(user.avatar);
+    setPreviewImage(user.avatar || withoutAvatar);
   }, [user.avatar]);
 
   const handleAddButton = () => {

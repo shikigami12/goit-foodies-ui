@@ -1,15 +1,18 @@
-import { useLocation, useSearchParams } from 'react-router-dom';
+import { useLocation, useParams, useSearchParams, useOutletContext } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import RecipePreviewItem from '../RecipePreviewItem/RecipePreviewItem';
 import { EMPTY_LIST_MESSAGES } from '../../../constants/messages';
 import { ROUTES } from '../../../constants';
-import { fetchFavoriteRecipes, fetchOwnRecipes } from '../../../redux/slices/recipesSlice';
+import { fetchFavoriteRecipes, fetchOwnRecipes, fetchRecipes } from '../../../redux/slices/recipesSlice';
 import { RecipePagination } from '../../layout/Recipes/RecipePagination';
+import RecipePreviewItemSkeleton from '../Skeleton/RecipePreviewItemSkeleton';
 
 export default function RecipeList() {
   const dispatch = useDispatch();
   const location = useLocation();
+  const { id } = useParams();
+  const { isCurrentUser } = useOutletContext();
   const [searchParams, setSearchParams] = useSearchParams();
   
   const { recipes, pagination, isLoading } = useSelector(state => state.recipes);
@@ -21,19 +24,34 @@ export default function RecipeList() {
   useEffect(() => {
     const params = { page, limit };
 
-    if (currentRoute.includes(ROUTES.RECIPES_MY)) {
-      dispatch(fetchOwnRecipes(params));
-    } else if (currentRoute.includes(ROUTES.RECIPES_FAVORITES)) {
-      dispatch(fetchFavoriteRecipes(params));
+    if (isCurrentUser) {
+      if (currentRoute.includes(ROUTES.RECIPES_MY)) {
+        dispatch(fetchOwnRecipes(params));
+      } else if (currentRoute.includes(ROUTES.RECIPES_FAVORITES)) {
+        dispatch(fetchFavoriteRecipes(params));
+      }
+    } else {
+      // Fetching recipes for another user profile
+      if (currentRoute.includes(ROUTES.RECIPES_MY)) {
+        dispatch(fetchRecipes({ ...params, owner: id }));
+      }
     }
-  }, [dispatch, currentRoute, page, limit]);
+  }, [dispatch, currentRoute, page, limit, isCurrentUser, id]);
 
   const handlePageChange = (newPage) => {
     setSearchParams({ page: newPage });
   };
 
   if (isLoading) {
-    return <div className="text-center mt-20">Loading...</div>;
+    return (
+      <ul className="flex flex-col gap-8 md:gap-10">
+        {[...Array(4)].map((_, i) => (
+          <li key={i}>
+            <RecipePreviewItemSkeleton />
+          </li>
+        ))}
+      </ul>
+    );
   }
 
   if (recipes.length === 0)
@@ -53,6 +71,7 @@ export default function RecipeList() {
             <RecipePreviewItem 
               recipe={recipe} 
               type={currentRoute.includes(ROUTES.RECIPES_MY) ? 'own' : 'favorite'} 
+              isCurrentUser={isCurrentUser}
             />
           </li>
         ))}

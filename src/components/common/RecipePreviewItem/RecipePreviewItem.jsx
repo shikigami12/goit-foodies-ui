@@ -28,7 +28,7 @@ const DeleteButton = ({ id, type, iconSize }) => {
   );
 };
 
-export default function RecipePreviewItem({ recipe, type }) {
+export default function RecipePreviewItem({ recipe, type, isCurrentUser }) {
   const windowWidth = useWindowWidth();
   const iconSize = windowWidth < 768 ? 16 : 18;
 
@@ -53,7 +53,9 @@ export default function RecipePreviewItem({ recipe, type }) {
       {/* Buttons */}
       <div className="gap-1 flex-shrink-0 flex flex-row items-start">
         <GoToButton id={recipe.id || recipe._id} iconSize={iconSize} />
-        <DeleteButton id={recipe.id || recipe._id} type={type} iconSize={iconSize} />
+        {isCurrentUser && (
+          <DeleteButton id={recipe.id || recipe._id} type={type} iconSize={iconSize} />
+        )}
       </div>
     </div>
   );

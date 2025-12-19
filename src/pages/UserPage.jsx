@@ -11,7 +11,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   currentUserProfileSelector,
   getCurrentUser,
+  getUserById,
 } from '../redux/slices/usersSlice';
+import { FollowButton } from '../components/common/FollowButton/FollowButton';
+import { Loader } from '../components/common/Loader';
+import { Breadcrumbs } from '../components/common/Breadcrumbs';
 
 export const UserPage = () => {
   const navigate = useNavigate();
@@ -31,32 +35,36 @@ export const UserPage = () => {
   }, []);
 
   useEffect(() => {
-    if (!user) {
-      if (isCurrentUser) dispatch(getCurrentUser());
+    if (!user || user.id !== id) {
+      if (isCurrentUser) {
+        dispatch(getCurrentUser());
+      } else {
+        dispatch(getUserById(id));
+      }
     }
-  }, [dispatch, isCurrentUser]);
+  }, [dispatch, id, isCurrentUser, user]);
 
-  if (!isLoaded) return <p>Loading...</p>;
+  if (!isLoaded) return <Loader />;
 
   return (
-    <>
+    <main className="mx-auto w-full max-w-[1440px] px-4 md:px-8 xl:px-20 py-10">
       <div className="flex flex-col gap-4 mb-8">
-        {/* TODO: Replace title and subtitle with components relative to page */}
+        <Breadcrumbs currentPage="Profile" />
         <MainTitle>Profile</MainTitle>
         <Subtitle>
           Reveal your culinary art, share your favorite recipe and create
           gastronomic masterpieces with us.
         </Subtitle>
       </div>
-      <div className="xl:flex xl:flex-row xl:gap-10 xl:max-w-[1440px]">
+      <div className="xl:flex xl:flex-row xl:gap-10">
         <div className="flex flex-col gap-5 max-w-[375px] md:max-w-[394px] xl:min-w-[394px] mx-auto xl:mx-0 mb-16">
-          <UserInfo />
-          {isCurrentUser && <LogOutButton />}
+          <UserInfo isCurrentUser={isCurrentUser} />
+          {isCurrentUser ? <LogOutButton /> : <FollowButton />}
         </div>
-        <div>
-          <UserTabList />
+        <div className="flex-grow">
+          <UserTabList isCurrentUser={isCurrentUser} />
         </div>
       </div>
-    </>
+    </main>
   );
 };
