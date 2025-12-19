@@ -17,8 +17,8 @@ export const API_ENDPOINTS = {
     AVATAR: '/users/avatar',
     FOLLOWERS: (id) => `/users/${id}/followers`,
     FOLLOWING: '/users/following',
-    FOLLOW: (id) => `/users/${id}/follow`,
-    UNFOLLOW: (id) => `/users/${id}/follow`,
+    FOLLOW: (id) => `/users/${id}/followers`,
+    UNFOLLOW: (id) => `/users/${id}/followers`,
   },
 
   // Recipes
