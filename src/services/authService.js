@@ -29,7 +29,7 @@ const logout = async () => {
 
 // Fetches current authenticated user data
 const getCurrentUser = async () => {
-  const { data } = await api.get(API_ENDPOINTS.AUTH.CURRENT);
+  const { data } = await api.get(API_ENDPOINTS.USERS.CURRENT);
   return data;
 };
 
