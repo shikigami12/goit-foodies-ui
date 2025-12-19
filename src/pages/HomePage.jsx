@@ -1,4 +1,5 @@
 import { Categories } from "../components/layout/Categories";
+import { Hero } from "../components/home/Hero";
 import { useEffect, useState, useCallback } from "react";
 import { Recipes } from "../components/layout/Recipes";
 import { fetchCategories } from "../redux/slices/categoriesSlice";
@@ -37,7 +38,8 @@ export const HomePage = () => {
       setRecipes(data.recipes || []);
       setTotalPages(data.totalPages || 1);
       setMeta({
-        title: category ? category.name : 'All Categories',
+        title: category ? category.name : defaultMeta.title,
+        text: category?.description || defaultMeta.text,
       });
     } catch (error) {
       console.error('Failed to fetch recipes:', error);
@@ -61,7 +63,7 @@ export const HomePage = () => {
 
   return (
     <div className="max-w-7xl mx-auto">
-      {/* TODO: Add Hero, Categories, Recipes, Testimonials */}
+      <Hero />
       
       {recipes.length > 0 || isLoading ? 
         <Recipes 
