@@ -16,6 +16,7 @@
       (function() {
         var redirect = sessionStorage.getItem('redirect');
         sessionStorage.removeItem('redirect');
+        sessionStorage.removeItem('redirectAttempts');
         if (redirect && redirect !== location.pathname) {
           history.replaceState(null, null, redirect);
         }

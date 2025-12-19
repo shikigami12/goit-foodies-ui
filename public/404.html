@@ -5,9 +5,26 @@
     <title>Foodies - Redirecting...</title>
     <script>
       // GitHub Pages SPA redirect solution
-      // Store the current path and redirect to index.html
-      sessionStorage.setItem('redirect', location.pathname + location.search + location.hash);
-      location.replace(location.origin + location.pathname.split('/').slice(0, -1).join('/') + '/');
+      // Prevent infinite loops by checking if we've already attempted a redirect
+      (function() {
+        var redirectAttempts = sessionStorage.getItem('redirectAttempts') || 0;
+
+        if (redirectAttempts > 2) {
+          // Too many redirect attempts, clear and stop
+          sessionStorage.removeItem('redirectAttempts');
+          sessionStorage.removeItem('redirect');
+          return;
+        }
+
+        var path = location.pathname + location.search + location.hash;
+
+        // Only redirect if we're not already at root and path is not just '/'
+        if (location.pathname !== '/' && path !== '/') {
+          sessionStorage.setItem('redirect', path);
+          sessionStorage.setItem('redirectAttempts', parseInt(redirectAttempts) + 1);
+          location.replace(location.origin + '/');
+        }
+      })();
     </script>
   </head>
   <body>
