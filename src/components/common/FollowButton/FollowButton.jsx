@@ -1,11 +1,16 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { Button } from '../Button/Button';
-import { followUser, unfollowUser, currentUserProfileSelector } from '../../../redux/slices/usersSlice';
+import {
+  followUser,
+  unfollowUser,
+  currentUserProfileSelector,
+} from '../../../redux/slices/usersSlice';
 import { useParams } from 'react-router-dom';
 
 export const FollowButton = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
+
   const user = useSelector(currentUserProfileSelector);
   const isLoading = useSelector(state => state.users.isLoading);
 
@@ -28,6 +33,7 @@ export const FollowButton = () => {
       onClick={handleToggleFollow}
       isLoading={isLoading}
       fullWidth
+      type="button"
     />
   );
 };

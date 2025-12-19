@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 export const UserRelationsList = ({ items, actionLabel, onAction }) => {
   return (
     <div className="space-y-6">
@@ -14,16 +16,20 @@ export const UserRelationsList = ({ items, actionLabel, onAction }) => {
         >
           <div className="flex justify-between items-start gap-3">
             <div className="flex gap-4 items-start">
-              <img
-                src={item.avatar}
-                alt={item.name}
-                className="w-[60px] h-[60px] rounded-full object-cover md:w-[85px] md:h-[85px]"
-              />
+              <Link to={`/user/${item.id}`}>
+                <img
+                  src={item.avatar}
+                  alt={item.name}
+                  className="w-[60px] h-[60px] rounded-full object-cover md:w-[85px] md:h-[85px] transition-opacity hover:opacity-80"
+                />
+              </Link>
 
               <div className="flex-1">
-                <h3 className="font-extrabold text-[20px] leading-[1.2] tracking-[-0.02em] uppercase text-[#050505] mb-1">
-                  {item.name}
-                </h3>
+                <Link to={`/user/${item.id}`}>
+                  <h3 className="font-extrabold text-[20px] leading-[1.2] tracking-[-0.02em] uppercase text-[#050505] mb-1 hover:text-brand transition-colors">
+                    {item.name}
+                  </h3>
+                </Link>
                 <p className="font-medium text-[14px] leading-[1.42857] tracking-[-0.02em] text-[#bfbebe] mb-2">
                   Own recipes: {item.recipesCount}
                 </p>
@@ -74,8 +80,8 @@ export const UserRelationsList = ({ items, actionLabel, onAction }) => {
               })}
             </div>
 
-            <button
-              type="button"
+            <Link
+              to={`/user/${item.id}`}
               className="
                 w-9 h-9 rounded-full
                 border border-borders
@@ -89,7 +95,7 @@ export const UserRelationsList = ({ items, actionLabel, onAction }) => {
               <svg className="w-5 h-5 stroke-current">
                 <use href="/sprite.svg#icon-arrow-up-right" />
               </svg>
-            </button>
+            </Link>
           </div>
         </article>
       ))}

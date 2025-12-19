@@ -1,7 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { persistReducer } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
-import { userService } from '../../services';
+import { userService } from '../../services/userService';
 
 const initialState = {
   currentUserProfile: null,
@@ -26,11 +24,6 @@ const handleUserSuccess = (state, action) => {
 const handleUserFailure = (state, action) => {
   state.isLoading = false;
   state.error = action.payload;
-};
-
-const clearUserState = state => {
-  state.currentUserProfile = null;
-  state.error = null;
 };
 
 export const getCurrentUser = createAsyncThunk(
@@ -66,9 +59,7 @@ export const updateAvatar = createAsyncThunk(
       return await userService.updateAvatar(file);
     } catch (error) {
       console.error(error);
-      return rejectWithValue(
-        getErrorMessage(error, `get user with Id: ${id} failed`)
-      );
+      return rejectWithValue(getErrorMessage(error, 'Update avatar failed'));
     }
   }
 );
@@ -103,12 +94,17 @@ const usersSlice = createSlice({
     setCurrentUserProfile: (state, action) => {
       state.currentUserProfile = action.payload;
     },
-    decrementRecipesCount: (state) => {
+    setIsFollowing: (state, action) => {
+      if (state.currentUserProfile) {
+        state.currentUserProfile.isFollowing = action.payload;
+      }
+    },
+    decrementRecipesCount: state => {
       if (state.currentUserProfile) {
         state.currentUserProfile.recipesCount -= 1;
       }
     },
-    decrementFavoritesCount: (state) => {
+    decrementFavoritesCount: state => {
       if (state.currentUserProfile) {
         state.currentUserProfile.favoritesCount -= 1;
       }
@@ -127,13 +123,13 @@ const usersSlice = createSlice({
         state.currentUserProfile.avatar = payload.avatar;
       })
       .addCase(updateAvatar.rejected, handleUserFailure)
-      .addCase(followUser.fulfilled, (state) => {
+      .addCase(followUser.fulfilled, state => {
         if (state.currentUserProfile) {
           state.currentUserProfile.isFollowing = true;
           state.currentUserProfile.followersCount += 1;
         }
       })
-      .addCase(unfollowUser.fulfilled, (state) => {
+      .addCase(unfollowUser.fulfilled, state => {
         if (state.currentUserProfile) {
           state.currentUserProfile.isFollowing = false;
           state.currentUserProfile.followersCount -= 1;
@@ -142,7 +138,13 @@ const usersSlice = createSlice({
   },
 });
 
-export const { setCurrentUserProfile, decrementRecipesCount, decrementFavoritesCount } = usersSlice.actions;
+export const {
+  setCurrentUserProfile,
+  decrementRecipesCount,
+  decrementFavoritesCount,
+  setIsFollowing,
+} = usersSlice.actions;
+
 export default usersSlice.reducer;
 
 export const currentUserProfileSelector = state =>

@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useParams, useOutletContext } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { currentUserProfileSelector } from '../../../redux/slices/usersSlice';
 import { ROUTES } from '../../../constants';
 import { EMPTY_LIST_MESSAGES } from '../../../constants/messages';
 import { userService } from '../../../services/userService';
@@ -9,13 +11,15 @@ import { Loader } from '../Loader';
 export default function FollowersList() {
   const location = useLocation();
   const { id } = useParams();
+  const { isCurrentUser } = useOutletContext();
+
+  const userProfile = useSelector(currentUserProfileSelector);
 
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
   const currentRoute = location.pathname.split('/').pop() || '';
-
   const followersSlug = ROUTES.FOLLOWERS_LIST.replace('/', '');
   const followingSlug = ROUTES.FOLLOWING_LIST.replace('/', '');
 
@@ -23,41 +27,42 @@ export default function FollowersList() {
   const isFollowingTab = currentRoute === followingSlug;
 
   const actionLabel = isFollowersTab ? 'Follow' : 'Unfollow';
+
   const emptyMessage = isFollowersTab
     ? EMPTY_LIST_MESSAGES.FOLLOWERS
     : EMPTY_LIST_MESSAGES.FOLLOWING;
 
+  const mapUserToItem = u => ({
+    id: u.id,
+    name: u.name,
+    avatar: u.avatar,
+    recipesCount: u.recipesCount ?? 0,
+    recipesThumbs: u.recipesThumbs ?? [],
+  });
+
   useEffect(() => {
     const load = async () => {
       try {
-        setLoading(true);
-        setError('');
+        if (items.length === 0) setLoading(true);
 
-        // TODO: Підгружати дані чужого акаунта для таба Followers (якщо ця сторінка не поточного користувача)
-        
+        setError('');
+        let data = [];
+
         if (isFollowersTab && id) {
-          const data = await userService.getFollowers(id);
-          const list = (data.followers ?? data ?? []).map(u => ({
-            id: u.id,
-            name: u.name,
-            avatar: u.avatar,
-            recipesCount: u.recipesCount ?? 0,
-            recipesThumbs: u.recipesThumbs ?? [],
-          }));
-          setItems(list);
+          const response = await userService.getFollowers(id);
+          data = Array.isArray(response) ? response : response.followers || [];
         }
 
         if (isFollowingTab) {
-          const data = await userService.getFollowing();
-          const list = (data.following ?? data ?? []).map(u => ({
-            id: u.id,
-            name: u.name,
-            avatar: u.avatar,
-            recipesCount: u.recipesCount ?? 0,
-            recipesThumbs: u.recipesThumbs ?? [],
-          }));
-          setItems(list);
+          if (isCurrentUser) {
+            const response = await userService.getFollowing();
+            data = Array.isArray(response)
+              ? response
+              : response.following || [];
+          }
         }
+
+        setItems(data.map(mapUserToItem));
       } catch (e) {
         console.error(e);
         setError('Failed to load users');
@@ -67,10 +72,15 @@ export default function FollowersList() {
       }
     };
 
-    if ((isFollowersTab && id) || isFollowingTab) {
-      load();
-    }
-  }, [id, isFollowersTab, isFollowingTab]);
+    load();
+  }, [
+    id,
+    isFollowersTab,
+    isFollowingTab,
+    isCurrentUser,
+    userProfile?.followersCount,
+    userProfile?.followingCount,
+  ]);
 
   const handleAction = async userId => {
     try {
@@ -85,13 +95,8 @@ export default function FollowersList() {
     }
   };
 
-  if (loading) {
-    return <Loader />;
-  }
-
-  if (error) {
-    return <p className="mt-10 text-center text-red-500">{error}</p>;
-  }
+  if (loading) return <Loader />;
+  if (error) return <p className="mt-10 text-center text-red-500">{error}</p>;
 
   if (!items.length) {
     return (
