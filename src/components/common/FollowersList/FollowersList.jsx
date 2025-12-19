@@ -14,6 +14,7 @@ export default function FollowersList() {
   const { isCurrentUser } = useOutletContext();
 
   const userProfile = useSelector(currentUserProfileSelector);
+  const authUser = useSelector(state => state.auth.user);
 
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -26,43 +27,55 @@ export default function FollowersList() {
   const isFollowersTab = currentRoute === followersSlug;
   const isFollowingTab = currentRoute === followingSlug;
 
-  const actionLabel = isFollowersTab ? 'Follow' : 'Unfollow';
-
   const emptyMessage = isFollowersTab
     ? EMPTY_LIST_MESSAGES.FOLLOWERS
     : EMPTY_LIST_MESSAGES.FOLLOWING;
 
-  const mapUserToItem = u => ({
+  const mapUserToItem = (u, myFollowingIds = new Set()) => ({
     id: u.id,
     name: u.name,
     avatar: u.avatar,
     recipesCount: u.recipesCount ?? 0,
     recipesThumbs: u.recipesThumbs ?? [],
+    isFollowing: isFollowingTab ? true : myFollowingIds.has(u.id),
   });
 
   useEffect(() => {
     const load = async () => {
       try {
         if (items.length === 0) setLoading(true);
-
         setError('');
-        let data = [];
+
+        let listData = [];
+        let myFollowingSet = new Set();
+
+        if (authUser?.id) {
+          try {
+            const myFollowingData = await userService.getFollowing();
+            const myFollowingList = Array.isArray(myFollowingData)
+              ? myFollowingData
+              : myFollowingData.following || [];
+            myFollowingList.forEach(u => myFollowingSet.add(u.id));
+          } catch (err) {
+            console.error('Failed to load my following list', err);
+          }
+        }
 
         if (isFollowersTab && id) {
           const response = await userService.getFollowers(id);
-          data = Array.isArray(response) ? response : response.followers || [];
-        }
-
-        if (isFollowingTab) {
+          listData = Array.isArray(response)
+            ? response
+            : response.followers || [];
+        } else if (isFollowingTab) {
           if (isCurrentUser) {
             const response = await userService.getFollowing();
-            data = Array.isArray(response)
+            listData = Array.isArray(response)
               ? response
               : response.following || [];
           }
         }
 
-        setItems(data.map(mapUserToItem));
+        setItems(listData.map(u => mapUserToItem(u, myFollowingSet)));
       } catch (e) {
         console.error(e);
         setError('Failed to load users');
@@ -80,18 +93,37 @@ export default function FollowersList() {
     isCurrentUser,
     userProfile?.followersCount,
     userProfile?.followingCount,
+    authUser?.id,
   ]);
 
-  const handleAction = async userId => {
+  const handleAction = async (userId, currentIsFollowing) => {
     try {
-      if (isFollowersTab) {
-        await userService.followUser(userId);
-      } else if (isFollowingTab) {
+      setItems(prev =>
+        prev.map(item =>
+          item.id === userId
+            ? { ...item, isFollowing: !currentIsFollowing }
+            : item
+        )
+      );
+
+      if (currentIsFollowing) {
         await userService.unfollowUser(userId);
-        setItems(prev => prev.filter(u => u.id !== userId));
+
+        if (isFollowingTab) {
+          setItems(prev => prev.filter(u => u.id !== userId));
+        }
+      } else {
+        await userService.followUser(userId);
       }
     } catch (e) {
       console.error(e);
+      setItems(prev =>
+        prev.map(item =>
+          item.id === userId
+            ? { ...item, isFollowing: currentIsFollowing }
+            : item
+        )
+      );
     }
   };
 
@@ -109,8 +141,8 @@ export default function FollowersList() {
   return (
     <UserRelationsList
       items={items}
-      actionLabel={actionLabel}
       onAction={handleAction}
+      currentUserId={authUser?.id}
     />
   );
 }
