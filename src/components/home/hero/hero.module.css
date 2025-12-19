@@ -123,3 +123,109 @@
 
   box-shadow: 0 18px 50px rgba(0, 0, 0, 0.5);
 }
+
+
+/* Tablet */
+@media (max-width: 1439px) {
+  .hero {
+    padding: 64px 0 96px;
+  }
+
+  .container {
+    max-width: 100%;
+    min-height: 860px;
+    padding: 96px 16px 64px;
+    border-radius: 26px;
+  }
+
+  .subtitle {
+    max-width: 520px;
+  }
+
+  .images {
+    margin-top: 72px;
+    width: 520px;
+    height: 320px;
+  }
+
+  .bigCard {
+    width: 280px;
+    height: 252px;
+    border-radius: 26px;
+
+    left: 190px;
+    top: 0;
+    transform: rotate(12deg);
+  }
+
+  .smallCard {
+    width: 120px;
+    height: 108px;
+    border-radius: 14px;
+
+    left: 0;
+    top: 150px;
+    transform: rotate(-11deg);
+  }
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+  .hero {
+    padding: 40px 0 64px;
+  }
+
+  .container {
+    min-height: 720px;
+    padding: 72px 16px 56px;
+    border-radius: 20px;
+  }
+
+  .title {
+    font-size: 40px;
+    line-height: 1.05;
+  }
+
+  .subtitle {
+    max-width: 320px;
+    font-size: 12px;
+  }
+
+  .btn {
+    margin-top: 24px;
+  }
+
+  .images {
+    position: relative;
+    margin: 56px auto 0; /* центр */
+    width: 340px;
+    height: 260px;
+  }
+
+  .bigCard {
+    position: absolute;
+    width: 190px;
+    height: 172px;
+    border-radius: 30px;
+
+    left: 116px;
+    top: 0;
+    transform: rotate(12deg);
+    object-fit: cover;
+    display: block;
+  }
+
+  .smallCard {
+    position: absolute;
+    width: 77px;
+    height: 70px;
+    border-radius: 15px;
+
+    left: 26px;
+    top: 92px;
+    transform: rotate(-11deg);
+    object-fit: cover;
+    display: block;
+  }
+}
+
