@@ -35,7 +35,7 @@ const api = axios.create({
   timeout: 10000,
 });
 
-// Request interceptor - auto-attach auth token
+// Auto-attaches JWT token to requests
 api.interceptors.request.use(
   config => {
     const token = tokenManager.getToken();
@@ -47,26 +47,26 @@ api.interceptors.request.use(
   error => Promise.reject(error)
 );
 
-// Response interceptor - error handling
+// Handles 401 errors and normalizes error responses
 api.interceptors.response.use(
   response => response,
   error => {
     const { response } = error;
 
-    // Handle 401 Unauthorized - token expired or invalid
     if (response?.status === 401) {
       tokenManager.removeToken();
-      // Only redirect if not already on home page
       if (window.location.pathname !== '/') {
         window.location.href = '/';
       }
     }
 
-    // Normalize error for consistent handling across the app
+    const errorMessage = response?.data?.message 
+      ? response.data.message 
+      : 'Something went wrong. Please try again later';
+
     const normalizedError = {
       status: response?.status || 0,
-      message:
-        response?.data?.message || error.message || 'Something went wrong',
+      message: errorMessage,
       data: response?.data || null,
       originalError: error,
     };
@@ -126,14 +126,3 @@ export const createFormData = data => {
 };
 
 export default api;
-[
-  {
-    id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-    measure: 'string',
-    ingredient: {
-      id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-      name: 'string',
-      img: 'string',
-    },
-  },
-];

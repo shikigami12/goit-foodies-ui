@@ -1,8 +1,24 @@
+import { useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { getCurrentUser } from '../redux/slices/authSlice';
+import { tokenManager } from '../services';
 
 export const PrivateRoute = ({ children }) => {
-  const { isAuthenticated } = useSelector(state => state.auth);
+  const dispatch = useDispatch();
+  const { isAuthenticated, isLoading } = useSelector((state) => state.auth);
+  const hasToken = tokenManager.hasToken();
 
-  return isAuthenticated || true ? children : <Navigate to="/" replace />;
+  useEffect(() => {
+    if (hasToken && !isAuthenticated && !isLoading) {
+      dispatch(getCurrentUser());
+    }
+  }, [dispatch, hasToken, isAuthenticated, isLoading]);
+
+  if (hasToken && !isAuthenticated) {
+    return null;
+  }
+
+  return isAuthenticated ? children : <Navigate to="/" replace />;
 };
