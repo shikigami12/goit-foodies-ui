@@ -7,7 +7,7 @@ export const API_ENDPOINTS = {
     REGISTER: '/auth/register',
     LOGIN: '/auth/login',
     LOGOUT: '/auth/logout',
-    CURRENT: '/auth/current',
+
   },
 
   // Users
