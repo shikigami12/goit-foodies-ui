@@ -61,7 +61,7 @@ export const HomePage = () => {
 
   return (
     <div className="max-w-7xl mx-auto">
-      {/* TODO: Add Hero, Categories, Recipes, Testimonials */}
+      {/* TODO: Add Hero, Testimonials */}
       
       {recipes.length > 0 || isLoading ? 
         <Recipes 

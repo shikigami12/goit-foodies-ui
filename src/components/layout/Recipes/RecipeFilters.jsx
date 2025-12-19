@@ -5,6 +5,7 @@ import clsx from "clsx";
 import SelectFieldSkeleton from "../../common/Skeleton/SelectFieldSkeleton";
 
 export const RecipeFilters = ({ filters, onFilterChange, className }) => {
+  // TODO: Add handlers to filter changes
   const areas = useSelector((state) => state.areas);
   const ingredients = useSelector((state) => state.ingredients);
 
