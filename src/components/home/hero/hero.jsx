@@ -2,14 +2,14 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import css from "./hero.module.css";
+import css from "./Hero.module.css";
 
 import bigCard from "../../../assets/bigCard.png";
 import smallCard from "../../../assets/smallCard.png";
 
 import { SignInModal } from "../../modals/SignInModal";
 
-export default function Hero() {
+export const Hero = () => {
   const isLoggedIn = useSelector(state => state.auth.isLoggedIn);
   const navigate = useNavigate();
 
@@ -49,4 +49,4 @@ export default function Hero() {
       {isModalOpen && <SignInModal />}
     </section>
   );
-}
+};
