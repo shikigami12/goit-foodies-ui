@@ -106,9 +106,15 @@
 }
 
 @layer utilities {
-    .h3-mobile {
-        @apply text-lg leading-6 font-extrabold font-sans tracking-tight uppercase;
-    }
+  .h2-mobile {
+    @apply text-[28px] leading-8 font-extrabold font-sans tracking-tight uppercase;
+  }
+  .h3-mobile {
+    @apply text-lg leading-6 font-extrabold font-sans tracking-tight uppercase;
+  }
+  .desktop-tablet-main {
+    @apply text-base leading-6 font-sans font-medium tracking-tight;
+  }
 }
 
 html {
