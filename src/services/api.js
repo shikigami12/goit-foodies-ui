@@ -1,15 +1,6 @@
 import axios from 'axios';
 import { API_BASE_URL } from '../constants';
-/**
- * Token management utilities for JWT authentication
- * TODO: Implement persistent storage (e.g., SessionStorage)
- */
-export const tokenManager = {
-  getToken: () => {},
-  setToken: (token) => {},
-  removeToken: () => {},
-  hasToken: () => Boolean(false),
-};
+import { tokenManager } from './tokenManager';
 
 /**
  * Axios instance configured for the Foodies API
@@ -44,25 +35,24 @@ const api = axios.create({
   timeout: 10000,
 });
 
-// Request interceptor - auto-attach auth token
+// Auto-attaches JWT token to requests
 api.interceptors.request.use(
-  (config) => {
+  config => {
     const token = tokenManager.getToken();
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
-  (error) => Promise.reject(error)
+  error => Promise.reject(error)
 );
 
-// Response interceptor - error handling
+// Handles 401 errors and normalizes error responses
 api.interceptors.response.use(
-  (response) => response,
-  (error) => {
+  response => response,
+  error => {
     const { response } = error;
 
-    // Handle 401 Unauthorized - clear token and redirect to home
     if (response?.status === 401) {
       tokenManager.removeToken();
       if (window.location.pathname !== '/') {
@@ -70,10 +60,13 @@ api.interceptors.response.use(
       }
     }
 
-    // Normalize error for consistent handling across the app
+    const errorMessage = response?.data?.message 
+      ? response.data.message 
+      : 'Something went wrong. Please try again later';
+
     const normalizedError = {
       status: response?.status || 0,
-      message: response?.data?.message || error.message || 'Something went wrong',
+      message: errorMessage,
       data: response?.data || null,
       originalError: error,
     };
@@ -90,7 +83,7 @@ api.interceptors.response.use(
  *   const query = buildQueryString({ page: 1, limit: 10, category: undefined });
  *   // Returns: "page=1&limit=10"
  */
-export const buildQueryString = (params) => {
+export const buildQueryString = params => {
   const searchParams = new URLSearchParams();
 
   Object.entries(params).forEach(([key, value]) => {
@@ -114,7 +107,7 @@ export const buildQueryString = (params) => {
  *     thumb: fileObject
  *   });
  */
-export const createFormData = (data) => {
+export const createFormData = data => {
   const formData = new FormData();
 
   Object.entries(data).forEach(([key, value]) => {
