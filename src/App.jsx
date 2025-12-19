@@ -12,6 +12,7 @@ function App() {
       <Routes>
         <Route path={ROUTES.HOME} element={<SharedLayout />}>
           <Route index element={<HomePage />} />
+          <Route path={ROUTES.CATEGORY} element={<HomePage />} />
           <Route path={ROUTES.RECIPE} element={<RecipePage />} />
           <Route
             path={ROUTES.ADD_RECIPE}
@@ -24,6 +25,24 @@ function App() {
 
           <Route
             path={ROUTES.USER}
+            element={
+              <PrivateRoute>
+                <UserPage />
+              </PrivateRoute>
+            }
+          >
+            <Route
+              index
+              element={<Navigate to={ROUTES.RECIPES_MY} replace />}
+            />
+            <Route element={<RecipeList />} path={ROUTES.RECIPES_MY} />
+            <Route element={<RecipeList />} path={ROUTES.RECIPES_FAVORITES} />
+            <Route element={<FollowersList />} path={ROUTES.FOLLOWERS_LIST} />
+            <Route element={<FollowersList />} path={ROUTES.FOLLOWING_LIST} />
+          </Route>
+
+          <Route
+            path={ROUTES.USER_PROFILE}
             element={
               <PrivateRoute>
                 <UserPage />

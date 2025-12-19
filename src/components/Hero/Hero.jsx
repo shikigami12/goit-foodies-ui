@@ -2,21 +2,21 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import css from "./hero.module.css";
+import css from "./Hero.module.css";
 
-import bigCard from "../../../assets/bigCard.png";
-import smallCard from "../../../assets/smallCard.png";
+import bigCard from "../../assets/bigCard.png";
+import smallCard from "../../assets/smallCard.png";
 
-import { SignInModal } from "../../modals/SignInModal";
+import { SignInModal } from "../modals/SignInModal";
 
-export default function Hero() {
-  const isLoggedIn = useSelector(state => state.auth.isLoggedIn);
+export const Hero = () => {
+  const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
   const navigate = useNavigate();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleAddRecipe = () => {
-    if (!isLoggedIn) {
+    if (!isAuthenticated) {
       setIsModalOpen(true);
     } else {
       navigate("/add-recipe");
@@ -49,4 +49,4 @@ export default function Hero() {
       {isModalOpen && <SignInModal />}
     </section>
   );
-}
+};
