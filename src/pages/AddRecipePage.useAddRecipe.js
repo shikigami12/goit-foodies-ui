@@ -1,9 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { referenceService } from "../services/referenceService";
 import { recipeService } from "../services/recipeService";
 
 export const useAddRecipe = () => {
   const fileInputRef = useRef(null);
+  const navigate = useNavigate();
 
   const [isDragging, setIsDragging] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -74,20 +76,23 @@ export const useAddRecipe = () => {
     [categories]
   );
 
-  const areaOptions = useMemo(() => areas.map((a) => ({ value: a.id, label: a.name })), [areas]);
+  const areaOptions = useMemo(
+    () => areas.map((a) => ({ value: a.id, label: a.name })),
+    [areas]
+  );
 
   const ingredientOptions = useMemo(
     () => ingredientsRef.map((i) => ({ value: i.id, label: i.name })),
     [ingredientsRef]
   );
 
-const ingredientMetaById = useMemo(() => {
-  const map = new Map();
-  for (const i of ingredientsRef) {
-    map.set(i.id, { name: i.name, img: i.img || i.image || i.thumb || "" });
-  }
-  return map;
-}, [ingredientsRef]);
+  const ingredientMetaById = useMemo(() => {
+    const map = new Map();
+    for (const i of ingredientsRef) {
+      map.set(i.id, { name: i.name, img: i.img || i.image || i.thumb || "" });
+    }
+    return map;
+  }, [ingredientsRef]);
 
   // -------- Thumb preview --------
   const previewUrl = useMemo(() => {
@@ -167,9 +172,9 @@ const ingredientMetaById = useMemo(() => {
     const exists = ingredients.some((x) => x.ingredientId === ingredientId);
     if (exists) return setSubmitError("This ingredient is already added.");
 
-  const meta = ingredientMetaById.get(ingredientId);
-  const label = meta?.name ?? ingredientId;
-  const img = meta?.img ?? "";
+    const meta = ingredientMetaById.get(ingredientId);
+    const label = meta?.name ?? ingredientId;
+    const img = meta?.img ?? "";
 
     setIngredients((p) => [...p, { ingredientId, label, img, measure: measure.trim() }]);
     setIngredientDraft({ ingredientId: "", measure: "" });
@@ -219,7 +224,7 @@ const ingredientMetaById = useMemo(() => {
         }))
       );
 
-      await recipeService.createRecipe({
+      const created = await recipeService.createRecipe({
         title: form.title.trim(),
         categoryId: form.categoryId,
         areaId: form.areaId,
@@ -229,8 +234,14 @@ const ingredientMetaById = useMemo(() => {
         thumb: thumb ?? undefined,
       });
 
+      const createdId = created?.id;
+      if (!createdId) {
+        setSubmitError("Recipe created, but server did not return recipe id.");
+        return;
+      }
+
       clearAll();
-      alert("Recipe published ✅");
+      navigate(`/recipe/${createdId}`, { replace: true });
     } catch (error) {
       const msg =
         error?.response?.data?.message ||
@@ -244,7 +255,6 @@ const ingredientMetaById = useMemo(() => {
   };
 
   return {
-    // state
     fileInputRef,
     isDragging,
     isSubmitting,
@@ -257,12 +267,10 @@ const ingredientMetaById = useMemo(() => {
     ingredientDraft,
     ingredients,
 
-    // options
     categoryOptions,
     areaOptions,
     ingredientOptions,
 
-    // handlers
     setSubmitError,
     onFieldChange,
     onDraftChange,
