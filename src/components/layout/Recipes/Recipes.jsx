@@ -54,8 +54,8 @@ export const Recipes = ({ meta = {}, recipes, totalPages, currentPage = 1, onBac
                     <span>Back</span>
                 </button>
             </div>
-            {meta.title && <MainTitle className="mb-4">{meta.title}</MainTitle>}
-            {meta.text && <Subtitle className="mb-8">{meta.text}</Subtitle>}
+            {meta.title && <MainTitle className="mb-4 tablet:mb-5">{meta.title}</MainTitle>}
+            {meta.text && <Subtitle className="mb-8 tablet:mb-10 max-w-xl">{meta.text}</Subtitle>}
             <div className="flex flex-col gap-8 md:gap-10 xl:flex-row">
                 <RecipeFilters className="flex-none self-start w-full xl:w-[330px]" filters={filters} onFilterChange={handleFilterChange} />
                 <div className="">
