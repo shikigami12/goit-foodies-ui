@@ -3,7 +3,7 @@ import clsx from "clsx";
 import { Icon } from "../../common/Icon/Icon";
 
 export const CategoryList = ({ categories, onCategoryClick }) => {
-  // Генеруємо випадкові позиції для кожної трійки (0, 1 або 2) без повторів підряд
+  // Generate random positions for wide categories in each triplet
   const randomPositions = useMemo(() => {
     const triplets = Math.ceil(categories.length / 3);
     const positions = [];
