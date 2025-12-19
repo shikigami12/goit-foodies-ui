@@ -10,13 +10,13 @@ import smallCard from "../../../assets/smallCard.png";
 import { SignInModal } from "../../modals/SignInModal";
 
 export const Hero = () => {
-  const isLoggedIn = useSelector(state => state.auth.isLoggedIn);
+  const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
   const navigate = useNavigate();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleAddRecipe = () => {
-    if (!isLoggedIn) {
+    if (!isAuthenticated) {
       setIsModalOpen(true);
     } else {
       navigate("/add-recipe");
