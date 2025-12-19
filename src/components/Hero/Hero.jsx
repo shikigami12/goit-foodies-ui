@@ -4,10 +4,10 @@ import { useNavigate } from "react-router-dom";
 
 import css from "./Hero.module.css";
 
-import bigCard from "../../../assets/bigCard.png";
-import smallCard from "../../../assets/smallCard.png";
+import bigCard from "../../assets/bigCard.png";
+import smallCard from "../../assets/smallCard.png";
 
-import { SignInModal } from "../../modals/SignInModal";
+import { SignInModal } from "../modals/SignInModal";
 
 export const Hero = () => {
   const isAuthenticated = useSelector(state => state.auth.isAuthenticated);

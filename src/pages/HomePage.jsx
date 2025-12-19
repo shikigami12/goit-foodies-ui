@@ -1,5 +1,5 @@
 import { Categories } from "../components/layout/Categories";
-import { Hero } from "../components/home/Hero";
+import { Hero } from "../components/Hero/Hero";
 import { useEffect, useState, useCallback } from "react";
 import { Recipes } from "../components/layout/Recipes";
 import { fetchCategories } from "../redux/slices/categoriesSlice";
