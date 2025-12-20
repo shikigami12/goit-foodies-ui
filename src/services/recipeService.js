@@ -44,6 +44,18 @@ const getOwnRecipes = async (params = {}) => {
 };
 
 /**
+ * Get recipes by user ID (public)
+ * @param {string} userId - User UUID
+ * @param {import('../models').PaginationParams} [params]
+ * @returns {Promise<import('../models').RecipesPaginatedResponse>}
+ */
+const getRecipesByUserId = async (userId, params = {}) => {
+  const query = buildQueryString(params);
+  const { data } = await api.get(`${API_ENDPOINTS.RECIPES.BY_USER(userId)}${query}`);
+  return data;
+};
+
+/**
  * Create a new recipe
  * @param {import('../models').CreateRecipeRequest & { thumb?: File }} recipeData
  * @returns {Promise<import('../models').RecipeDetail>}
@@ -100,6 +112,7 @@ export const recipeService = {
   getRecipeById,
   getPopularRecipes,
   getOwnRecipes,
+  getRecipesByUserId,
   createRecipe,
   deleteRecipe,
   getFavorites,
