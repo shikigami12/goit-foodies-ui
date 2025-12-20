@@ -1,5 +1,6 @@
 import { Categories } from "../components/layout/Categories";
 import { Hero } from "../components/Hero/Hero";
+import Testemonials from "../components/layout/Testemonials/Testemonials";
 import { useEffect, useState, useCallback } from "react";
 import { Recipes } from "../components/layout/Recipes";
 import { fetchCategories } from "../redux/slices/categoriesSlice";
@@ -92,9 +93,11 @@ export const HomePage = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto">
+    <div className="max-w-7xl mx-auto flex flex-col gap-16 tablet:gap-[100px] desktop:gap-[120px]">
+      {/* HERO */}
       <Hero />
       
+      {/* CATEGORIES OR RECIPES */}
       {recipes.length > 0 || isLoading ? 
         <Recipes 
           meta={meta}
@@ -104,8 +107,11 @@ export const HomePage = () => {
           isLoading={isLoading} 
           onBackToCategories={handleBackToCategories} 
           onPageChange={handlePageChange}
-        /> :
-        <Categories meta={meta} categories={categories} onCategoryClick={handleCategoryClick} />}
+        /> : <Categories meta={meta} categories={categories} onCategoryClick={handleCategoryClick} />
+      }
+
+      {/* TESTEMONIALS */}
+      <Testemonials />
     </div>
   );
 };
