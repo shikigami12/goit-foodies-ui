@@ -105,7 +105,6 @@ const RecipeCard = ({ recipe }) => {
                         <li>
                             <IconButton
                                 style={isFavorite ? styles.style_button_favorit : styles.style_button_notFavorit}
-                                stroke={isFavorite ? "#FFF" : undefined}
                                 iconId="heart"
                                 onClick={toggleFavorite}
                                 disabled={isLoading}
