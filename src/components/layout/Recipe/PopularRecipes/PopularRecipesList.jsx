@@ -4,7 +4,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
-import RecipeCard from "./RecipeCard/RecipeCard.jsx";
+import { RecipeCard } from "../../../common/RecipeCard";
 import styles from "./PopularRecipes.module.css";
 
 export const PopularRecipesList = ({ recipes }) => {

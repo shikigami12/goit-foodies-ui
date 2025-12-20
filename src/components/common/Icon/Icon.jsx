@@ -22,7 +22,9 @@ export const Icon = ({ name, color, size = 20, className = '', stroke }) => {
     stroke !== undefined ||
     name === 'arrow-up-right' ||
     name === 'chevron-up' ||
-    name === 'chevron-down';
+    name === 'chevron-down' ||
+    name === 'minus' ||
+    name === 'plus';
   const strokeColor = stroke || color || 'currentColor';
   const fillColor = color || 'currentColor';
 

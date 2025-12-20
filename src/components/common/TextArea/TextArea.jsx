@@ -14,45 +14,41 @@ export const TextArea = ({
     }) => {
     const length = value?.length ?? 0;
 
-    const borderClass = error
-        ? "border-red-500"
-        : "border-gray-300 focus-within:border-black";
-    const textClass = error ? "text-red-700" : "text-black";
-    const counterClass = error ? "text-red-600" : "text-gray-400";
+    const textClass = error ? "text-red-700" : "text-[#1a1a1a]";
+    const counterClass = error ? "text-red-600" : "text-[#bfbebe]";
 
     const ref = useRef(null);
     useAutosizeTextArea(ref, value);
 
     return (
-        <div className="flex flex-col gap-1 mb-2 mx-2">
-            <div className={`border-b ${borderClass}`}>
-                <div className="flex items-start gap-2 py-2">
-                    <textarea
-                        ref={ref}
-                        id={id}
-                        name={name}
-                        value={value}
-                        onChange={onChange}
-                        maxLength={maxLength}
-                        disabled={disabled}
-                        rows={1}
-                        className={`
+        <div className="flex flex-col gap-4">
+            <div className="flex items-start justify-between gap-4">
+                <textarea
+                    ref={ref}
+                    id={id}
+                    name={name}
+                    value={value}
+                    onChange={onChange}
+                    maxLength={maxLength}
+                    disabled={disabled}
+                    rows={1}
+                    className={`
                         flex-1 bg-transparent outline-none resize-none overflow-hidden
-                        text-sm ${textClass}
-                        placeholder:text-gray-400 disabled:text-gray-400
-                        p-0 leading-tight
-                        `}
-                        placeholder={placeholder}
-                    />
+                        font-medium text-base leading-6 tracking-[-0.02em] ${textClass}
+                        placeholder:text-[#bfbebe] disabled:text-gray-400
+                        p-0
+                    `}
+                    placeholder={placeholder}
+                />
 
-                    <span className={`text-xs ${counterClass} whitespace-nowrap`}>
-                        {length}/{maxLength}
-                    </span>
-                </div>
+                <span className={`font-medium text-base leading-6 tracking-[-0.02em] ${counterClass} whitespace-nowrap`}>
+                    {length}/{maxLength}
+                </span>
             </div>
+            <div className={`h-[1px] w-full ${error ? "bg-red-500" : "bg-[#bfbebe]"}`} />
 
             {error && (
-                <p className="text-xs text-red-600 mt-1">{error}</p>
+                <p className="text-xs text-red-600">{error}</p>
             )}
         </div>
     );
