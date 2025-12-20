@@ -26,6 +26,7 @@ export const API_ENDPOINTS = {
     BY_ID: id => `/recipes/${id}`,
     POPULAR: '/recipes/popular',
     OWN: '/recipes/own',
+    BY_USER: userId => `/recipes/user/${userId}`,
     FAVORITES: '/recipes/favorites',
     FAVORITE: id => `/recipes/${id}/favorite`,
   },
