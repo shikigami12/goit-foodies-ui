@@ -12,13 +12,15 @@ export const FollowButton = () => {
   const dispatch = useDispatch();
 
   const user = useSelector(currentUserProfileSelector);
-  const isLoading = useSelector(state => state.users.isLoading);
+  const isFollowLoading = useSelector(state => state.users.isFollowLoading);
 
   if (!user || user.id !== id) return null;
 
   const isFollowing = user.isFollowing;
 
   const handleToggleFollow = () => {
+    if (isFollowLoading) return;
+
     if (isFollowing) {
       dispatch(unfollowUser(id));
     } else {
@@ -31,7 +33,8 @@ export const FollowButton = () => {
       label={isFollowing ? 'Unfollow' : 'Follow'}
       variant={isFollowing ? 'light' : 'dark'}
       onClick={handleToggleFollow}
-      isLoading={isLoading}
+      isLoading={isFollowLoading}
+      disabled={isFollowLoading}
       fullWidth
       type="button"
     />

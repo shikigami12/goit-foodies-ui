@@ -11,7 +11,7 @@ import { Loader } from '../Loader';
 export default function FollowersList() {
   const location = useLocation();
   const { id } = useParams();
-  const { isCurrentUser } = useOutletContext();
+  const { isCurrentUser } = useOutletContext() || {};
 
   const userProfile = useSelector(currentUserProfileSelector);
   const authUser = useSelector(state => state.auth.user);

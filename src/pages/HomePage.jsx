@@ -8,8 +8,11 @@ import { fetchAreas } from "../redux/slices/areasSlice";
 import { fetchIngredients } from "../redux/slices/ingredientsSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { recipeService } from "../services";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { ROUTES } from "../constants";
+import { Modal } from "../components/common/Modal/Modal";
+import { SignInModal } from "../components/modals/SignInModal";
+import { SignUpModal } from "../components/modals/SignUpModal";
 
 const defaultMeta = {
   title: 'Categories',
@@ -19,8 +22,9 @@ const defaultMeta = {
 export const HomePage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const { category: categoryName } = useParams();
-  
+
   const [meta, setMeta] = useState(defaultMeta);
   const { categories } = useSelector((state) => state.categories);
   const [recipes, setRecipes] = useState([]);
@@ -33,6 +37,29 @@ export const HomePage = () => {
     ingredient: ""
   });
 
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [authModalType, setAuthModalType] = useState('signin');
+
+  useEffect(() => {
+    if (location.state?.authRequired) {
+      setIsAuthModalOpen(true);
+      setAuthModalType('signin');
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+  }, [location.state, navigate, location.pathname]);
+
+  const handleCloseAuthModal = () => {
+    setIsAuthModalOpen(false);
+  };
+
+  const handleSwitchToSignUp = () => {
+    setAuthModalType('signup');
+  };
+
+  const handleSwitchToSignIn = () => {
+    setAuthModalType('signin');
+  };
+
   useEffect(() => {
     dispatch(fetchCategories());
     dispatch(fetchAreas());
@@ -44,7 +71,7 @@ export const HomePage = () => {
       setIsLoading(true);
       setCurrentCategory(category?.id || 'all');
       setCurrentPage(page);
-      
+
       const params = {
         ...(category?.id && { category: category.id }),
         page,
@@ -52,7 +79,7 @@ export const HomePage = () => {
         ...(filters.area && { area: filters.area }),
         ...(filters.ingredient && { ingredient: filters.ingredient })
       };
-      
+
       const data = await recipeService.searchRecipes(params);
       setRecipes(data.recipes || []);
       setTotalPages(data.totalPages || 1);
@@ -79,7 +106,7 @@ export const HomePage = () => {
         const category = categories.find(
           c => c.name.toLowerCase() === categoryName.toLowerCase()
         );
-        
+
         if (category) {
           fetchRecipes(category);
         }
@@ -134,21 +161,43 @@ export const HomePage = () => {
     <div className="max-w-7xl mx-auto flex flex-col gap-16 tablet:gap-[100px] desktop:gap-[120px]">
       {/* HERO */}
       <Hero />
-      
+
       {/* CATEGORIES OR RECIPES */}
-      {categoryName ? 
-        <Recipes 
+      {categoryName ? (
+        <Recipes
           meta={meta}
-          recipes={recipes} 
-          totalPages={totalPages} 
+          recipes={recipes}
+          totalPages={totalPages}
           currentPage={currentPage}
           filters={currentFilters}
-          isLoading={isLoading} 
-          onBackToCategories={handleBackToCategories} 
+          isLoading={isLoading}
+          onBackToCategories={handleBackToCategories}
           onPageChange={handlePageChange}
           onFilterChange={handleFilterChange}
-        /> : <Categories meta={meta} categories={categories} onCategoryClick={handleCategoryClick} />}
+        />
+      ) : (
+        <Categories
+          meta={meta}
+          categories={categories}
+          onCategoryClick={handleCategoryClick}
+        />
+      )}
+
       <Testemonials />
+
+      <Modal isOpen={isAuthModalOpen} onClose={handleCloseAuthModal}>
+        {authModalType === 'signin' ? (
+          <SignInModal
+            onClose={handleCloseAuthModal}
+            onSwitchToSignUp={handleSwitchToSignUp}
+          />
+        ) : (
+          <SignUpModal
+            onClose={handleCloseAuthModal}
+            onSwitchToSignIn={handleSwitchToSignIn}
+          />
+        )}
+      </Modal>
     </div>
   );
 };

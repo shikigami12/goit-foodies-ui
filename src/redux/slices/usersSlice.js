@@ -4,6 +4,7 @@ import { userService } from '../../services/userService';
 const initialState = {
   currentUserProfile: null,
   isLoading: false,
+  isFollowLoading: false,
   error: null,
 };
 
@@ -123,17 +124,31 @@ const usersSlice = createSlice({
         state.currentUserProfile.avatar = payload.avatar;
       })
       .addCase(updateAvatar.rejected, handleUserFailure)
+      .addCase(followUser.pending, state => {
+        state.isFollowLoading = true;
+      })
       .addCase(followUser.fulfilled, state => {
+        state.isFollowLoading = false;
         if (state.currentUserProfile) {
           state.currentUserProfile.isFollowing = true;
           state.currentUserProfile.followersCount += 1;
         }
       })
+      .addCase(followUser.rejected, state => {
+        state.isFollowLoading = false;
+      })
+      .addCase(unfollowUser.pending, state => {
+        state.isFollowLoading = true;
+      })
       .addCase(unfollowUser.fulfilled, state => {
+        state.isFollowLoading = false;
         if (state.currentUserProfile) {
           state.currentUserProfile.isFollowing = false;
           state.currentUserProfile.followersCount -= 1;
         }
+      })
+      .addCase(unfollowUser.rejected, state => {
+        state.isFollowLoading = false;
       });
   },
 });

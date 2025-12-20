@@ -23,18 +23,20 @@ export const UserPage = () => {
   const { id } = useParams();
   const user = useSelector(currentUserProfileSelector);
   const authUser = useSelector(state => state.auth.user);
+  const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
   const dispatch = useDispatch();
 
-  const isCurrentUser = authUser?.id === id;
+  const isCurrentUser = isAuthenticated && authUser?.id === id;
   const isLoaded = user && user.id === id;
 
   useEffect(() => {
-    if (typeof id === 'undefined' && authUser?.id)
+    if (typeof id === 'undefined' && isAuthenticated && authUser?.id) {
       navigate(`/user/${authUser.id}`, { replace: true });
-  }, [id, authUser, navigate]);
+    }
+  }, [id, isAuthenticated, authUser?.id, navigate]);
 
   useEffect(() => {
-    if (!user || user.id !== id) {
+    if (id && (!user || user.id !== id)) {
       if (isCurrentUser) {
         dispatch(getCurrentUser());
       } else {
@@ -79,7 +81,11 @@ export const UserPage = () => {
       <div className="xl:flex xl:flex-row xl:gap-10">
         <div className="flex flex-col gap-5 max-w-[375px] md:max-w-[394px] xl:min-w-[394px] mx-auto xl:mx-0 mb-16">
           <UserInfo isCurrentUser={isCurrentUser} />
-          {isCurrentUser ? <LogOutButton /> : <FollowButton />}
+          {isCurrentUser ? (
+            <LogOutButton />
+          ) : (
+            isAuthenticated && <FollowButton />
+          )}
         </div>
         <div className="flex-grow">
           <UserTabList isCurrentUser={isCurrentUser} />

@@ -7,20 +7,36 @@ import css from "./Hero.module.css";
 import bigCard from "../../assets/bigCard.png";
 import smallCard from "../../assets/smallCard.png";
 
+import { Modal } from "../common/Modal/Modal";
 import { SignInModal } from "../modals/SignInModal";
+import { SignUpModal } from "../modals/SignUpModal";
 
 export const Hero = () => {
   const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
   const navigate = useNavigate();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalType, setModalType] = useState("signin");
 
   const handleAddRecipe = () => {
     if (!isAuthenticated) {
       setIsModalOpen(true);
+      setModalType("signin");
     } else {
       navigate("/add");
     }
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleSwitchToSignUp = () => {
+    setModalType("signup");
+  };
+
+  const handleSwitchToSignIn = () => {
+    setModalType("signin");
   };
 
   return (
@@ -46,7 +62,19 @@ export const Hero = () => {
         </div>
       </div>
 
-      {isModalOpen && <SignInModal />}
+      <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
+        {modalType === "signin" ? (
+          <SignInModal
+            onClose={handleCloseModal}
+            onSwitchToSignUp={handleSwitchToSignUp}
+          />
+        ) : (
+          <SignUpModal
+            onClose={handleCloseModal}
+            onSwitchToSignIn={handleSwitchToSignIn}
+          />
+        )}
+      </Modal>
     </section>
   );
 };
