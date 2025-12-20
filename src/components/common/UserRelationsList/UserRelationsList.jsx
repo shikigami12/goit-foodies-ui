@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import withoutAvatar from '../../../images/user_without_avatar.jpg';
 
 export const UserRelationsList = ({ items, onAction, currentUserId }) => {
   return (
@@ -22,7 +23,7 @@ export const UserRelationsList = ({ items, onAction, currentUserId }) => {
               <div className="flex gap-4 items-start">
                 <Link to={`/user/${item.id}`}>
                   <img
-                    src={item.avatar}
+                    src={item.avatar || withoutAvatar}
                     alt={item.name}
                     className="w-[60px] h-[60px] rounded-full object-cover md:w-[85px] md:h-[85px] transition-opacity hover:opacity-80"
                   />
