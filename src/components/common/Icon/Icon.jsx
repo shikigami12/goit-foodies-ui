@@ -17,7 +17,7 @@ import styles from './Icon.module.css';
  * @returns {JSX.Element}
  */
 export const Icon = ({ name, color, size = 20, className = '', stroke }) => {
-  const symbolId = `/sprite2.svg#icon-${name}`;
+  const symbolId = `/sprite.svg#icon-${name}`;
   const isStrokeIcon =
     stroke !== undefined ||
     name === 'arrow-up-right' ||
