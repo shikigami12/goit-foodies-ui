@@ -1,23 +1,35 @@
 import clsx from "clsx";
 
-export const RecipePagination = ({ currentPage, totalPages, onPageChange }) => {
+export const RecipePagination = ({ currentPage, totalPages, onPageChange, isLoading }) => {
   const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
-  
+
   const getVisiblePages = () => {
     if (totalPages <= 7) return pages;
-    
+
     if (currentPage <= 4) {
       return [...pages.slice(0, 5), "...", totalPages];
     }
-    
+
     if (currentPage >= totalPages - 3) {
       return [1, "...", ...pages.slice(totalPages - 5)];
     }
-    
+
     return [1, "...", currentPage - 1, currentPage, currentPage + 1, "...", totalPages];
   };
 
+  if (isLoading) {
+    return <div className="flex justify-center items-center gap-1.5">
+      {Array.from({ length: 5 }).map((_, index) => (
+        <div key={index} className="animate-pulse rounded-full h-10 w-10 bg-gray-300"></div>
+      ))}
+    </div>
+  }
+
   const visiblePages = getVisiblePages();
+
+  if (visiblePages.length === 1) {
+    return null;
+  }
 
   return (
     <div className="flex justify-center items-center gap-1.5">

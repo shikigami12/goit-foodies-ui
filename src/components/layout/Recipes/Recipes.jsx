@@ -1,48 +1,23 @@
-import { useState } from "react";
+import { useRef } from "react";
 import { RecipeFilters } from "../Recipes/RecipeFilters";
 import { RecipeList } from "../Recipes/RecipeList";
 import { RecipePagination } from "../Recipes/RecipePagination";
 import { MainTitle } from "../../common/MainTitle/MainTitle";
 import { Subtitle } from "../../common/Subtitle/Subtitle";
 
-export const Recipes = ({ meta = {}, recipes, totalPages, currentPage = 1, onBackToCategories, onPageChange, isLoading }) => {
-    const [filters, setFilters] = useState({
-        area: "",
-        ingredient: ""
-    });
+export const Recipes = ({ meta = {}, recipes, totalPages, currentPage = 1, filters = {}, onBackToCategories, onPageChange, onFilterChange, isLoading }) => {
+    const recipeListRef = useRef(null);
 
-    const handleFilterChange = (newFilters) => {
-        setFilters(newFilters);
+    const handleFilterChangeLocal = (newFilters) => {
+        onFilterChange?.(newFilters);
     };
 
-    if (isLoading) {
-        return <section>
-            <div className="animate-pulse rounded-2xl h-[18px] w-16 bg-gray-300 mb-4"></div>
-            <div className="animate-pulse rounded-2xl h-3.5 w-full max-w-3xl bg-gray-300 mb-2"></div>
-            <div className="animate-pulse rounded-2xl h-3.5 w-full max-w-3xl bg-gray-300 mb-2"></div>
-            <div className="animate-pulse rounded-2xl h-3.5 w-full max-w-3xl bg-gray-300 mb-10"></div>
-            <div className="flex flex-col gap-8 md:gap-10 xl:flex-row">
-                <div className="flex-none self-start xl:w-[330px]">
-                    <div className="grid gap-3.5 md:grid-cols-2 xl:grid-cols-1">
-                        <div className="animate-pulse rounded-full h-14 w-full bg-gray-300"></div>
-                        <div className="animate-pulse rounded-full h-14 w-full bg-gray-300"></div>
-                    </div>
-                </div>
-                <div className="w-full">
-                    <div className="grid gap-8 md:grid-cols-2 md:gap-x-5 md:gap-y-8 xl:grid-cols-3 mb-8 xl:mb-[60px]">
-                        {Array.from({ length: 6 }).map((_, index) => (
-                            <div key={index} className="animate-pulse rounded-2xl h-[427px] w-full bg-gray-300"></div>
-                        ))}
-                    </div>
-                    <div className="flex justify-center items-center gap-1.5">
-                        {Array.from({ length: 5 }).map((_, index) => (
-                            <div key={index} className="animate-pulse rounded-full h-10 w-10 bg-gray-300"></div>
-                        ))}
-                    </div>
-                </div>
-            </div>
-        </section>;
-    }
+    const handlePageChangeWithScroll = (page) => {
+        onPageChange(page);
+        if (recipeListRef.current) {
+            recipeListRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    };
 
     return (
         <section>
@@ -57,21 +32,22 @@ export const Recipes = ({ meta = {}, recipes, totalPages, currentPage = 1, onBac
             {meta.title && <MainTitle className="mb-4 tablet:mb-5">{meta.title}</MainTitle>}
             {meta.text && <Subtitle className="mb-8 tablet:mb-10 max-w-xl">{meta.text}</Subtitle>}
             <div className="flex flex-col gap-8 md:gap-10 xl:flex-row">
-                <RecipeFilters className="flex-none self-start w-full xl:w-[330px]" filters={filters} onFilterChange={handleFilterChange} />
-                <div className="">
-                    {recipes.length > 0 ? (
-                        <>
-                            <RecipeList recipes={recipes} className="mb-8 xl:mb-[60px]" />
-                            <RecipePagination
-                                currentPage={currentPage}
-                                totalPages={totalPages}
-                                onPageChange={onPageChange}
-                            />
-                        </>
-                    ) : (
-                        <p className="text-center text-gray-500 py-8">Recipes not found</p>
-                    )}
-                </div>
+                <RecipeFilters className="flex-none self-start w-full xl:w-[330px]" filters={filters} onFilterChange={handleFilterChangeLocal} />
+                {recipes.length > 0 ? (
+                    <div className="w-full">
+                        <div ref={recipeListRef}>
+                            <RecipeList recipes={recipes} className="mb-8 xl:mb-[60px] w-full" />
+                        </div>
+                        <RecipePagination
+                            currentPage={currentPage}
+                            totalPages={totalPages}
+                            isLoading={isLoading}
+                            onPageChange={handlePageChangeWithScroll}
+                        />
+                    </div>
+                ) : (
+                    <p className="text-center text-gray-500 py-8">Recipes not found</p>
+                )}
             </div>
         </section>
     );

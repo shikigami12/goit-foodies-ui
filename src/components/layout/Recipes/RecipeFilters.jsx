@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { SelectField } from "../../common/Select/SelectField";
 import clsx from "clsx";
@@ -8,12 +8,22 @@ export const RecipeFilters = ({ filters, onFilterChange, className }) => {
   const areas = useSelector((state) => state.areas);
   const ingredients = useSelector((state) => state.ingredients);
 
-  const [localFilters, setLocalFilters] = useState(filters);
+  const [localFilters, setLocalFilters] = useState(filters || {
+    area: "",
+    ingredient: ""
+  });
 
-  const handleChange = (name, value) => {
+  useEffect(() => {
+    if (filters) {
+      setLocalFilters(filters);
+    }
+  }, [filters]);
+
+  const handleChange = (name, event) => {
+    const value = event?.target?.value ?? "";
     const newFilters = { ...localFilters, [name]: value };
     setLocalFilters(newFilters);
-    onFilterChange(newFilters);
+    onFilterChange?.(newFilters);
   };
 
   return (
@@ -21,14 +31,14 @@ export const RecipeFilters = ({ filters, onFilterChange, className }) => {
       {ingredients.isLoading ? <SelectFieldSkeleton /> : <SelectField
         name="ingredient"
         value={localFilters.ingredient}
-        onChange={(value) => handleChange("ingredient", value)}
+        onChange={(event) => handleChange("ingredient", event)}
         options={ingredients.ingredients.map(ing => ({ value: ing.id, label: ing.name }))}
         placeholder="Ingredients"
       />}
       {areas.isLoading ? <SelectFieldSkeleton /> : <SelectField
         name="area"
         value={localFilters.area}
-        onChange={(value) => handleChange("area", value)}
+        onChange={(event) => handleChange("area", event)}
         options={areas.areas.map(area => ({ value: area.id, label: area.name }))}
         placeholder="Area"
       />}
