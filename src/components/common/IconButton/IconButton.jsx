@@ -9,13 +9,27 @@ const IconButton = ({
                         style,
                         styleSVG,
                         iconId,
-                        width = "16",
-                        height = "16",
-                        stroke = "#000",
+                        width = "20",
+                        height = "20",
+                        stroke = "currentColor",
+                        fill = "black",
+                        disabled = false,
                     }) => {
     return (
-        <button type={type} className={cx(styles.button, style)} onClick={onClick}>
-            <Icon name={iconId} width={width} height={height} customStyle={styleSVG} stroke={stroke} />
+        <button
+            type={type}
+            className={cx(styles.button, style)}
+            onClick={onClick}
+            disabled={disabled}
+        >
+            <Icon
+                name={iconId}
+                width={width}
+                height={height}
+                customStyle={styleSVG}
+                stroke={stroke}
+                fill={fill}
+            />
         </button>
     );
 };
