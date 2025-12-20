@@ -14,8 +14,7 @@ function App() {
           <Route index element={<HomePage />} />
           <Route path={ROUTES.CATEGORY} element={<HomePage />} />
           <Route path={ROUTES.RECIPE} element={<RecipePage />} />
-          <Route
-            path={ROUTES.ADD_RECIPE}
+          <Route path={ROUTES.ADD_RECIPE}
             element={
               <PrivateRoute>
                 <AddRecipePage />
@@ -23,8 +22,7 @@ function App() {
             }
           />
 
-          <Route
-            path={ROUTES.USER}
+          <Route path={ROUTES.USER}
             element={
               <PrivateRoute>
                 <UserPage />
@@ -47,7 +45,9 @@ function App() {
               element={<Navigate to={ROUTES.RECIPES_MY} replace />}
             />
             <Route element={<RecipeList />} path={ROUTES.RECIPES_MY} />
+            <Route element={<RecipeList />} path={ROUTES.RECIPES_FAVORITES} />
             <Route element={<FollowersList />} path={ROUTES.FOLLOWERS_LIST} />
+            <Route element={<FollowersList />} path={ROUTES.FOLLOWING_LIST} />
           </Route>
         </Route>
       </Routes>

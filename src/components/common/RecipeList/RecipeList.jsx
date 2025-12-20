@@ -1,10 +1,10 @@
-import { useLocation, useParams, useSearchParams, useOutletContext } from 'react-router-dom';
+import { useLocation, useParams, useSearchParams, useOutletContext, Navigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import RecipePreviewItem from '../RecipePreviewItem/RecipePreviewItem';
 import { EMPTY_LIST_MESSAGES } from '../../../constants/messages';
 import { ROUTES } from '../../../constants';
-import { fetchFavoriteRecipes, fetchOwnRecipes, fetchRecipes } from '../../../redux/slices/recipesSlice';
+import { fetchFavoriteRecipes, fetchOwnRecipes, fetchRecipesByUserId } from '../../../redux/slices/recipesSlice';
 import { RecipePagination } from '../../layout/Recipes/RecipePagination';
 import RecipePreviewItemSkeleton from '../Skeleton/RecipePreviewItemSkeleton';
 
@@ -14,12 +14,18 @@ export default function RecipeList() {
   const { id } = useParams();
   const { isCurrentUser } = useOutletContext();
   const [searchParams, setSearchParams] = useSearchParams();
-  
+
   const { recipes, pagination, isLoading } = useSelector(state => state.recipes);
   const { currentPage, totalPages, limit } = pagination;
 
   const page = Number(searchParams.get('page')) || 1;
   const currentRoute = location.pathname;
+  const isFavoritesTab = currentRoute.includes(ROUTES.RECIPES_FAVORITES);
+
+  // Redirect to my_recipes if viewing another user's favorites (not supported)
+  if (!isCurrentUser && isFavoritesTab) {
+    return <Navigate to={`../${ROUTES.RECIPES_MY}`} replace />;
+  }
 
   useEffect(() => {
     const params = { page, limit };
@@ -27,16 +33,16 @@ export default function RecipeList() {
     if (isCurrentUser) {
       if (currentRoute.includes(ROUTES.RECIPES_MY)) {
         dispatch(fetchOwnRecipes(params));
-      } else if (currentRoute.includes(ROUTES.RECIPES_FAVORITES)) {
+      } else if (isFavoritesTab) {
         dispatch(fetchFavoriteRecipes(params));
       }
     } else {
       // Fetching recipes for another user profile
-      if (currentRoute.includes(ROUTES.RECIPES_MY)) {
-        dispatch(fetchRecipes({ ...params, owner: id }));
+      if (currentRoute.includes(ROUTES.RECIPES_MY) && id) {
+        dispatch(fetchRecipesByUserId({ userId: id, ...params }));
       }
     }
-  }, [dispatch, currentRoute, page, limit, isCurrentUser, id]);
+  }, [dispatch, currentRoute, page, limit, isCurrentUser, id, isFavoritesTab]);
 
   const handlePageChange = (newPage) => {
     setSearchParams({ page: newPage });
