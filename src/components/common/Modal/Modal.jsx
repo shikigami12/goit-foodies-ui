@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
+import { createPortal } from "react-dom";
 import PropTypes from "prop-types";
 import Icon from "../Icon";
 import styles from "./Modal.module.css";
@@ -55,7 +56,7 @@ export const Modal = ({ isOpen, onClose, children }) => {
         }
     };
 
-    return (
+    return createPortal(
         <div
             className={`${styles.backdrop} ${isVisible ? styles.backdropVisible : styles.backdropHidden}`}
             onClick={handleBackdropClick}
@@ -65,7 +66,7 @@ export const Modal = ({ isOpen, onClose, children }) => {
                 onClick={(e) => e.stopPropagation()}
             >
                 {children}
-                
+
                 <button
                     type="button"
                     onClick={handleClose}
@@ -80,7 +81,8 @@ export const Modal = ({ isOpen, onClose, children }) => {
                     />
                 </button>
             </div>
-        </div>
+        </div>,
+        document.body
     );
 };
 

@@ -6,36 +6,6 @@
     object-fit: cover;
 }
 
-.style_button_favorit {
-    background-color: rgba(5, 5, 5, 1);
-    color: var(--color-white);
-    transition: all var(--transition-default);
-}
-
-.style_button_favorit:hover {
-    background-color: var(--color-black-90);
-}
-
-.style_button_favorit svg {
-    stroke: var(--color-white);
-    fill: var(--color-black);
-}
-
-.style_button_notFavorit {
-    background-color: transparent;
-    color: var(--color-black-40);
-    transition: all var(--transition-default);
-}
-
-.style_button_notFavorit:hover {
-    background-color: rgba(5, 5, 5, 1);
-    color: var(--color-white);
-}
-
-.style_button_notFavorit:hover svg {
-    stroke: var(--color-white) !important;
-}
-
 .textWrap {
     margin-bottom: 8px;
 }
@@ -134,6 +104,47 @@
 
 .recipeCard:hover {
     transform: translateY(-4px);
+}
+
+.style_button_favorit {
+    background-color: var(--color-black)!important;
+    box-shadow: inset 0 0 0 2px var(--color-black);
+    transform: scale(1.1);
+}
+
+.style_button_favorit svg {
+    stroke: var(--color-white) !important;
+}
+
+.style_button_favorit:hover {
+    background-color: var(--color-black);
+    color: var(--color-white);
+}
+
+.style_button_favorit:hover svg {
+    stroke: var(--color-white) !important;
+    fill: var(--color-white) !important;
+}
+
+.style_button_notFavorit {
+    background-color: transparent;
+    box-shadow: inset 0 0 0 1px var(--color-black-10);
+    transform: scale(1);
+}
+
+.style_button_notFavorit svg {
+    stroke: var(--color-black) !important;
+    fill: none !important;
+}
+
+.style_button_notFavorit:hover {
+    background-color: var(--color-black);
+    color: var(--color-white);
+}
+
+.style_button_notFavorit:hover svg {
+    stroke: var(--color-white) !important;
+    fill: none !important;
 }
 
 @media screen and (min-width: 768px) {

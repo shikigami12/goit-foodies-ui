@@ -1,48 +1,96 @@
 .header_popular_recipes {
-  font-size: 18px;
-  font-weight: 800;
-  line-height: 24px;
-  letter-spacing: -0.36px;
-  text-transform: uppercase;
+    font-size: 18px;
+    font-weight: 800;
+    line-height: 24px;
+    letter-spacing: -0.36px;
+    text-transform: uppercase;
 }
 
 .popular_recipes_container {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 32px;
-  max-width: 343px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 32px;
+    max-width: 343px;
 }
 
 .popular_recipes_list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
+    width: 100%;
+    padding: 20px 0;
+}
+
+.popular_recipes_list :global(.swiper-wrapper) {
+    display: flex;
+    align-items: stretch;
+}
+
+.popular_recipes_list :global(.swiper-slide) {
+    height: auto;
+}
+
+.popular_recipes_list :global(.swiper-button-next),
+.popular_recipes_list :global(.swiper-button-prev) {
+    color: var(--color-brand);
+}
+
+.popular_recipes_list :global(.swiper-button-next):after,
+.popular_recipes_list :global(.swiper-button-prev):after {
+    font-size: 24px;
+}
+
+.popular_recipes_list :global(.swiper-pagination-bullet-active) {
+    background: var(--color-brand);
+}
+
+.popular_recipes_list :global(.swiper-pagination) {
+    position: relative;
+    margin-top: 20px;
+    bottom: auto;
+}
+
+.popular_recipes_list :global(.swiper-button-next),
+.popular_recipes_list :global(.swiper-button-prev) {
+    width: 40px;
+    height: 40px;
+    background: var(--color-white);
+    border-radius: 50%;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    color: var(--color-black);
+    transition: all 0.25s ease;
+}
+
+.popular_recipes_list :global(.swiper-button-next):after,
+.popular_recipes_list :global(.swiper-button-prev):after {
+    display: none;
+}
+
+.popular_recipes_list :global(.swiper-button-next svg),
+.popular_recipes_list :global(.swiper-button-prev svg) {
+    width: 16px;
+    height: 16px;
+}
+
+.popular_recipes_list :global(.swiper-button-next):hover,
+.popular_recipes_list :global(.swiper-button-prev):hover {
+    background: var(--color-brand);
+    color: var(--color-white);
 }
 
 @media screen and (min-width: 768px) {
-  .popular_recipes_container {
-    max-width: 704px;
-    gap: 40px;
-  }
+    .popular_recipes_container {
+        max-width: 704px;
+        gap: 40px;
+    }
 
-  .header_popular_recipes {
-    font-size: 24px;
-    line-height: 28px;
-    letter-spacing: -0.48px;
-  }
-  .popular_recipes_list {
-    flex-wrap: wrap;
-    gap: 40px 18px;
-  }
+    .header_popular_recipes {
+        font-size: 24px;
+        line-height: 28px;
+        letter-spacing: -0.48px;
+    }
 }
 
 @media screen and (min-width: 1440px) {
-  .popular_recipes_container {
-    max-width: 1280px;
-  }
-
-  .popular_recipes_list {
-    gap: 20px;
-  }
+    .popular_recipes_container {
+        max-width: 1280px;
+    }
 }
