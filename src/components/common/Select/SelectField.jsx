@@ -36,6 +36,11 @@ export const SelectField = ({
         setIsOpen(false);
     };
 
+    const handleClear = (e) => {
+        e.stopPropagation();
+        onChange?.({target: {value: "", name, id}});
+    };
+
     return (
         <div className="flex flex-col gap-1 mb-2 mx-2 relative" ref={wrapperRef}>
             <button
@@ -58,10 +63,24 @@ export const SelectField = ({
                   {selected ? selected.label : placeholder}
                 </span>
 
-                <svg
-                    className={`w-4 h-4 transition-transform ${ isOpen ? "" : "rotate-180" } ${error ? "text-red-600" : "text-black"}`}>
-                    <use href="/sprite.svg#icon-chevron-down"/>
-                </svg>
+                <div className="flex items-center gap-2">
+                    {hasValue && !disabled && (
+                        <div
+                            onClick={handleClear}
+                            className="text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
+                            role="button"
+                            aria-label="Clear selection"
+                        >
+                            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </div>
+                    )}
+                    <svg
+                        className={`w-4 h-4 transition-transform ${ isOpen ? "" : "rotate-180" } ${error ? "text-red-600" : "text-black"}`}>
+                        <use href="/sprite.svg#icon-chevron-down"/>
+                    </svg>
+                </div>
             </button>
 
             {isOpen && !disabled && (
@@ -69,7 +88,7 @@ export const SelectField = ({
                     className="
                         absolute left-0 right-0 top-full mt-2
                         rounded-2xl border border-gray-200 bg-white shadow-lg
-                        overflow-hidden z-20
+                        overflow-y-auto max-h-72 z-20
                     "
                     onClick={(e) => e.stopPropagation()}
                 >

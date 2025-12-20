@@ -28,6 +28,10 @@ export const HomePage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [currentCategory, setCurrentCategory] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [currentFilters, setCurrentFilters] = useState({
+    area: "",
+    ingredient: ""
+  });
 
   useEffect(() => {
     dispatch(fetchCategories());
@@ -35,18 +39,26 @@ export const HomePage = () => {
     dispatch(fetchIngredients());
   }, [dispatch]);
 
-  const fetchRecipes = useCallback(async (category, page = 1) => {
+  const fetchRecipes = useCallback(async (category, page = 1, filters = {}) => {
     try {
       setIsLoading(true);
-      setCurrentCategory(category.id);
+      setCurrentCategory(category?.id || 'all');
       setCurrentPage(page);
       
-      const data = await recipeService.searchRecipes({ category: category.id, page, limit: 12 });
+      const params = {
+        ...(category?.id && { category: category.id }),
+        page,
+        limit: 12,
+        ...(filters.area && { area: filters.area }),
+        ...(filters.ingredient && { ingredient: filters.ingredient })
+      };
+      
+      const data = await recipeService.searchRecipes(params);
       setRecipes(data.recipes || []);
       setTotalPages(data.totalPages || 1);
       setMeta({
-        title: category.name,
-        text: category.description || defaultMeta.text,
+        title: category?.name || 'All Recipes',
+        text: category?.description || 'Discover a limitless world of culinary possibilities and enjoy exquisite recipes from all categories.',
       });
     } catch (error) {
       console.error('Failed to fetch recipes:', error);
@@ -60,12 +72,17 @@ export const HomePage = () => {
   // Handle URL changes
   useEffect(() => {
     if (categoryName && categories.length > 0) {
-      const category = categories.find(
-        c => c.name.toLowerCase() === categoryName.toLowerCase()
-      );
-      
-      if (category) {
-        fetchRecipes(category);
+      if (categoryName.toLowerCase() === 'all') {
+        // Fetch all recipes without category filter
+        fetchRecipes(null);
+      } else {
+        const category = categories.find(
+          c => c.name.toLowerCase() === categoryName.toLowerCase()
+        );
+        
+        if (category) {
+          fetchRecipes(category);
+        }
       }
     } else if (!categoryName) {
       setRecipes([]);
@@ -75,15 +92,36 @@ export const HomePage = () => {
   }, [categoryName, categories, fetchRecipes]);
 
   const handleCategoryClick = (category) => {
-    navigate(ROUTES.CATEGORY.replace(':category', category.name.toLowerCase()));
+    if (category === undefined) {
+      navigate(ROUTES.CATEGORY.replace(':category', "all"));
+    } else {
+      navigate(ROUTES.CATEGORY.replace(':category', category.name.toLowerCase()));
+    }
   };
 
   const handlePageChange = useCallback((page) => {
     if (currentCategory && categoryName) {
-      // Create a dummy category object since we have the ID and name from state/URL
-      const category = categories.find(c => c.id === currentCategory);
-      if (category) {
-        fetchRecipes(category, page);
+      if (categoryName.toLowerCase() === 'all') {
+        fetchRecipes(null, page, currentFilters);
+      } else {
+        const category = categories.find(c => c.id === currentCategory);
+        if (category) {
+          fetchRecipes(category, page, currentFilters);
+        }
+      }
+    }
+  }, [currentCategory, categoryName, categories, currentFilters, fetchRecipes]);
+
+  const handleFilterChange = useCallback((newFilters) => {
+    setCurrentFilters(newFilters);
+    if (currentCategory && categoryName) {
+      if (categoryName.toLowerCase() === 'all') {
+        fetchRecipes(null, 1, newFilters);
+      } else {
+        const category = categories.find(c => c.id === currentCategory);
+        if (category) {
+          fetchRecipes(category, 1, newFilters);
+        }
       }
     }
   }, [currentCategory, categoryName, categories, fetchRecipes]);
@@ -98,19 +136,18 @@ export const HomePage = () => {
       <Hero />
       
       {/* CATEGORIES OR RECIPES */}
-      {recipes.length > 0 || isLoading ? 
+      {categoryName ? 
         <Recipes 
           meta={meta}
           recipes={recipes} 
           totalPages={totalPages} 
           currentPage={currentPage}
+          filters={currentFilters}
           isLoading={isLoading} 
           onBackToCategories={handleBackToCategories} 
           onPageChange={handlePageChange}
-        /> : <Categories meta={meta} categories={categories} onCategoryClick={handleCategoryClick} />
-      }
-
-      {/* TESTEMONIALS */}
+          onFilterChange={handleFilterChange}
+        /> : <Categories meta={meta} categories={categories} onCategoryClick={handleCategoryClick} />}
       <Testemonials />
     </div>
   );
