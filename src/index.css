@@ -115,6 +115,9 @@
   .desktop-tablet-main {
     @apply text-base leading-6 font-sans font-medium tracking-tight;
   }
+  .desktop-tablet-h4 {
+    @apply text-xl leading-6 font-sans font-extrabold tracking-tight;
+  }
 }
 
 html {
