@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { ROUTES } from '../../../constants';
 import { EMPTY_LIST_MESSAGES } from '../../../constants/messages';
 import { userService } from '../../../services/userService';
@@ -9,10 +10,13 @@ import { Loader } from '../Loader';
 export default function FollowersList() {
   const location = useLocation();
   const { id } = useParams();
+  const authUser = useSelector(state => state.auth.user);
+  const currentUserId = authUser?.id;
 
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [followedUsers, setFollowedUsers] = useState(new Set());
 
   const currentRoute = location.pathname.split('/').pop() || '';
 
@@ -22,7 +26,6 @@ export default function FollowersList() {
   const isFollowersTab = currentRoute === followersSlug;
   const isFollowingTab = currentRoute === followingSlug;
 
-  const actionLabel = isFollowersTab ? 'Follow' : 'Unfollow';
   const emptyMessage = isFollowersTab
     ? EMPTY_LIST_MESSAGES.FOLLOWERS
     : EMPTY_LIST_MESSAGES.FOLLOWING;
@@ -33,8 +36,6 @@ export default function FollowersList() {
         setLoading(true);
         setError('');
 
-        // TODO: Підгружати дані чужого акаунта для таба Followers (якщо ця сторінка не поточного користувача)
-        
         if (isFollowersTab && id) {
           const data = await userService.getFollowers(id);
           const list = (data.followers ?? data ?? []).map(u => ({
@@ -57,6 +58,7 @@ export default function FollowersList() {
             recipesThumbs: u.recipesThumbs ?? [],
           }));
           setItems(list);
+          setFollowedUsers(new Set(list.map(u => u.id)));
         }
       } catch (e) {
         console.error(e);
@@ -75,14 +77,36 @@ export default function FollowersList() {
   const handleAction = async userId => {
     try {
       if (isFollowersTab) {
-        await userService.followUser(userId);
+        if (followedUsers.has(userId)) {
+          await userService.unfollowUser(userId);
+          setFollowedUsers(prev => {
+            const newSet = new Set(prev);
+            newSet.delete(userId);
+            return newSet;
+          });
+        } else {
+          await userService.followUser(userId);
+          setFollowedUsers(prev => new Set(prev).add(userId));
+        }
       } else if (isFollowingTab) {
         await userService.unfollowUser(userId);
         setItems(prev => prev.filter(u => u.id !== userId));
+        setFollowedUsers(prev => {
+          const newSet = new Set(prev);
+          newSet.delete(userId);
+          return newSet;
+        });
       }
     } catch (e) {
       console.error(e);
     }
+  };
+
+  const getActionLabel = userId => {
+    if (isFollowingTab) {
+      return 'Unfollow';
+    }
+    return followedUsers.has(userId) ? 'Following' : 'Follow';
   };
 
   if (loading) {
@@ -104,7 +128,8 @@ export default function FollowersList() {
   return (
     <UserRelationsList
       items={items}
-      actionLabel={actionLabel}
+      currentUserId={currentUserId}
+      getActionLabel={getActionLabel}
       onAction={handleAction}
     />
   );

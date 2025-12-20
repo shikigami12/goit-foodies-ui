@@ -41,22 +41,13 @@ function App() {
             <Route element={<FollowersList />} path={ROUTES.FOLLOWING_LIST} />
           </Route>
 
-          <Route
-            path={ROUTES.USER_PROFILE}
-            element={
-              <PrivateRoute>
-                <UserPage />
-              </PrivateRoute>
-            }
-          >
+          <Route path={ROUTES.USER_PROFILE} element={<UserPage />}>
             <Route
               index
               element={<Navigate to={ROUTES.RECIPES_MY} replace />}
             />
             <Route element={<RecipeList />} path={ROUTES.RECIPES_MY} />
-            <Route element={<RecipeList />} path={ROUTES.RECIPES_FAVORITES} />
             <Route element={<FollowersList />} path={ROUTES.FOLLOWERS_LIST} />
-            <Route element={<FollowersList />} path={ROUTES.FOLLOWING_LIST} />
           </Route>
         </Route>
       </Routes>

@@ -7,8 +7,11 @@ import { fetchAreas } from "../redux/slices/areasSlice";
 import { fetchIngredients } from "../redux/slices/ingredientsSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { recipeService } from "../services";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { ROUTES } from "../constants";
+import { Modal } from "../components/common/Modal/Modal";
+import { SignInModal } from "../components/modals/SignInModal";
+import { SignUpModal } from "../components/modals/SignUpModal";
 
 const defaultMeta = {
   title: 'Categories',
@@ -18,8 +21,9 @@ const defaultMeta = {
 export const HomePage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const { category: categoryName } = useParams();
-  
+
   const [meta, setMeta] = useState(defaultMeta);
   const { categories } = useSelector((state) => state.categories);
   const [recipes, setRecipes] = useState([]);
@@ -27,6 +31,29 @@ export const HomePage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [currentCategory, setCurrentCategory] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [authModalType, setAuthModalType] = useState('signin');
+
+  useEffect(() => {
+    if (location.state?.authRequired) {
+      setIsAuthModalOpen(true);
+      setAuthModalType('signin');
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+  }, [location.state, navigate, location.pathname]);
+
+  const handleCloseAuthModal = () => {
+    setIsAuthModalOpen(false);
+  };
+
+  const handleSwitchToSignUp = () => {
+    setAuthModalType('signup');
+  };
+
+  const handleSwitchToSignIn = () => {
+    setAuthModalType('signin');
+  };
 
   useEffect(() => {
     dispatch(fetchCategories());
@@ -94,18 +121,38 @@ export const HomePage = () => {
   return (
     <div className="max-w-7xl mx-auto">
       <Hero />
-      
-      {recipes.length > 0 || isLoading ? 
-        <Recipes 
+
+      {recipes.length > 0 || isLoading ? (
+        <Recipes
           meta={meta}
-          recipes={recipes} 
-          totalPages={totalPages} 
+          recipes={recipes}
+          totalPages={totalPages}
           currentPage={currentPage}
-          isLoading={isLoading} 
-          onBackToCategories={handleBackToCategories} 
+          isLoading={isLoading}
+          onBackToCategories={handleBackToCategories}
           onPageChange={handlePageChange}
-        /> :
-        <Categories meta={meta} categories={categories} onCategoryClick={handleCategoryClick} />}
+        />
+      ) : (
+        <Categories
+          meta={meta}
+          categories={categories}
+          onCategoryClick={handleCategoryClick}
+        />
+      )}
+
+      <Modal isOpen={isAuthModalOpen} onClose={handleCloseAuthModal}>
+        {authModalType === 'signin' ? (
+          <SignInModal
+            onClose={handleCloseAuthModal}
+            onSwitchToSignUp={handleSwitchToSignUp}
+          />
+        ) : (
+          <SignUpModal
+            onClose={handleCloseAuthModal}
+            onSwitchToSignIn={handleSwitchToSignIn}
+          />
+        )}
+      </Modal>
     </div>
   );
 };
