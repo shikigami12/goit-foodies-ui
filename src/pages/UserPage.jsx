@@ -12,6 +12,7 @@ import {
   currentUserProfileSelector,
   getCurrentUser,
   getUserById,
+  setIsFollowing,
 } from '../redux/slices/usersSlice';
 import { FollowButton } from '../components/common/FollowButton/FollowButton';
 import { Loader } from '../components/common/Loader';
@@ -43,6 +44,27 @@ export const UserPage = () => {
       }
     }
   }, [dispatch, id, isCurrentUser, user]);
+
+  useEffect(() => {
+    const checkStatus = async () => {
+      if (!isCurrentUser && authUser?.id && isLoaded) {
+        try {
+          const data = await userService.getFollowing();
+          const followingList = data.following || data || [];
+
+          const isFollowing = followingList.some(u => u.id === id);
+
+          if (isFollowing) {
+            dispatch(setIsFollowing(true));
+          }
+        } catch (error) {
+          console.error('Failed to check following status:', error);
+        }
+      }
+    };
+
+    checkStatus();
+  }, [dispatch, id, isCurrentUser, authUser, isLoaded]);
 
   if (!isLoaded) return <Loader />;
 

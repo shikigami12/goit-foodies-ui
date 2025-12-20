@@ -7,28 +7,27 @@ export const API_ENDPOINTS = {
     REGISTER: '/auth/register',
     LOGIN: '/auth/login',
     LOGOUT: '/auth/logout',
-
   },
 
   // Users
   USERS: {
     CURRENT: '/users/current',
-    BY_ID: (id) => `/users/${id}`,
+    BY_ID: id => `/users/${id}`,
     AVATAR: '/users/avatar',
-    FOLLOWERS: (id) => `/users/${id}/followers`,
+    FOLLOWERS: id => `/users/${id}/followers`,
     FOLLOWING: '/users/following',
-    FOLLOW: (id) => `/users/${id}/followers`,
-    UNFOLLOW: (id) => `/users/${id}/followers`,
+    FOLLOW: id => `/users/${id}/follow`,
+    UNFOLLOW: id => `/users/${id}/follow`,
   },
 
   // Recipes
   RECIPES: {
     BASE: '/recipes',
-    BY_ID: (id) => `/recipes/${id}`,
+    BY_ID: id => `/recipes/${id}`,
     POPULAR: '/recipes/popular',
     OWN: '/recipes/own',
     FAVORITES: '/recipes/favorites',
-    FAVORITE: (id) => `/recipes/${id}/favorite`,
+    FAVORITE: id => `/recipes/${id}/favorite`,
   },
 
   // Reference data

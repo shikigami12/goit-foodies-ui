@@ -10,6 +10,7 @@ import { useParams } from 'react-router-dom';
 export const FollowButton = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
+
   const user = useSelector(currentUserProfileSelector);
   const isFollowLoading = useSelector(state => state.users.isFollowLoading);
 
@@ -35,6 +36,7 @@ export const FollowButton = () => {
       isLoading={isFollowLoading}
       disabled={isFollowLoading}
       fullWidth
+      type="button"
     />
   );
 };

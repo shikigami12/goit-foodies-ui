@@ -1,21 +1,12 @@
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import withoutAvatar from '../../../images/user_without_avatar.jpg';
 
-export const UserRelationsList = ({
-  items,
-  currentUserId,
-  getActionLabel,
-  onAction,
-}) => {
-  const navigate = useNavigate();
-
+export const UserRelationsList = ({ items, onAction, currentUserId }) => {
   return (
     <div className="space-y-6">
       {items.map((item, index) => {
-        const isCurrentUser = currentUserId === item.id;
-        const actionLabel =
-          typeof getActionLabel === 'function'
-            ? getActionLabel(item.id)
-            : getActionLabel;
+        const isMe = currentUserId === item.id;
+        const isFollowing = item.isFollowing;
 
         return (
           <article
@@ -30,25 +21,50 @@ export const UserRelationsList = ({
           >
             <div className="flex justify-between items-start gap-3">
               <div className="flex gap-4 items-start">
-                <img
-                  src={item.avatar}
-                  alt={item.name}
-                  className="w-[60px] h-[60px] rounded-full object-cover md:w-[85px] md:h-[85px]"
-                />
+                <Link to={`/user/${item.id}`}>
+                  <img
+                    src={item.avatar || withoutAvatar}
+                    alt={item.name}
+                    className="w-[60px] h-[60px] rounded-full object-cover md:w-[85px] md:h-[85px] transition-opacity hover:opacity-80"
+                  />
+                </Link>
 
                 <div className="flex-1">
-                  <h3 className="font-extrabold text-[20px] leading-[1.2] tracking-[-0.02em] uppercase text-[#050505] mb-1">
-                    {item.name}
-                  </h3>
+                  <Link to={`/user/${item.id}`}>
+                    <h3 className="font-extrabold text-[20px] leading-[1.2] tracking-[-0.02em] uppercase text-[#050505] mb-1 hover:text-brand transition-colors">
+                      {item.name}
+                    </h3>
+                  </Link>
                   <p className="font-medium text-[14px] leading-[1.42857] tracking-[-0.02em] text-[#bfbebe] mb-2">
                     Own recipes: {item.recipesCount}
                   </p>
 
-                  {!isCurrentUser && (
+                  {isMe ? (
                     <button
                       type="button"
-                      onClick={() => onAction?.(item.id)}
+                      disabled
                       className="
+                        w-[139px] h-11
+                        px-6 py-2.5
+                        rounded-[30px]
+                        border border-gray-200
+                        bg-gray-100
+                        font-bold
+                        text-[16px]
+                        leading-normal
+                        tracking-[-0.02em]
+                        uppercase
+                        text-gray-400
+                        cursor-default
+                      "
+                    >
+                      You
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => onAction?.(item.id, isFollowing)}
+                      className={`
                         w-[139px] h-11
                         px-6 py-2.5
                         rounded-[30px]
@@ -58,13 +74,16 @@ export const UserRelationsList = ({
                         leading-normal
                         tracking-[-0.02em]
                         uppercase
-                        text-dark
                         transition-colors
                         cursor-pointer
-                        hover:bg-brand hover:text-white
-                      "
+                        ${
+                          isFollowing
+                            ? 'bg-transparent text-dark hover:bg-black hover:text-white'
+                            : 'bg-brand text-white hover:bg-brand-dark hover:text-white'
+                        }
+                      `}
                     >
-                      {actionLabel}
+                      {isFollowing ? 'Unfollow' : 'Follow'}
                     </button>
                   )}
                 </div>
@@ -92,9 +111,8 @@ export const UserRelationsList = ({
                 })}
               </div>
 
-              <button
-                type="button"
-                onClick={() => navigate(`/user/${item.id}`)}
+              <Link
+                to={`/user/${item.id}`}
                 className="
                   w-9 h-9 rounded-full
                   border border-borders
@@ -108,7 +126,7 @@ export const UserRelationsList = ({
                 <svg className="w-5 h-5 stroke-current">
                   <use href="/sprite.svg#icon-arrow-up-right" />
                 </svg>
-              </button>
+              </Link>
             </div>
           </article>
         );
