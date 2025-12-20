@@ -27,9 +27,9 @@
         <path d="M24.5 21H3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
 
-    <symbol id="icon-arrow-up-right" viewBox="0 0 32 32">
-    <path d="M21.825 8.299c0.524-0.427 1.297-0.396 1.785 0.092s0.519 1.261 0.092 1.785l-0.092 0.101-13.333 13.333c-0.521 0.521-1.365 0.521-1.885 0s-0.521-1.365 0-1.886l13.434-13.425z"></path>
-    <path d="M21.333 22.667v-12h-12c-0.736 0-1.333-0.597-1.333-1.333s0.597-1.333 1.333-1.333l13.47 0.007c0.672 0.069 1.196 0.636 1.196 1.326v13.333c0 0.736-0.597 1.333-1.333 1.333s-1.333-0.597-1.333-1.333z"></path>
+    <symbol id="icon-arrow-up-right" viewBox="0 0 18 18">
+        <path d="M5.25 12.75L12.75 5.25" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M5.25 5.25H12.75V12.75" stroke-linecap="round" stroke-linejoin="round"/>
     </symbol>
     <symbol id="icon-chevron-up" viewBox="0 0 32 32">
     <path stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="4" stroke-width="3.2" d="M8 20l8-8 8 8"></path>
