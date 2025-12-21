@@ -40,8 +40,8 @@ const DeleteButton = ({ id, type, iconSize }) => {
 };
 
 export default function RecipePreview({ recipe, type, isCurrentUser }) {
-  const windowWidth = useWindowWidth();
-  const iconSize = windowWidth < 768 ? 16 : 18;
+  const { isMobile } = useWindowWidth();
+  const iconSize = isMobile ? 16 : 18;
 
   // Replace newlines with spaces for proper line-clamp behavior
   const cleanInstructions = recipe.instructions.replace(/\r\n|\r|\n/g, ' ');

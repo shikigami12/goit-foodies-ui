@@ -23,7 +23,7 @@ export default function UserAvatarInput() {
 
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewImage, setPreviewImage] = useState(user?.avatar || withoutAvatar);
-  const windowWidth = useWindowWidth();
+  const { isMobile } = useWindowWidth();
   const dispatch = useDispatch();
 
   const inputRef = React.useRef();
@@ -93,7 +93,7 @@ export default function UserAvatarInput() {
           >
             <Icon
               name="plus"
-              size={windowWidth < 768 ? 16 : 18}
+              size={isMobile ? 16 : 18}
               stroke="currentColor"
             />
           </button>
