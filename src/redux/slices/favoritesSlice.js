@@ -21,10 +21,15 @@ const favoritesSlice = createSlice({
         removeFromFavorites: (state, action) => {
             state.favorites = state.favorites.filter((item) => item !== action.payload);
         },
+        clearFavorites: (state) => {
+            state.favorites = [];
+            state.isLoading = false;
+            state.error = null;
+        },
     },
 });
 
-export const { setFavorites, addToFavorites, removeFromFavorites } = favoritesSlice.actions;
+export const { setFavorites, addToFavorites, removeFromFavorites, clearFavorites } = favoritesSlice.actions;
 
 // Persist config
 const persistConfig = {
