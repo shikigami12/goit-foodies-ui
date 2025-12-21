@@ -5,6 +5,7 @@ import { SignInModal, SignUpModal } from "../../modals";
 import { useModal, useToggleFavorite } from "../../../hooks";
 import { Icon } from "../Icon/Icon";
 import placeholderUser from "../../../images/user_without_avatar.jpg";
+import placeholderRecipe from "../../../assets/No_Preview_image_2.png";
 
 const RecipeCard = ({ recipe }) => {
   const { id, title, owner, instructions, thumb } = recipe;
@@ -47,7 +48,7 @@ const RecipeCard = ({ recipe }) => {
           className="block rounded-[30px] overflow-hidden hover:opacity-90 transition-opacity"
         >
           <img
-            src={thumb}
+            src={thumb || placeholderRecipe}
             alt={title}
             className="w-full h-[230px] md:h-[275px] object-cover"
           />
