@@ -74,13 +74,11 @@ export const Hero = () => {
   return (
     <section className={css.hero}>
       <div className={css.container}>
-        {/* Decorative vertical lines */}
         <span className={`${css.decorativeLine} ${css.line1}`}></span>
         <span className={`${css.decorativeLine} ${css.line2}`}></span>
         <span className={`${css.decorativeLine} ${css.line3}`}></span>
         <span className={`${css.decorativeLine} ${css.line4}`}></span>
 
-        {/* Header inside Hero */}
         <header className={css.header}>
           <Logo isDarkTheme={true} />
           <Nav isDarkTheme={true} />
@@ -115,8 +113,24 @@ export const Hero = () => {
         </button>
 
         <div className={css.images}>
-          <img src={smallCard} alt="Dessert" className={css.smallCard} />
-          <img src={bigCard} alt="Beef" className={css.bigCard} />
+          <img
+            src={smallCard}
+            srcSet={`${smallCard} 1x, ${smallCard} 2x`}
+            alt="Dessert"
+            className={css.smallCard}
+            loading="lazy"
+            width={128}
+            height={116}
+          />
+          <img
+            src={bigCard}
+            srcSet={`${bigCard} 1x, ${bigCard} 2x`}
+            alt="Beef"
+            className={css.bigCard}
+            loading="lazy"
+            width={302}
+            height={273}
+          />
         </div>
       </div>
 

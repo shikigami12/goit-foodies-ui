@@ -3,7 +3,7 @@ import { SelectField } from "../components/common/Select/SelectField";
 import { TextInput } from "../components/common/TextInput/TextInput";
 import { TextArea } from "../components/common/TextArea/TextArea";
 import { Breadcrumbs } from "../components/common/Breadcrumbs";
-import { useAddRecipe } from "./AddRecipePage.useAddRecipe";
+import { useAddRecipe } from "../hooks/useAddRecipe";
 
 export const AddRecipePage = () => {
   const {
@@ -41,12 +41,10 @@ export const AddRecipePage = () => {
 
   return (
     <div className="mx-auto w-full max-w-[1280px] px-4 py-10">
-      {/* Breadcrumbs */}
       <div className="mb-10">
         <Breadcrumbs currentPage="Add recipe" />
       </div>
 
-      {/* Header */}
       <div className="mb-10">
         <h1 className="font-extrabold text-[28px] md:text-[40px] leading-[32px] md:leading-[44px] tracking-[-0.02em] uppercase text-[#050505] mb-5">
           Add recipe
@@ -63,7 +61,6 @@ export const AddRecipePage = () => {
       ) : null}
 
       <form onSubmit={onSubmit} className="flex flex-col lg:flex-row gap-10 lg:gap-20">
-        {/* LEFT: Upload */}
         <div className="w-full lg:w-[551px] flex-shrink-0">
           <div
             className={[
@@ -115,13 +112,9 @@ export const AddRecipePage = () => {
           </div>
         </div>
 
-        {/* RIGHT: Fields */}
         <div className="flex-1 flex flex-col gap-20">
-          {/* Form Fields */}
           <div className="flex flex-col gap-10">
-            {/* Recipe Name Section */}
             <div className="flex flex-col gap-10">
-              {/* Title Input */}
               <div>
                 <input
                   type="text"
@@ -147,7 +140,6 @@ export const AddRecipePage = () => {
                 />
               </div>
 
-              {/* Category + Cooking time */}
               <div className="flex flex-col md:flex-row gap-5">
                 <div className="w-full md:w-[280px]">
                   <h3 className="font-extrabold text-lg md:text-xl leading-6 tracking-[-0.02em] uppercase text-[#050505] mb-4">
@@ -194,7 +186,6 @@ export const AddRecipePage = () => {
                 </div>
               </div>
 
-              {/* Area */}
               <div className="w-full md:w-[340px]">
                 <h3 className="font-extrabold text-lg md:text-xl leading-6 tracking-[-0.02em] uppercase text-[#050505] mb-4">
                   Area
@@ -210,7 +201,6 @@ export const AddRecipePage = () => {
                 />
               </div>
 
-              {/* Ingredients */}
               <div>
                 <h3 className="font-extrabold text-lg md:text-xl leading-6 tracking-[-0.02em] uppercase text-[#050505] mb-4">
                   Ingredients
@@ -245,7 +235,6 @@ export const AddRecipePage = () => {
               </div>
             </div>
 
-            {/* Add Ingredient Button */}
             <button
               type="button"
               onClick={addIngredient}
@@ -256,7 +245,6 @@ export const AddRecipePage = () => {
               <Icon name="plus" size={22} />
             </button>
 
-            {/* Added Ingredients List */}
             {ingredients.length > 0 && (
               <div className="flex flex-wrap gap-4">
                 {ingredients.map((ing, idx) => (
@@ -292,7 +280,6 @@ export const AddRecipePage = () => {
             )}
           </div>
 
-          {/* Recipe Preparation */}
           <div>
             <h3 className="font-extrabold text-lg md:text-xl leading-6 tracking-[-0.02em] uppercase text-[#050505] mb-10">
               Recipe Preparation
@@ -308,14 +295,12 @@ export const AddRecipePage = () => {
             />
           </div>
 
-          {/* Submit error */}
           {submitError ? (
             <div className="rounded-[30px] border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
               {submitError}
             </div>
           ) : null}
 
-          {/* Actions */}
           <div className="flex items-center gap-2">
             <button
               type="button"

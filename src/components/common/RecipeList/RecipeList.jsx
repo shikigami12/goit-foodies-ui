@@ -34,7 +34,6 @@ export default function RecipeList() {
   const currentRoute = location.pathname;
   const isFavoritesTab = currentRoute.includes(ROUTES.RECIPES_FAVORITES);
 
-  // Redirect to my_recipes if viewing another user's favorites (not supported)
   if (!isCurrentUser && isFavoritesTab) {
     return <Navigate to={`../${ROUTES.RECIPES_MY}`} replace />;
   }
@@ -49,7 +48,6 @@ export default function RecipeList() {
         dispatch(fetchFavoriteRecipes(params));
       }
     } else {
-      // Fetching recipes for another user profile
       if (currentRoute.includes(ROUTES.RECIPES_MY)) {
         dispatch(fetchUserRecipes({ userId: id, params }));
       }
