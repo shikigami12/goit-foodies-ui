@@ -16,8 +16,7 @@ export const PopularRecipes = () => {
                 const data = await recipeService.getPopularRecipes();
 
                 setPopularRecipes(Array.isArray(data) ? data : []);
-            } catch (err) {
-                console.error('Error fetching popular recipes:', err);
+            } catch {
                 setIsError(true);
             } finally {
                 setIsLoading(false);

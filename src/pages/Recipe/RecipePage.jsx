@@ -24,7 +24,6 @@ export const RecipePage = () => {
                 const data = await recipeService.getRecipeById(id);
                 setRecipe(data);
             } catch (err) {
-                console.error('Error loading recipe:', err);
                 setError(err);
             } finally {
                 setIsLoading(false);
@@ -43,8 +42,8 @@ export const RecipePage = () => {
                     const favoriteIds = response.recipes?.map(recipe => recipe.id) || [];
 
                     dispatch(setFavorites(favoriteIds));
-                } catch (error) {
-                    console.error('Failed to load favorites:', error);
+                } catch {
+                    // Silent fail - favorites will show empty
                 }
             }
         };

@@ -87,8 +87,7 @@ export const HomePage = () => {
         title: category?.name || 'All Recipes',
         text: category?.description || 'Discover a limitless world of culinary possibilities and enjoy exquisite recipes from all categories.',
       });
-    } catch (error) {
-      console.error('Failed to fetch recipes:', error);
+    } catch {
       setRecipes([]);
       setMeta(defaultMeta);
     } finally {

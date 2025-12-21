@@ -57,8 +57,8 @@ export const UserPage = () => {
           if (isFollowing) {
             dispatch(setIsFollowing(true));
           }
-        } catch (error) {
-          console.error('Failed to check following status:', error);
+        } catch {
+          // Silent fail - following status check is not critical
         }
       }
     };

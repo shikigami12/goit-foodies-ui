@@ -33,7 +33,6 @@ export const getCurrentUser = createAsyncThunk(
     try {
       return await userService.getCurrentUser();
     } catch (error) {
-      console.error(error);
       return rejectWithValue(getErrorMessage(error, 'get current user failed'));
     }
   }
@@ -45,7 +44,6 @@ export const getUserById = createAsyncThunk(
     try {
       return await userService.getUserById(id);
     } catch (error) {
-      console.error(error);
       return rejectWithValue(
         getErrorMessage(error, `get user with Id: ${id} failed`)
       );
@@ -59,7 +57,6 @@ export const updateAvatar = createAsyncThunk(
     try {
       return await userService.updateAvatar(file);
     } catch (error) {
-      console.error(error);
       return rejectWithValue(getErrorMessage(error, 'Update avatar failed'));
     }
   }
