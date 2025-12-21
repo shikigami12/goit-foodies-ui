@@ -158,32 +158,37 @@ export const HomePage = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto flex flex-col gap-16 tablet:gap-[100px] desktop:gap-[120px]">
+    <div className="flex flex-col gap-16 tablet:gap-[100px] desktop:gap-[120px]">
       {/* HERO */}
       <Hero />
 
-      {/* CATEGORIES OR RECIPES */}
-      {categoryName ? (
-        <Recipes
-          meta={meta}
-          recipes={recipes}
-          totalPages={totalPages}
-          currentPage={currentPage}
-          filters={currentFilters}
-          isLoading={isLoading}
-          onBackToCategories={handleBackToCategories}
-          onPageChange={handlePageChange}
-          onFilterChange={handleFilterChange}
-        />
-      ) : (
-        <Categories
-          meta={meta}
-          categories={categories}
-          onCategoryClick={handleCategoryClick}
-        />
-      )}
+      {/* CATEGORIES OR RECIPES - constrained to 1280px */}
+      <div className="w-full max-w-[1280px] mx-auto px-4 sm:px-6">
+        {categoryName ? (
+          <Recipes
+            meta={meta}
+            recipes={recipes}
+            totalPages={totalPages}
+            currentPage={currentPage}
+            filters={currentFilters}
+            isLoading={isLoading}
+            onBackToCategories={handleBackToCategories}
+            onPageChange={handlePageChange}
+            onFilterChange={handleFilterChange}
+          />
+        ) : (
+          <Categories
+            meta={meta}
+            categories={categories}
+            onCategoryClick={handleCategoryClick}
+          />
+        )}
+      </div>
 
-      <Testemonials />
+      {/* TESTIMONIALS - constrained to 1280px */}
+      <div className="w-full max-w-[1280px] mx-auto px-4 sm:px-6">
+        <Testemonials />
+      </div>
 
       <Modal isOpen={isAuthModalOpen} onClose={handleCloseAuthModal}>
         {authModalType === 'signin' ? (

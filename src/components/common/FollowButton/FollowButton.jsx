@@ -4,6 +4,9 @@ import {
   followUser,
   unfollowUser,
   currentUserProfileSelector,
+  setIsFollowing,
+  incrementFollowersCount,
+  decrementFollowersCount,
 } from '../../../redux/slices/usersSlice';
 import { useParams } from 'react-router-dom';
 
@@ -18,13 +21,21 @@ export const FollowButton = () => {
 
   const isFollowing = user.isFollowing;
 
-  const handleToggleFollow = () => {
+  const handleToggleFollow = async () => {
     if (isFollowLoading) return;
 
-    if (isFollowing) {
-      dispatch(unfollowUser(id));
-    } else {
-      dispatch(followUser(id));
+    try {
+      if (isFollowing) {
+        await dispatch(unfollowUser(id)).unwrap();
+        dispatch(setIsFollowing(false));
+        dispatch(decrementFollowersCount());
+      } else {
+        await dispatch(followUser(id)).unwrap();
+        dispatch(setIsFollowing(true));
+        dispatch(incrementFollowersCount());
+      }
+    } catch (error) {
+      console.error('Failed to toggle follow:', error);
     }
   };
 

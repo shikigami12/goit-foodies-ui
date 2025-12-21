@@ -38,9 +38,12 @@ export default function RecipePreviewItem({ recipe, type, isCurrentUser }) {
   return (
     <div className="h-[75px] md:h-[100px] flex overflow-hidden">
       {/* Thumb */}
-      <div className="rounded-[15px] w-[75px] md:w-[100px] h-full flex-shrink-0 overflow-hidden">
-        <img src={recipe.thumb} className="w-full h-full object-cover" />
-      </div>
+      <Link
+        to={ROUTES.RECIPE.replace(':id', recipe.id || recipe._id)}
+        className="rounded-[15px] w-[75px] md:w-[100px] h-full flex-shrink-0 overflow-hidden block hover:opacity-90 transition-opacity"
+      >
+        <img src={recipe.thumb} alt={recipe.title} className="w-full h-full object-cover" />
+      </Link>
       {/* Description */}
       <div className="flex-grow text-left pl-2.5 pr-4 md:pr-8 overflow-hidden">
         <p className="font-extrabold text-base md:text-xl leading-[150%] md:leading-[120%] tracking-[-0.02em] uppercase text-brand mb-2 overflow-hidden text-ellipsis line-clamp-1">

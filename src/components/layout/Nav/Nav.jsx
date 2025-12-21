@@ -9,24 +9,25 @@ export const Nav = ({ isDarkTheme = true, isMobile = false }) => {
     ];
 
     const baseLink =
-        "px-5 py-3 rounded-full font-semibold uppercase transition-colors duration-200";
+        "p-3.5 rounded-[30px] font-bold text-xs leading-[18px] tracking-[-0.02em] uppercase transition-colors duration-200";
 
+    // isDarkTheme = true means dark background, so use light (white) text
+    // isDarkTheme = false means light background, so use dark (black) text
     const styles = {
-        light: {
-            active: "border border-white text-white",
+        darkBg: {
+            active: "border border-white/20 text-white",
             inactive: "text-white/80 hover:text-white",
-
         },
-        dark: {
+        lightBg: {
             active: "border border-borders text-black",
             inactive: "text-black/80 hover:text-black",
         },
     };
 
-    const theme = isDarkTheme ? styles.dark : styles.light;
+    const theme = isDarkTheme ? styles.darkBg : styles.lightBg;
     const navClass = isMobile
-        ? "flex flex-col items-center gap-8"
-        : "hidden sm:flex items-center gap-8";
+        ? "flex flex-col items-center gap-10"
+        : "hidden sm:flex items-center gap-10";
 
     return (
         <nav className={navClass}>

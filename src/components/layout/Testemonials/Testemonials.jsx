@@ -47,7 +47,7 @@ const Testemonials = () => {
                 spaceBetween={50}
                 slidesPerView={1}
                 pagination={{ clickable: true }}
-                // autoplay={{ delay: 5000, disableOnInteraction: false }}
+                autoplay={{ delay: 5000, disableOnInteraction: false }}
                 className="pb-12! [--swiper-pagination-bullet-size:14px] [--swiper-pagination-bullet-inactive-color:#BFBEBE] [--swiper-pagination-bullet-horizontal-gap:4px] [--swiper-theme-color:#050505] [--swiper-pagination-bullet-inactive-opacity:1]"
             >
                 {testimonials.map((item) => (

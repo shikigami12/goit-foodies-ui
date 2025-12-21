@@ -110,6 +110,26 @@ const usersSlice = createSlice({
         state.currentUserProfile.favoritesCount -= 1;
       }
     },
+    incrementFollowingCount: state => {
+      if (state.currentUserProfile) {
+        state.currentUserProfile.followingCount += 1;
+      }
+    },
+    decrementFollowingCount: state => {
+      if (state.currentUserProfile) {
+        state.currentUserProfile.followingCount -= 1;
+      }
+    },
+    incrementFollowersCount: state => {
+      if (state.currentUserProfile) {
+        state.currentUserProfile.followersCount += 1;
+      }
+    },
+    decrementFollowersCount: state => {
+      if (state.currentUserProfile) {
+        state.currentUserProfile.followersCount -= 1;
+      }
+    },
   },
   extraReducers: builder => {
     builder
@@ -129,10 +149,8 @@ const usersSlice = createSlice({
       })
       .addCase(followUser.fulfilled, state => {
         state.isFollowLoading = false;
-        if (state.currentUserProfile) {
-          state.currentUserProfile.isFollowing = true;
-          state.currentUserProfile.followersCount += 1;
-        }
+        // Note: isFollowing and count updates are handled by components
+        // since they depend on context (own profile vs other user's profile)
       })
       .addCase(followUser.rejected, state => {
         state.isFollowLoading = false;
@@ -142,10 +160,8 @@ const usersSlice = createSlice({
       })
       .addCase(unfollowUser.fulfilled, state => {
         state.isFollowLoading = false;
-        if (state.currentUserProfile) {
-          state.currentUserProfile.isFollowing = false;
-          state.currentUserProfile.followersCount -= 1;
-        }
+        // Note: isFollowing and count updates are handled by components
+        // since they depend on context (own profile vs other user's profile)
       })
       .addCase(unfollowUser.rejected, state => {
         state.isFollowLoading = false;
@@ -157,6 +173,10 @@ export const {
   setCurrentUserProfile,
   decrementRecipesCount,
   decrementFavoritesCount,
+  incrementFollowingCount,
+  decrementFollowingCount,
+  incrementFollowersCount,
+  decrementFollowersCount,
   setIsFollowing,
 } = usersSlice.actions;
 

@@ -63,6 +63,18 @@ export const fetchOwnRecipes = createAsyncThunk(
   }
 );
 
+export const fetchRecipesByUserId = createAsyncThunk(
+  'recipes/fetchRecipesByUserId',
+  async ({ userId, ...params }, { rejectWithValue }) => {
+    try {
+      const data = await recipeService.getRecipesByUserId(userId, params);
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 export const fetchFavoriteRecipes = createAsyncThunk(
   'recipes/fetchFavoriteRecipes',
   async (params = {}, { rejectWithValue }) => {
@@ -128,6 +140,10 @@ const recipesSlice = createSlice({
       .addCase(fetchOwnRecipes.pending, handlePending)
       .addCase(fetchOwnRecipes.fulfilled, handleSuccess)
       .addCase(fetchOwnRecipes.rejected, handleReject)
+
+      .addCase(fetchRecipesByUserId.pending, handlePending)
+      .addCase(fetchRecipesByUserId.fulfilled, handleSuccess)
+      .addCase(fetchRecipesByUserId.rejected, handleReject)
 
       .addCase(fetchFavoriteRecipes.pending, handlePending)
       .addCase(fetchFavoriteRecipes.fulfilled, handleSuccess)
