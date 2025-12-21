@@ -21,7 +21,6 @@ export const UserBar = ({ isDarkTheme = true, user, onLogoutClick }) => {
     <div className={styles.userBar}>
       <div className={styles.userBarContainer}>
         <button type="button" onClick={toggle} className={styles.button}>
-          {/* Avatar */}
           <div className={styles.avatarContainer}>
             <img
               src={imageError ? DEFAULT_AVATAR : avatarUrl}
@@ -35,12 +34,10 @@ export const UserBar = ({ isDarkTheme = true, user, onLogoutClick }) => {
             />
           </div>
 
-          {/* Name */}
           <div className={styles.nameContainer}>
             <span className={styles.name}>{displayName}</span>
           </div>
 
-          {/* Chevron */}
           <div className={styles.chevronContainer}>
             <Icon
               key={isOpen ? 'up' : 'down'}
@@ -56,11 +53,9 @@ export const UserBar = ({ isDarkTheme = true, user, onLogoutClick }) => {
         <BurgerMenu isDarkTheme={isDarkTheme} />
       </div>
 
-      {/* Dropdown Menu */}
       {isOpen && (
         <div className={styles.dropdown}>
           <div className={styles.dropdownContent}>
-            {/* Profile Link */}
             <Link
               to={ROUTES.USER.replace(':id', user.id)}
               className={styles.profileLink}
@@ -69,7 +64,6 @@ export const UserBar = ({ isDarkTheme = true, user, onLogoutClick }) => {
               PROFILE
             </Link>
 
-            {/* Log Out Button */}
             <button
               type="button"
               className={styles.logoutButton}

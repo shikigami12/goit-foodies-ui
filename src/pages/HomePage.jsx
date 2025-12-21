@@ -96,11 +96,9 @@ export const HomePage = () => {
     }
   }, []);
 
-  // Handle URL changes
   useEffect(() => {
     if (categoryName && categories.length > 0) {
       if (categoryName.toLowerCase() === 'all') {
-        // Fetch all recipes without category filter
         fetchRecipes(null);
       } else {
         const category = categories.find(
@@ -159,10 +157,8 @@ export const HomePage = () => {
 
   return (
     <div className="flex flex-col gap-16 tablet:gap-[100px] desktop:gap-[120px]">
-      {/* HERO */}
       <Hero />
 
-      {/* CATEGORIES OR RECIPES - constrained to 1280px */}
       <div className="w-full max-w-[1280px] mx-auto px-4 sm:px-6">
         {categoryName ? (
           <Recipes
@@ -185,7 +181,6 @@ export const HomePage = () => {
         )}
       </div>
 
-      {/* TESTIMONIALS - constrained to 1280px */}
       <div className="w-full max-w-[1280px] mx-auto px-4 sm:px-6">
         <Testemonials />
       </div>
