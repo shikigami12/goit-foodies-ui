@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import { recipeService } from "../../../../services/recipeService";
 import { addToFavorites, removeFromFavorites } from "../../../../redux/slices/favoritesSlice";
 import { Button } from "../../../common/Button/Button.jsx";
+import { Image } from "../../../common/Image";
 import { Modal } from "../../../common/Modal/Modal";
 import { SignInModal, SignUpModal } from "../../../modals";
 import { useModal } from "../../../../hooks";
@@ -11,7 +12,6 @@ import style from "./RecipeInfo.module.css";
 import { RecipeIngredients } from "./RecipeIngredients/RecipeIngredients";
 import { RecipeMainInfo } from "./RecipeMainInfo/RecipeMainInfo.jsx";
 import { RecipePreparation } from "./RecipePreparation/RecipePreparation.jsx";
-import recipe_without_img from "../../../../images/recipe_without_img.jpg";
 import { selectFavoriteRecipes } from "../../../../redux/selectors/selectors.js";
 
 export const RecipeInfo = ({ recipe }) => {
@@ -78,10 +78,11 @@ export const RecipeInfo = ({ recipe }) => {
     return (
         <>
             <section className={style.recipe_info_container}>
-                <img
+                <Image
                     className={style.recipe_img}
-                    src={thumb !== "[object FileList]" ? thumb : recipe_without_img}
+                    src={thumb}
                     alt={title}
+                    type="recipe"
                 />
                 <div className={style.recipe_info_wrapper}>
                     <RecipeMainInfo data={recipe} />
