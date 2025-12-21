@@ -64,9 +64,9 @@ export const Header = ({ isDarkTheme = false }) => {
   return (
     <>
       <header className="w-full">
-        <div className="max-w-screen-xl mx-auto flex items-center justify-between px-4 sm:px-6 py-4 sm:py-6">
+        <div className="max-w-[1280px] mx-auto flex items-center justify-between px-4 sm:px-6 py-5">
           <Logo isDarkTheme={isDarkTheme} />
-          {isAuthenticated && <Nav isDarkTheme={isDarkTheme} />}
+          <Nav isDarkTheme={isDarkTheme} />
           <div className="relative">
             <div
               className={`transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] ${

@@ -7,7 +7,7 @@ import Icon from '../Icon';
 export const GoToButton = ({ id, iconSize }) => (
   <Link to={ROUTES.RECIPE.replace(':id', id)}>
     <RoundButton>
-      <Icon name="arrow-up-right" size={iconSize} color= '#050505' stroke='#050505'/>
+      <Icon name="arrow-up-right" size={iconSize} stroke="currentColor"/>
     </RoundButton>
   </Link>
 );

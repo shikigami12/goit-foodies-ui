@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import toast from "react-hot-toast";
 import { recipeService } from "../../../../services/recipeService";
-import handleFavorite from "../../../../utils/handleFavorite.js";
+import { addToFavorites, removeFromFavorites } from "../../../../redux/slices/favoritesSlice";
 import { Button } from "../../../common/Button/Button.jsx";
 import { Modal } from "../../../common/Modal/Modal";
 import { SignInModal, SignUpModal } from "../../../modals";
@@ -15,6 +16,7 @@ import { selectFavoriteRecipes } from "../../../../redux/selectors/selectors.js"
 
 export const RecipeInfo = ({ recipe }) => {
     const { thumb, title, instructions, ingredients, id } = recipe;
+    const dispatch = useDispatch();
     const favoritesRecipe = useSelector(selectFavoriteRecipes);
     const { isAuthenticated } = useSelector((state) => state.auth);
     const [isFavorite, setIsFavorite] = useState(favoritesRecipe.includes(id));
@@ -42,19 +44,29 @@ export const RecipeInfo = ({ recipe }) => {
         openSignInModal();
     };
 
-    const addFavoriteRecipe = async (id) => {
+    const toggleFavorite = async () => {
         setIsLoading(true);
         try {
-            return await recipeService.addFavorite(id);
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
-    const removeFavoriteRecipe = async (id) => {
-        setIsLoading(true);
-        try {
-            return await recipeService.removeFavorite(id);
+            if (isFavorite) {
+                await recipeService.removeFavorite(id);
+                dispatch(removeFromFavorites(id));
+                setIsFavorite(false);
+                toast.success("Recipe removed from favorites!");
+            } else {
+                await recipeService.addFavorite(id);
+                dispatch(addToFavorites(id));
+                setIsFavorite(true);
+                toast.success("Recipe added to favorites!");
+            }
+        } catch (error) {
+            console.error('Error toggling favorite:', error);
+            if (error?.status === 409) {
+                toast("Recipe is already in your favorites!");
+                dispatch(addToFavorites(id));
+                setIsFavorite(true);
+            } else {
+                toast.error("Failed to update favorites");
+            }
         } finally {
             setIsLoading(false);
         }
@@ -77,23 +89,13 @@ export const RecipeInfo = ({ recipe }) => {
                     <RecipeIngredients ingredients={ingredients} />
                     <RecipePreparation instruction={instructions} />
                     {isAuthenticated ? (
-                        !isFavorite ? (
-                            <Button
-                                label="Add to favorites"
-                                variant="light"
-                                onClick={() => handleFavorite(addFavoriteRecipe, id, "add", setIsFavorite)}
-                                isLoading={isLoading}
-                                disabled={isLoading}
-                            />
-                        ) : (
-                            <Button
-                                label="Remove from favorites"
-                                variant="dark"
-                                onClick={() => handleFavorite(removeFavoriteRecipe, id, "delete", setIsFavorite)}
-                                isLoading={isLoading}
-                                disabled={isLoading}
-                            />
-                        )
+                        <Button
+                            label={isFavorite ? "Remove from favorites" : "Add to favorites"}
+                            variant={isFavorite ? "dark" : "light"}
+                            onClick={toggleFavorite}
+                            isLoading={isLoading}
+                            disabled={isLoading}
+                        />
                     ) : (
                         <Button
                             label="Add to favorites"

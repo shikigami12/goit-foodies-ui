@@ -9,10 +9,8 @@ const IconButton = ({
                         style,
                         styleSVG,
                         iconId,
-                        width = "20",
-                        height = "20",
+                        size = 18,
                         stroke = "currentColor",
-                        fill = "black",
                         disabled = false,
                     }) => {
     return (
@@ -24,11 +22,9 @@ const IconButton = ({
         >
             <Icon
                 name={iconId}
-                width={width}
-                height={height}
-                customStyle={styleSVG}
+                size={size}
+                className={styleSVG}
                 stroke={stroke}
-                fill={fill}
             />
         </button>
     );

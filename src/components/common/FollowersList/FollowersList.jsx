@@ -1,7 +1,13 @@
 import { useEffect, useState } from 'react';
-import { useLocation, useParams, useOutletContext } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { currentUserProfileSelector } from '../../../redux/slices/usersSlice';
+import { useLocation, useParams, useOutletContext, Navigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  currentUserProfileSelector,
+  followUser,
+  unfollowUser,
+  incrementFollowingCount,
+  decrementFollowingCount,
+} from '../../../redux/slices/usersSlice';
 import { ROUTES } from '../../../constants';
 import { EMPTY_LIST_MESSAGES } from '../../../constants/messages';
 import { userService } from '../../../services/userService';
@@ -12,6 +18,7 @@ export default function FollowersList() {
   const location = useLocation();
   const { id } = useParams();
   const { isCurrentUser } = useOutletContext() || {};
+  const dispatch = useDispatch();
 
   const userProfile = useSelector(currentUserProfileSelector);
   const authUser = useSelector(state => state.auth.user);
@@ -26,6 +33,11 @@ export default function FollowersList() {
 
   const isFollowersTab = currentRoute === followersSlug;
   const isFollowingTab = currentRoute === followingSlug;
+
+  // Redirect to my_recipes if viewing another user's following (not supported)
+  if (!isCurrentUser && isFollowingTab) {
+    return <Navigate to={`../${ROUTES.RECIPES_MY}`} replace />;
+  }
 
   const emptyMessage = isFollowersTab
     ? EMPTY_LIST_MESSAGES.FOLLOWERS
@@ -93,6 +105,7 @@ export default function FollowersList() {
     isCurrentUser,
     userProfile?.followersCount,
     userProfile?.followingCount,
+    userProfile?.isFollowing,
     authUser?.id,
   ]);
 
@@ -107,13 +120,22 @@ export default function FollowersList() {
       );
 
       if (currentIsFollowing) {
-        await userService.unfollowUser(userId);
+        await dispatch(unfollowUser(userId)).unwrap();
+
+        // Update own followingCount when unfollowing
+        if (isCurrentUser) {
+          dispatch(decrementFollowingCount());
+        }
 
         if (isFollowingTab) {
           setItems(prev => prev.filter(u => u.id !== userId));
         }
       } else {
-        await userService.followUser(userId);
+        await dispatch(followUser(userId)).unwrap();
+        // Update own followingCount when following
+        if (isCurrentUser) {
+          dispatch(incrementFollowingCount());
+        }
       }
     } catch (e) {
       console.error(e);

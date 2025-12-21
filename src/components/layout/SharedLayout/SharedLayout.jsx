@@ -1,15 +1,20 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import { Header } from '../Header/Header';
 import { Footer } from '../Footer/Footer';
 import { Toaster } from 'react-hot-toast';
+import { ROUTES } from '../../../constants';
 
 export const SharedLayout = () => {
-  return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
-      <Header />
+  const location = useLocation();
+  const isHomePage = location.pathname === ROUTES.HOME || location.pathname.startsWith('/category');
 
-      <main className="flex-1 p-4">
-        <Outlet />
+  return (
+    <div className="min-h-screen flex flex-col bg-white">
+      {/* Hide Header on home page - Hero has its own header */}
+      {!isHomePage && <Header isDarkTheme={false} />}
+
+      <main className={`flex-1 ${isHomePage ? 'pt-0' : 'p-4'}`}>
+        <Outlet context={{ isHomePage }} />
       </main>
 
       <Footer />

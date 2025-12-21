@@ -19,9 +19,7 @@ export const SelectField = ({
 
     const borderClass = error
         ? "border-red-500"
-        : `${hasValue ? "border-dark" : "border-gray-300"} focus-within:border-dark`;
-
-    const textClass = error ? "text-red-700" : "text-black";
+        : `${hasValue ? "border-[#050505]" : "border-[#bfbebe]"}`;
 
     useEffect(() => {
         const handleOutsideClick = (e) => {
@@ -42,22 +40,22 @@ export const SelectField = ({
     };
 
     return (
-        <div className="flex flex-col gap-1 mb-2 mx-2 relative" ref={wrapperRef}>
+        <div className="flex flex-col gap-1 relative" ref={wrapperRef}>
             <button
                 type="button"
                 disabled={disabled}
                 onClick={() => !disabled && setIsOpen((p) => !p)}
                 className={`
                     flex items-center justify-between w-full
-                    rounded-full bg-white px-6 py-3 border
+                    rounded-[30px] bg-white px-[18px] py-4 border
                     ${borderClass}
                     ${disabled ? "opacity-60 cursor-not-allowed" : "cursor-pointer"}
                 `}
             >
                 <span
                     className={`
-                        text-sm ${textClass}
-                        ${!selected ? "text-gray-400" : ""}
+                        font-medium text-base leading-6 tracking-[-0.02em]
+                        ${!selected ? "text-[#bfbebe]" : "text-[#1a1a1a]"}
                     `}
                 >
                   {selected ? selected.label : placeholder}
@@ -67,17 +65,17 @@ export const SelectField = ({
                     {hasValue && !disabled && (
                         <div
                             onClick={handleClear}
-                            className="text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
+                            className="text-[#bfbebe] hover:text-[#050505] transition-colors cursor-pointer"
                             role="button"
                             aria-label="Clear selection"
                         >
-                            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <svg className="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                             </svg>
                         </div>
                     )}
                     <svg
-                        className={`w-4 h-4 transition-transform ${ isOpen ? "" : "rotate-180" } ${error ? "text-red-600" : "text-black"}`}>
+                        className={`w-[18px] h-[18px] transition-transform ${isOpen ? "rotate-180" : ""} ${error ? "text-red-600" : "text-[#050505]"}`}>
                         <use href="/sprite.svg#icon-chevron-down"/>
                     </svg>
                 </div>
@@ -87,7 +85,7 @@ export const SelectField = ({
                 <div
                     className="
                         absolute left-0 right-0 top-full mt-2
-                        rounded-2xl border border-gray-200 bg-white shadow-lg
+                        rounded-[20px] border border-[#bfbebe] bg-white shadow-lg
                         overflow-y-auto max-h-72 z-20
                     "
                     onClick={(e) => e.stopPropagation()}
@@ -98,9 +96,9 @@ export const SelectField = ({
                             type="button"
                             onClick={() => handleSelect(opt.value)}
                             className={`
-                                w-full text-left px-6 py-3 text-sm
-                                hover:bg-gray-50
-                                ${value === opt.value ? "font-semibold" : ""}
+                                w-full text-left px-[18px] py-3 font-medium text-base leading-6 tracking-[-0.02em]
+                                hover:bg-[#f5f5f5] transition-colors
+                                ${value === opt.value ? "text-[#050505] font-bold" : "text-[#1a1a1a]"}
                             `}
                         >
                             {opt.label}

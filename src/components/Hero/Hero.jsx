@@ -10,13 +10,28 @@ import smallCard from "../../assets/smallCard.png";
 import { Modal } from "../common/Modal/Modal";
 import { SignInModal } from "../modals/SignInModal";
 import { SignUpModal } from "../modals/SignUpModal";
+import { Logo } from "../common/Logo/Logo";
+import { Nav } from "../layout/Nav/Nav";
+import { AuthBar } from "../layout/AuthBar/AuthBar";
+import { UserBar } from "../layout/UserBar/UserBar";
+import { useModal } from "../../hooks";
+import { logout } from "../../redux/slices/authSlice";
+import { useDispatch } from "react-redux";
+import { LogOutModal } from "../modals";
 
 export const Hero = () => {
-  const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
+  const dispatch = useDispatch();
+  const { user, isAuthenticated } = useSelector(state => state.auth);
   const navigate = useNavigate();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState("signin");
+
+  const {
+    isOpen: isLogoutOpen,
+    openModal: openLogoutModal,
+    closeModal: closeLogoutModal,
+  } = useModal();
 
   const handleAddRecipe = () => {
     if (!isAuthenticated) {
@@ -39,9 +54,50 @@ export const Hero = () => {
     setModalType("signin");
   };
 
+  const handleOpenSignIn = () => {
+    setIsModalOpen(true);
+    setModalType("signin");
+  };
+
+  const handleOpenSignUp = () => {
+    setIsModalOpen(true);
+    setModalType("signup");
+  };
+
+  const handleLogout = async () => {
+    await dispatch(logout());
+    closeLogoutModal();
+  };
+
   return (
     <section className={css.hero}>
       <div className={css.container}>
+        {/* Decorative vertical lines */}
+        <span className={`${css.decorativeLine} ${css.line1}`}></span>
+        <span className={`${css.decorativeLine} ${css.line2}`}></span>
+        <span className={`${css.decorativeLine} ${css.line3}`}></span>
+        <span className={`${css.decorativeLine} ${css.line4}`}></span>
+
+        {/* Header inside Hero */}
+        <header className={css.header}>
+          <Logo isDarkTheme={true} />
+          <Nav isDarkTheme={true} />
+          <div className="relative">
+            {isAuthenticated ? (
+              <UserBar
+                isDarkTheme={true}
+                user={user}
+                onLogoutClick={openLogoutModal}
+              />
+            ) : (
+              <AuthBar
+                onSignInClick={handleOpenSignIn}
+                onSignUpClick={handleOpenSignUp}
+              />
+            )}
+          </div>
+        </header>
+
         <h1 className={css.title}>
           IMPROVE YOUR <br />
           CULINARY TALENTS
@@ -74,6 +130,10 @@ export const Hero = () => {
             onSwitchToSignIn={handleSwitchToSignIn}
           />
         )}
+      </Modal>
+
+      <Modal isOpen={isLogoutOpen} onClose={closeLogoutModal}>
+        <LogOutModal onCancel={closeLogoutModal} onLogOut={handleLogout} />
       </Modal>
     </section>
   );

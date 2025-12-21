@@ -51,17 +51,21 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   response => response,
   error => {
-    const { response } = error;
+    const { response, config } = error;
 
-    if (response?.status === 401) {
+    // Check if this is an auth endpoint (login/register) - don't redirect on 401 for these
+    const isAuthEndpoint = config?.url?.includes('/auth/login') ||
+                           config?.url?.includes('/auth/register');
+
+    if (response?.status === 401 && !isAuthEndpoint) {
       tokenManager.removeToken();
       if (window.location.pathname !== '/') {
         window.location.href = '/';
       }
     }
 
-    const errorMessage = response?.data?.message 
-      ? response.data.message 
+    const errorMessage = response?.data?.message
+      ? response.data.message
       : 'Something went wrong. Please try again later';
 
     const normalizedError = {
