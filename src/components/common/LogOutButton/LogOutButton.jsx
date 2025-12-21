@@ -17,8 +17,8 @@ export default function LogOutButton() {
     try {
       await dispatch(logout()).unwrap();
       closeLogoutModal();
-    } catch (error) {
-      console.error('Logout failed:', error);
+    } catch {
+      // Logout failed silently
     }
   };
 

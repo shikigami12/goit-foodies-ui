@@ -36,8 +36,6 @@ export const useToggleFavorite = (recipeId) => {
       }
       return { success: true };
     } catch (error) {
-      console.error('Error toggling favorite:', error);
-
       if (error?.response?.status === 409) {
         toast("Recipe is already in your favorites!");
         dispatch(addToFavorites(recipeId));

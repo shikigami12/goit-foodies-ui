@@ -17,8 +17,7 @@ const Testemonials = () => {
                 setIsLoading(true);
                 const data = await referenceService.getTestimonials();
                 setTestimonials(data || []);
-            } catch (error) {
-                console.error('Failed to fetch testimonials:', error);
+            } catch {
                 setTestimonials([]);
             } finally {
                 setIsLoading(false);

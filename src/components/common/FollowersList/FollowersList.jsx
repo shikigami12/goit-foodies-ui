@@ -68,8 +68,8 @@ export default function FollowersList() {
               ? myFollowingData
               : myFollowingData.following || [];
             myFollowingList.forEach(u => myFollowingSet.add(u.id));
-          } catch (err) {
-            console.error('Failed to load my following list', err);
+          } catch {
+            // Silent fail - user may not be logged in
           }
         }
 
@@ -88,8 +88,7 @@ export default function FollowersList() {
         }
 
         setItems(listData.map(u => mapUserToItem(u, myFollowingSet)));
-      } catch (e) {
-        console.error(e);
+      } catch {
         setError('Failed to load users');
         setItems([]);
       } finally {
@@ -137,8 +136,7 @@ export default function FollowersList() {
           dispatch(incrementFollowingCount());
         }
       }
-    } catch (e) {
-      console.error(e);
+    } catch {
       setItems(prev =>
         prev.map(item =>
           item.id === userId

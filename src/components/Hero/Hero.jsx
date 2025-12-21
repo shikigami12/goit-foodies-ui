@@ -4,8 +4,15 @@ import { useNavigate } from "react-router-dom";
 
 import css from "./Hero.module.css";
 
-import bigCard from "../../assets/bigCard.png";
-import smallCard from "../../assets/smallCard.png";
+// BigCard images: Mobile 190px, Tablet 280px, Desktop 302px (x2 for retina)
+import bigCardMobile from "../../assets/bigCard_e92lgl_c_scale,w_405.png";
+import bigCardTablet from "../../assets/bigCard_e92lgl_c_scale,w_559.png";
+import bigCardDesktop from "../../assets/bigCard_e92lgl_c_scale,w_683.png";
+
+// SmallCard images: Mobile 77px, Tablet 120px, Desktop 128px (x2 for retina)
+import smallCardMobile from "../../assets/smallCard_zylboe_c_scale,w_190.png";
+import smallCardTablet from "../../assets/smallCard_zylboe_c_scale,w_911.png";
+import smallCardDesktop from "../../assets/smallCard_zylboe_c_scale,w_911.png";
 
 import { Modal } from "../common/Modal/Modal";
 import { SignInModal } from "../modals/SignInModal";
@@ -113,24 +120,30 @@ export const Hero = () => {
         </button>
 
         <div className={css.images}>
-          <img
-            src={smallCard}
-            srcSet={`${smallCard} 1x, ${smallCard} 2x`}
-            alt="Dessert"
-            className={css.smallCard}
-            loading="lazy"
-            width={128}
-            height={116}
-          />
-          <img
-            src={bigCard}
-            srcSet={`${bigCard} 1x, ${bigCard} 2x`}
-            alt="Beef"
-            className={css.bigCard}
-            loading="lazy"
-            width={302}
-            height={273}
-          />
+          <picture>
+            <source media="(max-width: 767px)" srcSet={smallCardMobile} />
+            <source media="(max-width: 1439px)" srcSet={smallCardTablet} />
+            <img
+              src={smallCardDesktop}
+              alt="Dessert"
+              className={css.smallCard}
+              loading="lazy"
+              width={128}
+              height={116}
+            />
+          </picture>
+          <picture>
+            <source media="(max-width: 767px)" srcSet={bigCardMobile} />
+            <source media="(max-width: 1439px)" srcSet={bigCardTablet} />
+            <img
+              src={bigCardDesktop}
+              alt="Beef"
+              className={css.bigCard}
+              loading="lazy"
+              width={302}
+              height={273}
+            />
+          </picture>
         </div>
       </div>
 

@@ -34,8 +34,8 @@ export const FollowButton = () => {
         dispatch(setIsFollowing(true));
         dispatch(incrementFollowersCount());
       }
-    } catch (error) {
-      console.error('Failed to toggle follow:', error);
+    } catch {
+      // Silent fail - UI will remain unchanged
     }
   };
 

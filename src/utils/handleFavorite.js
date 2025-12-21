@@ -13,8 +13,6 @@ const handleFavorite = async (funcName, recipeID, action, setFunc) => {
 
         setFunc(action === "add");
     } catch (error) {
-        console.error("Failed to update favorites:", error);
-
         if (error?.response?.data?.message === "Recipe already in favorites") {
             toast("Recipe is already in your favorites!", { id: customId });
         } else {

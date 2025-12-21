@@ -1,12 +1,18 @@
+import { lazy, Suspense, useMemo } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { useMemo } from 'react';
 import { SharedLayout } from './components/layout/SharedLayout';
-import { HomePage, RecipePage, AddRecipePage, UserPage, NotFoundPage } from './pages';
 import { PrivateRoute } from './routes';
 import { ROUTES } from './constants';
-import RecipeList from './components/common/RecipeList';
-import FollowersList from './components/common/FollowersList';
+import { Loader } from './components/common/Loader';
+
+const HomePage = lazy(() => import('./pages/HomePage').then(m => ({ default: m.HomePage })));
+const RecipePage = lazy(() => import('./pages/Recipe/RecipePage').then(m => ({ default: m.RecipePage })));
+const AddRecipePage = lazy(() => import('./pages/AddRecipePage').then(m => ({ default: m.AddRecipePage })));
+const UserPage = lazy(() => import('./pages/UserPage').then(m => ({ default: m.UserPage })));
+const NotFoundPage = lazy(() => import('./pages/NotFoundPage').then(m => ({ default: m.NotFoundPage })));
+const RecipeList = lazy(() => import('./components/common/RecipeList'));
+const FollowersList = lazy(() => import('./components/common/FollowersList'));
 
 const ProfileRoutes = () => (
   <>
@@ -22,7 +28,6 @@ function App() {
   const { isAuthenticated } = useSelector(state => state.auth);
   const location = useLocation();
 
-  // Unique key based on current profile ID and auth status to force remount
   const userPageKey = useMemo(() => {
     const parts = location.pathname.split('/');
     const userIndex = parts.indexOf('user');
@@ -31,29 +36,29 @@ function App() {
   }, [location.pathname, isAuthenticated]);
 
   return (
-    <Routes>
-      <Route path={ROUTES.HOME} element={<SharedLayout />}>
-        <Route index element={<HomePage />} />
-        <Route path={ROUTES.CATEGORY} element={<HomePage />} />
-        <Route path={ROUTES.RECIPE} element={<RecipePage />} />
-        <Route path={ROUTES.ADD_RECIPE}
-          element={
-            <PrivateRoute>
-              <AddRecipePage />
-            </PrivateRoute>
-          }
-        />
-
-        {/* Unified User Profile Route */}
-        <Route
-          path="/user/:id?"
-          element={<UserPage key={userPageKey} />}
-        >
-          {ProfileRoutes()}
+    <Suspense fallback={<Loader />}>
+      <Routes>
+        <Route path={ROUTES.HOME} element={<SharedLayout />}>
+          <Route index element={<HomePage />} />
+          <Route path={ROUTES.CATEGORY} element={<HomePage />} />
+          <Route path={ROUTES.RECIPE} element={<RecipePage />} />
+          <Route path={ROUTES.ADD_RECIPE}
+            element={
+              <PrivateRoute>
+                <AddRecipePage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/user/:id?"
+            element={<UserPage key={userPageKey} />}
+          >
+            {ProfileRoutes()}
+          </Route>
+          <Route path="*" element={<NotFoundPage />} />
         </Route>
-        <Route path="*" element={<NotFoundPage />} />
-      </Route>
-    </Routes>
+      </Routes>
+    </Suspense>
   );
 }
 
