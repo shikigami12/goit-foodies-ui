@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { SharedLayout } from './components/layout/SharedLayout';
-import { HomePage, RecipePage, AddRecipePage, UserPage } from './pages';
+import { HomePage, RecipePage, AddRecipePage, UserPage, NotFoundPage } from './pages';
 import { PrivateRoute } from './routes';
 import { ROUTES } from './constants';
 import RecipeList from './components/common/RecipeList';
@@ -48,7 +48,9 @@ function App() {
             <Route element={<RecipeList />} path={ROUTES.RECIPES_FAVORITES} />
             <Route element={<FollowersList />} path={ROUTES.FOLLOWERS_LIST} />
             <Route element={<FollowersList />} path={ROUTES.FOLLOWING_LIST} />
+            <Route element={<FollowersList />} path={ROUTES.FOLLOWING_LIST} />
           </Route>
+          <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

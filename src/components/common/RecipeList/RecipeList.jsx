@@ -74,17 +74,17 @@ export default function RecipeList() {
       <ul className="flex flex-col gap-8 md:gap-10">
         {recipes.map(recipe => (
           <li key={recipe._id || recipe.id}>
-            <RecipePreviewItem 
-              recipe={recipe} 
-              type={currentRoute.includes(ROUTES.RECIPES_MY) ? 'own' : 'favorite'} 
+            <RecipePreviewItem
+              recipe={recipe}
+              type={currentRoute.includes(ROUTES.RECIPES_MY) ? 'own' : 'favorite'}
               isCurrentUser={isCurrentUser}
             />
           </li>
         ))}
       </ul>
-      
+
       {totalPages > 1 && (
-        <RecipePagination 
+        <RecipePagination
           currentPage={currentPage}
           totalPages={totalPages}
           onPageChange={handlePageChange}
