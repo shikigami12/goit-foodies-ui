@@ -13,7 +13,9 @@ export default function UserAvatarInput() {
   const user = useSelector(currentUserProfileSelector);
 
   const authUser = useSelector(authUserSelector);
-  const isCurrentUser = authUser.id === user.id;
+  
+  const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
+  const isCurrentUser = isAuthenticated && authUser?.id === id;
 
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewImage, setPreviewImage] = useState(user?.avatar || withoutAvatar);

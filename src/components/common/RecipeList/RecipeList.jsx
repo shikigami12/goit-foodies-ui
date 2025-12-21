@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import RecipePreviewItem from '../RecipePreviewItem/RecipePreviewItem';
 import { EMPTY_LIST_MESSAGES } from '../../../constants/messages';
 import { ROUTES } from '../../../constants';
-import { fetchFavoriteRecipes, fetchOwnRecipes, fetchRecipes } from '../../../redux/slices/recipesSlice';
+import { fetchFavoriteRecipes, fetchOwnRecipes, fetchRecipes, fetchUserRecipes } from '../../../redux/slices/recipesSlice';
 import { RecipePagination } from '../../layout/Recipes/RecipePagination';
 import RecipePreviewItemSkeleton from '../Skeleton/RecipePreviewItemSkeleton';
 
@@ -33,7 +33,7 @@ export default function RecipeList() {
     } else {
       // Fetching recipes for another user profile
       if (currentRoute.includes(ROUTES.RECIPES_MY)) {
-        dispatch(fetchRecipes({ ...params, owner: id }));
+        dispatch(fetchUserRecipes({ userId: id, params }));
       }
     }
   }, [dispatch, currentRoute, page, limit, isCurrentUser, id]);
