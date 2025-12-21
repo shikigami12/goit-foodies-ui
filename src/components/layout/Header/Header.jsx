@@ -10,6 +10,7 @@ import { Modal } from '../../common/Modal/Modal';
 import { useModal } from '../../../hooks';
 import { SignInModal, SignUpModal, LogOutModal } from '../../modals';
 import { getCurrentUser, logout } from '../../../redux/slices/authSlice';
+import { clearFavorites } from '../../../redux/slices/favoritesSlice';
 import { tokenManager } from '../../../services';
 
 export const Header = ({ isDarkTheme = false }) => {
@@ -58,6 +59,7 @@ export const Header = ({ isDarkTheme = false }) => {
 
   const handleLogout = async () => {
     await dispatch(logout());
+    dispatch(clearFavorites());
     closeLogoutModal();
   };
 

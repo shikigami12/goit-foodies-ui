@@ -16,6 +16,7 @@ import { AuthBar } from "../layout/AuthBar/AuthBar";
 import { UserBar } from "../layout/UserBar/UserBar";
 import { useModal } from "../../hooks";
 import { logout } from "../../redux/slices/authSlice";
+import { clearFavorites } from "../../redux/slices/favoritesSlice";
 import { useDispatch } from "react-redux";
 import { LogOutModal } from "../modals";
 
@@ -66,6 +67,7 @@ export const Hero = () => {
 
   const handleLogout = async () => {
     await dispatch(logout());
+    dispatch(clearFavorites());
     closeLogoutModal();
   };
 

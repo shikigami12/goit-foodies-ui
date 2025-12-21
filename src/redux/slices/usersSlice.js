@@ -141,7 +141,11 @@ const usersSlice = createSlice({
       .addCase(getUserById.rejected, handleUserFailure)
       .addCase(updateAvatar.pending, handlePending)
       .addCase(updateAvatar.fulfilled, (state, { payload }) => {
-        state.currentUserProfile.avatar = payload.avatar;
+        state.isLoading = false;
+        if (state.currentUserProfile) {
+          state.currentUserProfile.avatar = payload.avatar;
+        }
+        state.error = null;
       })
       .addCase(updateAvatar.rejected, handleUserFailure)
       .addCase(followUser.pending, state => {

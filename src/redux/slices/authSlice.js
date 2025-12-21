@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import { authService, tokenManager } from '../../services';
+import { updateAvatar } from './usersSlice';
 
 const initialState = {
   user: null,
@@ -117,6 +118,11 @@ const authSlice = createSlice({
         state.user = null;
         state.isAuthenticated = false;
         tokenManager.removeToken();
+      })
+      .addCase(updateAvatar.fulfilled, (state, { payload }) => {
+        if (state.user && payload?.avatar) {
+          state.user.avatar = payload.avatar;
+        }
       });
   },
 });
