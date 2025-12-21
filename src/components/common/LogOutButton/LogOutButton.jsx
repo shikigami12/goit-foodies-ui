@@ -1,6 +1,7 @@
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { logout } from '../../../redux/slices/authSlice';
+import { clearFavorites } from '../../../redux/slices/favoritesSlice';
 import { ROUTES } from '../../../constants';
 
 export default function LogOutButton() {
@@ -10,6 +11,7 @@ export default function LogOutButton() {
   const onClick = async () => {
     try {
       await dispatch(logout()).unwrap();
+      dispatch(clearFavorites());
       navigate(ROUTES.HOME);
     } catch (error) {
       console.error('Logout failed:', error);
