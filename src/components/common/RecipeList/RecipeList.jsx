@@ -7,7 +7,7 @@ import {
 } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import RecipePreviewItem from '../RecipePreviewItem/RecipePreviewItem';
+import RecipePreviewItem from '../RecipePreview/RecipePreview';
 import { EMPTY_LIST_MESSAGES } from '../../../constants/messages';
 import { ROUTES } from '../../../constants';
 import {

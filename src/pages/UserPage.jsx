@@ -8,6 +8,10 @@ import { Icon } from '../components/common/Icon/Icon';
 import { useEffect } from 'react';
 import { userService } from '../services/userService';
 import { useDispatch, useSelector } from 'react-redux';
+import { PathInfo } from '../components/common/PathInfo/PathInfo';
+import { logout } from '../redux/slices/authSlice';
+import { useModal } from '../hooks';
+import { LogOutModal } from '../components/modals';
 import {
   currentUserProfileSelector,
   getCurrentUser,
@@ -16,7 +20,7 @@ import {
 } from '../redux/slices/usersSlice';
 import { FollowButton } from '../components/common/FollowButton/FollowButton';
 import { Loader } from '../components/common/Loader';
-import { Breadcrumbs } from '../components/common/Breadcrumbs';
+import { Modal } from '../components/common/Modal/Modal';
 
 export const UserPage = () => {
   const navigate = useNavigate();
@@ -25,6 +29,12 @@ export const UserPage = () => {
   const authUser = useSelector(state => state.auth.user);
   const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
   const dispatch = useDispatch();
+
+  const {
+    isOpen: isLogoutOpen,
+    openModal: openLogoutModal,
+    closeModal: closeLogoutModal,
+  } = useModal();
 
   const isCurrentUser = isAuthenticated && authUser?.id === id;
   const isLoaded = user && user.id === id;
@@ -66,12 +76,22 @@ export const UserPage = () => {
     checkStatus();
   }, [dispatch, id, isCurrentUser, authUser, isLoaded]);
 
+  const handleLogout = async () => {
+    try {
+      await dispatch(logout()).unwrap();
+      navigate(ROUTES.HOME);
+      closeLogoutModal();
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
+  };
+
   if (!isLoaded) return <Loader />;
 
   return (
     <main className="mx-auto w-full max-w-[1440px] px-4 md:px-8 xl:px-20 py-10">
       <div className="flex flex-col gap-4 mb-8">
-        <Breadcrumbs currentPage="Profile" />
+        <PathInfo currentPage="Profile" />
         <MainTitle>Profile</MainTitle>
         <Subtitle>
           Reveal your culinary art, share your favorite recipe and create
@@ -82,7 +102,7 @@ export const UserPage = () => {
         <div className="flex flex-col gap-5 max-w-[375px] md:max-w-[394px] xl:min-w-[394px] mx-auto xl:mx-0 mb-16">
           <UserInfo isCurrentUser={isCurrentUser} />
           {isCurrentUser ? (
-            <LogOutButton />
+            <LogOutButton onClick={openLogoutModal} />
           ) : (
             isAuthenticated && <FollowButton />
           )}
@@ -91,6 +111,10 @@ export const UserPage = () => {
           <UserTabList isCurrentUser={isCurrentUser} />
         </div>
       </div>
+
+      <Modal isOpen={isLogoutOpen} onClose={closeLogoutModal}>
+        <LogOutModal onCancel={closeLogoutModal} onLogOut={handleLogout} />
+      </Modal>
     </main>
   );
 };
