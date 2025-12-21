@@ -79,7 +79,6 @@ export const UserPage = () => {
   const handleLogout = async () => {
     try {
       await dispatch(logout()).unwrap();
-      navigate(ROUTES.HOME);
       closeLogoutModal();
     } catch (error) {
       console.error('Logout failed:', error);
