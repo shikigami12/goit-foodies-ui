@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import Icon from '../Icon';
+import { Image } from '../Image';
 import { ROUTES } from '../../../constants';
 import { useWindowWidth } from '../../../hooks';
 import { RoundButton } from '../RoundButton';
@@ -53,7 +54,12 @@ export default function RecipePreview({ recipe, type, isCurrentUser }) {
         to={ROUTES.RECIPE.replace(':id', recipe.id || recipe._id)}
         className="rounded-[15px] w-[75px] md:w-[100px] h-full flex-shrink-0 overflow-hidden block hover:opacity-90 transition-opacity"
       >
-        <img src={recipe.thumb} alt={recipe.title} className="w-full h-full object-cover" />
+        <Image
+          src={recipe.thumb}
+          alt={recipe.title}
+          type="recipe"
+          className="w-full h-full object-cover"
+        />
       </Link>
       {/* Description */}
       <div className="flex-grow text-left pl-2.5 pr-4 md:pr-8 overflow-hidden">

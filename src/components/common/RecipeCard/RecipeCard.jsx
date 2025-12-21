@@ -1,11 +1,10 @@
 import { Link } from "react-router-dom";
 import clsx from "clsx";
 import { Modal } from "../Modal";
+import { Image } from "../Image";
 import { SignInModal, SignUpModal } from "../../modals";
 import { useModal, useToggleFavorite } from "../../../hooks";
 import { Icon } from "../Icon/Icon";
-import placeholderUser from "../../../images/user_without_avatar.jpg";
-import placeholderRecipe from "../../../assets/No_Preview_image_2.png";
 
 const RecipeCard = ({ recipe }) => {
   const { id, title, owner, instructions, thumb } = recipe;
@@ -47,9 +46,10 @@ const RecipeCard = ({ recipe }) => {
           to={`/recipe/${id}`}
           className="block rounded-[30px] overflow-hidden hover:opacity-90 transition-opacity"
         >
-          <img
-            src={thumb || placeholderRecipe}
+          <Image
+            src={thumb}
             alt={title}
+            type="recipe"
             className="w-full h-[230px] md:h-[275px] object-cover"
           />
         </Link>
@@ -69,9 +69,10 @@ const RecipeCard = ({ recipe }) => {
               to={`/user/${owner.id}`}
               className="flex items-center gap-2 hover:opacity-80 transition-opacity"
             >
-              <img
-                src={owner.avatar ?? placeholderUser}
+              <Image
+                src={owner.avatar}
                 alt={owner.name}
+                type="user"
                 className="size-8 md:size-10 rounded-[30px] object-cover"
               />
               <span className="font-bold text-sm md:text-base leading-6 tracking-[-0.02em] text-[#1a1a1a]">

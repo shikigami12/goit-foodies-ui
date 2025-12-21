@@ -13,6 +13,9 @@ import { EMPTY_LIST_MESSAGES } from '../../../constants/messages';
 import { userService } from '../../../services/userService';
 import { UserRelationsList } from '../UserRelationsList/UserRelationsList';
 import { Loader } from '../Loader';
+import { useModal } from '../../../hooks';
+import { Modal } from '../Modal/Modal';
+import { SignInModal, SignUpModal } from '../../modals';
 
 export default function FollowersList() {
   const location = useLocation();
@@ -22,10 +25,18 @@ export default function FollowersList() {
 
   const userProfile = useSelector(currentUserProfileSelector);
   const authUser = useSelector(state => state.auth.user);
+  const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
 
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [showSignIn, setShowSignIn] = useState(true);
+
+  const {
+    isOpen: isAuthOpen,
+    openModal: openAuthModal,
+    closeModal: closeAuthModal,
+  } = useModal();
 
   const currentRoute = location.pathname.split('/').pop() || '';
   const followersSlug = ROUTES.FOLLOWERS_LIST.replace('/', '');
@@ -109,6 +120,12 @@ export default function FollowersList() {
   ]);
 
   const handleAction = async (userId, currentIsFollowing) => {
+    // Якщо користувач не авторизований, показати модальне вікно
+    if (!isAuthenticated) {
+      openAuthModal();
+      return;
+    }
+
     try {
       setItems(prev =>
         prev.map(item =>
@@ -147,6 +164,22 @@ export default function FollowersList() {
     }
   };
 
+  const handleSwitchToSignUp = () => {
+    setShowSignIn(false);
+  };
+
+  const handleSwitchToSignIn = () => {
+    setShowSignIn(true);
+  };
+
+  const handleCloseAuth = () => {
+    closeAuthModal();
+    // Скинути на SignIn після закриття
+    setTimeout(() => {
+      setShowSignIn(true);
+    }, 300);
+  };
+
   if (loading) return <Loader />;
   if (error) return <p className="mt-10 text-center text-red-500">{error}</p>;
 
@@ -159,10 +192,26 @@ export default function FollowersList() {
   }
 
   return (
-    <UserRelationsList
-      items={items}
-      onAction={handleAction}
-      currentUserId={authUser?.id}
-    />
+    <>
+      <UserRelationsList
+        items={items}
+        onAction={handleAction}
+        currentUserId={authUser?.id}
+      />
+
+      <Modal isOpen={isAuthOpen} onClose={handleCloseAuth}>
+        {showSignIn ? (
+          <SignInModal
+            onSwitchToSignUp={handleSwitchToSignUp}
+            onClose={handleCloseAuth}
+          />
+        ) : (
+          <SignUpModal
+            onSwitchToSignIn={handleSwitchToSignIn}
+            onClose={handleCloseAuth}
+          />
+        )}
+      </Modal>
+    </>
   );
 }

@@ -24,6 +24,8 @@ export const UserPage = () => {
   const user = useSelector(currentUserProfileSelector);
   const authUser = useSelector(state => state.auth.user);
   const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
+  const isLoading = useSelector(state => state.users.isLoading);
+  const error = useSelector(state => state.users.error);
   const dispatch = useDispatch();
 
   const isCurrentUser = isAuthenticated && authUser?.id === id;
@@ -66,6 +68,29 @@ export const UserPage = () => {
     checkStatus();
   }, [dispatch, id, isCurrentUser, authUser, isLoaded]);
 
+  if (isLoading) return <Loader />;
+
+  if (error) {
+    return (
+      <main className="mx-auto w-full max-w-[1440px] px-4 md:px-8 xl:px-20 py-10">
+        <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
+          <p className="text-xl md:text-2xl font-bold text-red-500">
+            User not found
+          </p>
+          <p className="text-sm md:text-base text-gray-600">
+            The user you are looking for does not exist or has been removed.
+          </p>
+          <button
+            onClick={() => navigate('/')}
+            className="mt-4 px-6 py-2 bg-brand text-white rounded-[30px] font-bold hover:bg-brand-dark transition-colors"
+          >
+            Go to Home
+          </button>
+        </div>
+      </main>
+    );
+  }
+
   if (!isLoaded) return <Loader />;
 
   return (
@@ -81,11 +106,7 @@ export const UserPage = () => {
       <div className="xl:flex xl:flex-row xl:gap-10">
         <div className="flex flex-col gap-5 max-w-[375px] md:max-w-[394px] xl:min-w-[394px] mx-auto xl:mx-0 mb-16">
           <UserInfo isCurrentUser={isCurrentUser} />
-          {isCurrentUser ? (
-            <LogOutButton />
-          ) : (
-            isAuthenticated && <FollowButton />
-          )}
+          {isCurrentUser ? <LogOutButton /> : <FollowButton />}
         </div>
         <div className="flex-grow">
           <UserTabList isCurrentUser={isCurrentUser} />

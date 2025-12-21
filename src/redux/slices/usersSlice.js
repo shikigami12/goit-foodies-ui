@@ -5,6 +5,7 @@ const initialState = {
   currentUserProfile: null,
   isLoading: false,
   isFollowLoading: false,
+  isAvatarLoading: false,
   error: null,
 };
 
@@ -136,15 +137,18 @@ const usersSlice = createSlice({
       .addCase(getUserById.pending, handlePending)
       .addCase(getUserById.fulfilled, handleUserSuccess)
       .addCase(getUserById.rejected, handleUserFailure)
-      .addCase(updateAvatar.pending, handlePending)
+      .addCase(updateAvatar.pending, state => {
+        state.isAvatarLoading = true;
+      })
       .addCase(updateAvatar.fulfilled, (state, { payload }) => {
-        state.isLoading = false;
+        state.isAvatarLoading = false;
         if (state.currentUserProfile) {
           state.currentUserProfile.avatar = payload.avatar;
         }
-        state.error = null;
       })
-      .addCase(updateAvatar.rejected, handleUserFailure)
+      .addCase(updateAvatar.rejected, state => {
+        state.isAvatarLoading = false;
+      })
       .addCase(followUser.pending, state => {
         state.isFollowLoading = true;
       })

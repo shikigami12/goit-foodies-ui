@@ -9,6 +9,10 @@ import {
   decrementFollowersCount,
 } from '../../../redux/slices/usersSlice';
 import { useParams } from 'react-router-dom';
+import { useModal } from '../../../hooks';
+import { Modal } from '../Modal/Modal';
+import { SignInModal, SignUpModal } from '../../modals';
+import { useState } from 'react';
 
 export const FollowButton = () => {
   const { id } = useParams();
@@ -16,6 +20,15 @@ export const FollowButton = () => {
 
   const user = useSelector(currentUserProfileSelector);
   const isFollowLoading = useSelector(state => state.users.isFollowLoading);
+  const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
+
+  const [showSignIn, setShowSignIn] = useState(true);
+
+  const {
+    isOpen: isAuthOpen,
+    openModal: openAuthModal,
+    closeModal: closeAuthModal,
+  } = useModal();
 
   if (!user || user.id !== id) return null;
 
@@ -23,6 +36,12 @@ export const FollowButton = () => {
 
   const handleToggleFollow = async () => {
     if (isFollowLoading) return;
+
+    // Якщо користувач не авторизований, показати модальне вікно
+    if (!isAuthenticated) {
+      openAuthModal();
+      return;
+    }
 
     try {
       if (isFollowing) {
@@ -39,15 +58,47 @@ export const FollowButton = () => {
     }
   };
 
+  const handleSwitchToSignUp = () => {
+    setShowSignIn(false);
+  };
+
+  const handleSwitchToSignIn = () => {
+    setShowSignIn(true);
+  };
+
+  const handleCloseAuth = () => {
+    closeAuthModal();
+    // Скинути на SignIn після закриття
+    setTimeout(() => {
+      setShowSignIn(true);
+    }, 300);
+  };
+
   return (
-    <Button
-      label={isFollowing ? 'Unfollow' : 'Follow'}
-      variant={isFollowing ? 'light' : 'dark'}
-      onClick={handleToggleFollow}
-      isLoading={isFollowLoading}
-      disabled={isFollowLoading}
-      fullWidth
-      type="button"
-    />
+    <>
+      <Button
+        label={isFollowing ? 'Unfollow' : 'Follow'}
+        variant={isFollowing ? 'light' : 'dark'}
+        onClick={handleToggleFollow}
+        isLoading={isFollowLoading}
+        disabled={isFollowLoading}
+        fullWidth
+        type="button"
+      />
+
+      <Modal isOpen={isAuthOpen} onClose={handleCloseAuth}>
+        {showSignIn ? (
+          <SignInModal
+            onSwitchToSignUp={handleSwitchToSignUp}
+            onClose={handleCloseAuth}
+          />
+        ) : (
+          <SignUpModal
+            onSwitchToSignIn={handleSwitchToSignIn}
+            onClose={handleCloseAuth}
+          />
+        )}
+      </Modal>
+    </>
   );
 };
