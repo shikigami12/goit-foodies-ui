@@ -8,29 +8,40 @@ import { deleteRecipeThunk, removeFavoriteThunk } from '../../../redux/slices/re
 import { decrementFavoritesCount, decrementRecipesCount } from '../../../redux/slices/usersSlice';
 import GoToButton from '../GoToButton';
 
+import { useState } from 'react';
+import { showWarning } from '../../../utils/notification';
+
 const DeleteButton = ({ id, type, iconSize }) => {
   const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleDelete = () => {
-    if (type === 'own') {
-      dispatch(deleteRecipeThunk(id));
-      dispatch(decrementRecipesCount());
-    } else {
-      dispatch(removeFavoriteThunk(id));
-      dispatch(decrementFavoritesCount());
+  const handleDelete = async () => {
+    setIsLoading(true);
+    try {
+      if (type === 'own') {
+        await dispatch(deleteRecipeThunk(id)).unwrap();
+        dispatch(decrementRecipesCount());
+      } else {
+        await dispatch(removeFavoriteThunk(id)).unwrap();
+        dispatch(decrementFavoritesCount());
+      }
+    } catch (error) {
+      showWarning(error || 'Failed to delete recipe');
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <RoundButton onClick={handleDelete}>
+    <RoundButton onClick={handleDelete} isLoading={isLoading}>
       <Icon name="trash" size={iconSize} />
     </RoundButton>
   );
 };
 
-export default function RecipePreviewItem({ recipe, type, isCurrentUser }) {
-  const windowWidth = useWindowWidth();
-  const iconSize = windowWidth < 768 ? 16 : 18;
+export default function RecipePreview({ recipe, type, isCurrentUser }) {
+  const { isMobile } = useWindowWidth();
+  const iconSize = isMobile ? 16 : 18;
 
   // Replace newlines with spaces for proper line-clamp behavior
   const cleanInstructions = recipe.instructions.replace(/\r\n|\r|\n/g, ' ');

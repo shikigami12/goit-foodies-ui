@@ -1,10 +1,20 @@
-import { useLocation, useParams, useSearchParams, useOutletContext, Navigate } from 'react-router-dom';
+import {
+  useLocation,
+  useParams,
+  useSearchParams,
+  useOutletContext,
+  Navigate,
+} from 'react-router-dom';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import RecipePreviewItem from '../RecipePreviewItem/RecipePreviewItem';
+import RecipePreviewItem from '../RecipePreview/RecipePreview';
 import { EMPTY_LIST_MESSAGES } from '../../../constants/messages';
 import { ROUTES } from '../../../constants';
-import { fetchFavoriteRecipes, fetchOwnRecipes, fetchRecipesByUserId } from '../../../redux/slices/recipesSlice';
+import {
+  fetchFavoriteRecipes,
+  fetchOwnRecipes,
+  fetchUserRecipes,
+} from '../../../redux/slices/recipesSlice';
 import { RecipePagination } from '../../layout/Recipes/RecipePagination';
 import RecipePreviewItemSkeleton from '../Skeleton/RecipePreviewItemSkeleton';
 
@@ -15,7 +25,9 @@ export default function RecipeList() {
   const { isCurrentUser } = useOutletContext();
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const { recipes, pagination, isLoading } = useSelector(state => state.recipes);
+  const { recipes, pagination, isLoading } = useSelector(
+    state => state.recipes
+  );
   const { currentPage, totalPages, limit } = pagination;
 
   const page = Number(searchParams.get('page')) || 1;
@@ -38,13 +50,13 @@ export default function RecipeList() {
       }
     } else {
       // Fetching recipes for another user profile
-      if (currentRoute.includes(ROUTES.RECIPES_MY) && id) {
-        dispatch(fetchRecipesByUserId({ userId: id, ...params }));
+      if (currentRoute.includes(ROUTES.RECIPES_MY)) {
+        dispatch(fetchUserRecipes({ userId: id, params }));
       }
     }
   }, [dispatch, currentRoute, page, limit, isCurrentUser, id, isFavoritesTab]);
 
-  const handlePageChange = (newPage) => {
+  const handlePageChange = newPage => {
     setSearchParams({ page: newPage });
   };
 
@@ -76,7 +88,9 @@ export default function RecipeList() {
           <li key={recipe._id || recipe.id}>
             <RecipePreviewItem
               recipe={recipe}
-              type={currentRoute.includes(ROUTES.RECIPES_MY) ? 'own' : 'favorite'}
+              type={
+                currentRoute.includes(ROUTES.RECIPES_MY) ? 'own' : 'favorite'
+              }
               isCurrentUser={isCurrentUser}
             />
           </li>

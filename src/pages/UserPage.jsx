@@ -8,6 +8,7 @@ import { Icon } from '../components/common/Icon/Icon';
 import { useEffect } from 'react';
 import { userService } from '../services/userService';
 import { useDispatch, useSelector } from 'react-redux';
+import { PathInfo } from '../components/common/PathInfo/PathInfo';
 import {
   currentUserProfileSelector,
   getCurrentUser,
@@ -16,7 +17,6 @@ import {
 } from '../redux/slices/usersSlice';
 import { FollowButton } from '../components/common/FollowButton/FollowButton';
 import { Loader } from '../components/common/Loader';
-import { Breadcrumbs } from '../components/common/Breadcrumbs';
 
 export const UserPage = () => {
   const navigate = useNavigate();
@@ -71,7 +71,7 @@ export const UserPage = () => {
   return (
     <main className="mx-auto w-full max-w-[1440px] px-4 md:px-8 xl:px-20 py-10">
       <div className="flex flex-col gap-4 mb-8">
-        <Breadcrumbs currentPage="Profile" />
+        <PathInfo currentPage="Profile" />
         <MainTitle>Profile</MainTitle>
         <Subtitle>
           Reveal your culinary art, share your favorite recipe and create
