@@ -53,16 +53,12 @@ export default function UserAvatarInput() {
     }
   }, [selectedFile, dispatch]);
 
-  // Clear preview when user avatar updates from server
   useEffect(() => {
-    if (user?.avatar) {
-      setPreviewUrl(null);
-      setSelectedFile(null);
-    }
-  }, [user?.avatar]);
+    setPreviewImage(user.avatar || withoutAvatar);
+  }, [user.avatar]);
 
   const handleAddButton = () => {
-    if (isUploading) return;
+    if (isLoading) return;
     inputRef.current.click();
   };
 
