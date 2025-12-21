@@ -125,18 +125,26 @@
   .desktop-tablet-h4 {
     @apply text-xl leading-6 font-sans font-extrabold tracking-tight;
   }
-}
 
-html {
-  font-family: var(--font-sans);
-  /* Always show scrollbar to prevent layout shifts */
-  overflow-y: scroll;
-}
+  .desktop-h1 {
+    @apply text-[90px] leading-[90px] font-extrabold tracking-[-2px];
+  }
 
-body {
-  /* Scrollbar width will be set via JavaScript to prevent jumps */
-  margin: 0;
-  padding: 0;
+  .desktop-h2 {
+    @apply text-[40px] leading-[44px] font-extrabold tracking-[-2px];
+  }
+
+  .tablet-h1 {
+    @apply text-[70px] leading-[70px] font-extrabold tracking-[-2px];
+  }
+
+  .mobile-h1 {
+    @apply text-[40px] leading-[40px] font-extrabold tracking-[-2px];
+  }
+
+  .mobile-main {
+    @apply text-[14px] leading-[20px] font-medium tracking-[-2px];
+  }
 }
 
 /* Customize scrollbar appearance */

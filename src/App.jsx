@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-route
 import { useSelector } from 'react-redux';
 import { useMemo } from 'react';
 import { SharedLayout } from './components/layout/SharedLayout';
-import { HomePage, RecipePage, AddRecipePage, UserPage } from './pages';
+import { HomePage, RecipePage, AddRecipePage, UserPage, NotFoundPage } from './pages';
 import { PrivateRoute } from './routes';
 import { ROUTES } from './constants';
 import RecipeList from './components/common/RecipeList';
@@ -21,7 +21,7 @@ const ProfileRoutes = () => (
 function App() {
   const { isAuthenticated } = useSelector(state => state.auth);
   const location = useLocation();
-  
+
   // Unique key based on current profile ID and auth status to force remount
   const userPageKey = useMemo(() => {
     const parts = location.pathname.split('/');
@@ -45,12 +45,13 @@ function App() {
         />
 
         {/* Unified User Profile Route */}
-        <Route 
-          path="/user/:id?" 
+        <Route
+          path="/user/:id?"
           element={<UserPage key={userPageKey} />}
         >
           {ProfileRoutes()}
         </Route>
+        <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>
   );
