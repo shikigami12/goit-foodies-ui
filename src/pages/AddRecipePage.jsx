@@ -123,13 +123,21 @@ export const AddRecipePage = () => {
             <div className="flex flex-col gap-10">
               {/* Title Input */}
               <div>
-                <h2 className="font-extrabold text-xl md:text-2xl leading-7 tracking-[-0.02em] uppercase text-[#bfbebe] mb-10">
-                  The name of the recipe
-                </h2>
-                <TextInput
+                <input
+                  type="text"
                   id="title"
                   name="title"
                   value={form.title}
+                  onChange={onFieldChange}
+                  placeholder="The name of the recipe"
+                  maxLength={200}
+                  disabled={isSubmitting}
+                  className="w-full font-extrabold text-xl md:text-2xl leading-7 tracking-[-0.02em] uppercase text-[#050505] placeholder:text-[#bfbebe] bg-transparent border-none outline-none mb-10"
+                />
+                <TextInput
+                  id="description"
+                  name="description"
+                  value={form.description}
                   onChange={onFieldChange}
                   placeholder="Enter a description of the dish"
                   maxLength={200}
