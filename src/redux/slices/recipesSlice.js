@@ -87,6 +87,18 @@ export const fetchFavoriteRecipes = createAsyncThunk(
   }
 );
 
+export const fetchUserRecipes = createAsyncThunk(
+  'recipes/fetchUserRecipes',
+  async ({ userId, params = {} }, { rejectWithValue }) => {
+    try {
+      const data = await recipeService.getRecipesByUserId(userId, params);
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 export const deleteRecipeThunk = createAsyncThunk(
   'recipes/deleteRecipe',
   async (id, { rejectWithValue }) => {
@@ -136,6 +148,10 @@ const recipesSlice = createSlice({
       .addCase(fetchFavoriteRecipes.pending, handlePending)
       .addCase(fetchFavoriteRecipes.fulfilled, handleSuccess)
       .addCase(fetchFavoriteRecipes.rejected, handleReject)
+
+      .addCase(fetchUserRecipes.pending, handlePending)
+      .addCase(fetchUserRecipes.fulfilled, handleSuccess)
+      .addCase(fetchUserRecipes.rejected, handleReject)
 
       .addCase(deleteRecipeThunk.fulfilled, (state, action) => {
         state.recipes = state.recipes.filter(

@@ -5,8 +5,8 @@ export const ROUTES = {
   CATEGORY: '/category/:category',
   USER: '/user',
   USER_PROFILE: '/user/:id',
-  RECIPES_MY: 'my_recipes',
-  RECIPES_FAVORITES: 'my_favorites',
+  RECIPES_MY: 'recipes',
+  RECIPES_FAVORITES: 'favorites',
   FOLLOWERS_LIST: 'followers',
   FOLLOWING_LIST: 'following',
 };
