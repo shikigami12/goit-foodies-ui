@@ -78,16 +78,16 @@ export const BurgerMenu = ({ isDarkTheme = true }) => {
                     <div className="flex items-center gap-8 pointer-events-none justify-center mt-[50px]">
                         <div className="w-[77px] h-[70px] rotate-[11deg] rounded-[15px] overflow-hidden shrink-0 mt-[100px]">
                             <img
-                                src="/src/assets/smallCard_zylboe_c_scale,w_190.png"
-                                srcSet="/src/assets/smallCard_zylboe_c_scale,w_190.png 1x, /src/assets/smallCard_zylboe_c_scale,w_911.png 2x"
+                                src="/src/assets/smallCard_zylboe_c_scale,w_190.webp"
+                                srcSet="/src/assets/smallCard_zylboe_c_scale,w_190.webp 1x, /src/assets/smallCard_zylboe_c_scale,w_911.webp 2x"
                                 alt=""
                                 className="w-full h-full object-cover"
                             />
                         </div>
                         <div className="w-[190px] h-[172px] -rotate-12 rounded-[30px] overflow-hidden shrink-0">
                             <img
-                                src="/src/assets/bigCard_e92lgl_c_scale,w_405.png"
-                                srcSet="/src/assets/bigCard_e92lgl_c_scale,w_405.png 1x, /src/assets/bigCard_e92lgl_c_scale,w_559.png 1.5x, /src/assets/bigCard_e92lgl_c_scale,w_683.png 2x"
+                                src="/src/assets/bigCard_e92lgl_c_scale,w_405.webp"
+                                srcSet="/src/assets/bigCard_e92lgl_c_scale,w_405.webp 1x, /src/assets/bigCard_e92lgl_c_scale,w_559.webp 1.5x, /src/assets/bigCard_e92lgl_c_scale,w_683.webp 2x"
                                 alt=""
                                 className="w-full h-full object-cover"
                             />

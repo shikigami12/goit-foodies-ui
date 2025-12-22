@@ -5,14 +5,14 @@ import { useNavigate } from "react-router-dom";
 import css from "./Hero.module.css";
 
 // BigCard images: Mobile 190px, Tablet 280px, Desktop 302px (x2 for retina)
-import bigCardMobile from "../../assets/bigCard_e92lgl_c_scale,w_405.png";
-import bigCardTablet from "../../assets/bigCard_e92lgl_c_scale,w_559.png";
-import bigCardDesktop from "../../assets/bigCard_e92lgl_c_scale,w_683.png";
+import bigCardMobile from "../../assets/bigCard_e92lgl_c_scale,w_405.webp";
+import bigCardTablet from "../../assets/bigCard_e92lgl_c_scale,w_559.webp";
+import bigCardDesktop from "../../assets/bigCard_e92lgl_c_scale,w_683.webp";
 
 // SmallCard images: Mobile 77px, Tablet 120px, Desktop 128px (x2 for retina)
-import smallCardMobile from "../../assets/smallCard_zylboe_c_scale,w_190.png";
-import smallCardTablet from "../../assets/smallCard_zylboe_c_scale,w_911.png";
-import smallCardDesktop from "../../assets/smallCard_zylboe_c_scale,w_911.png";
+import smallCardMobile from "../../assets/smallCard_zylboe_c_scale,w_190.webp";
+import smallCardTablet from "../../assets/smallCard_zylboe_c_scale,w_911.webp";
+import smallCardDesktop from "../../assets/smallCard_zylboe_c_scale,w_911.webp";
 
 import { Modal } from "../common/Modal/Modal";
 import { Logo } from "../common/Logo/Logo";
@@ -130,7 +130,7 @@ export const Hero = () => {
               src={smallCardDesktop}
               alt="Dessert"
               className={css.smallCard}
-              loading="lazy"
+              fetchPriority="high"
               width={128}
               height={116}
             />
@@ -142,7 +142,7 @@ export const Hero = () => {
               src={bigCardDesktop}
               alt="Beef"
               className={css.bigCard}
-              loading="lazy"
+              fetchPriority="high"
               width={302}
               height={273}
             />

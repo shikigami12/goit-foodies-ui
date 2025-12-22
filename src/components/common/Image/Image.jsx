@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import placeholderUser from '../../../images/user_without_avatar.jpg';
-import placeholderRecipe from '../../../assets/No_Preview_image_2.png';
+import placeholderRecipe from '../../../assets/No_Preview_image_2.webp';
 
 export const Image = ({
   src,
