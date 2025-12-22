@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ROUTES } from '../../../constants';
 import PropTypes from 'prop-types';
-import { BurgerMenu } from '../BurgerMenu/index.js';
 import Icon from '../../common/Icon';
 import styles from './UserBar.module.css';
 
@@ -50,7 +49,6 @@ export const UserBar = ({ isDarkTheme = true, user, onLogoutClick }) => {
           </div>
         </button>
 
-        <BurgerMenu isDarkTheme={isDarkTheme} />
       </div>
 
       {isOpen && (

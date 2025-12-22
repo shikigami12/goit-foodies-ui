@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useState, lazy, Suspense } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import css from "./Hero.module.css";
@@ -15,17 +15,19 @@ import smallCardTablet from "../../assets/smallCard_zylboe_c_scale,w_911.png";
 import smallCardDesktop from "../../assets/smallCard_zylboe_c_scale,w_911.png";
 
 import { Modal } from "../common/Modal/Modal";
-import { SignInModal } from "../modals/SignInModal";
-import { SignUpModal } from "../modals/SignUpModal";
 import { Logo } from "../common/Logo/Logo";
 import { Nav } from "../layout/Nav/Nav";
 import { AuthBar } from "../layout/AuthBar/AuthBar";
 import { UserBar } from "../layout/UserBar/UserBar";
+import { BurgerMenu } from "../layout/BurgerMenu/BurgerMenu";
 import { useModal } from "../../hooks";
 import { logout } from "../../redux/slices/authSlice";
 import { clearFavorites } from "../../redux/slices/favoritesSlice";
-import { useDispatch } from "react-redux";
-import { LogOutModal } from "../modals";
+
+// Lazy load modals - not needed on initial render
+const SignInModal = lazy(() => import("../modals/SignInModal").then(m => ({ default: m.SignInModal })));
+const SignUpModal = lazy(() => import("../modals/SignUpModal").then(m => ({ default: m.SignUpModal })));
+const LogOutModal = lazy(() => import("../modals/LogOutModal").then(m => ({ default: m.LogOutModal })));
 
 export const Hero = () => {
   const dispatch = useDispatch();
@@ -89,7 +91,7 @@ export const Hero = () => {
         <header className={css.header}>
           <Logo isDarkTheme={true} />
           <Nav isDarkTheme={true} />
-          <div className="relative">
+          <div className="flex items-center gap-4 relative">
             {isAuthenticated ? (
               <UserBar
                 isDarkTheme={true}
@@ -102,6 +104,7 @@ export const Hero = () => {
                 onSignUpClick={handleOpenSignUp}
               />
             )}
+            <BurgerMenu isDarkTheme={true} />
           </div>
         </header>
 
@@ -148,21 +151,25 @@ export const Hero = () => {
       </div>
 
       <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
-        {modalType === "signin" ? (
-          <SignInModal
-            onClose={handleCloseModal}
-            onSwitchToSignUp={handleSwitchToSignUp}
-          />
-        ) : (
-          <SignUpModal
-            onClose={handleCloseModal}
-            onSwitchToSignIn={handleSwitchToSignIn}
-          />
-        )}
+        <Suspense fallback={null}>
+          {modalType === "signin" ? (
+            <SignInModal
+              onClose={handleCloseModal}
+              onSwitchToSignUp={handleSwitchToSignUp}
+            />
+          ) : (
+            <SignUpModal
+              onClose={handleCloseModal}
+              onSwitchToSignIn={handleSwitchToSignIn}
+            />
+          )}
+        </Suspense>
       </Modal>
 
       <Modal isOpen={isLogoutOpen} onClose={closeLogoutModal}>
-        <LogOutModal onCancel={closeLogoutModal} onLogOut={handleLogout} />
+        <Suspense fallback={null}>
+          <LogOutModal onCancel={closeLogoutModal} onLogOut={handleLogout} />
+        </Suspense>
       </Modal>
     </section>
   );

@@ -108,6 +108,11 @@ const usersSlice = createSlice({
         state.currentUserProfile.favoritesCount -= 1;
       }
     },
+    incrementFavoritesCount: state => {
+      if (state.currentUserProfile) {
+        state.currentUserProfile.favoritesCount += 1;
+      }
+    },
     incrementFollowingCount: state => {
       if (state.currentUserProfile) {
         state.currentUserProfile.followingCount += 1;
@@ -126,6 +131,12 @@ const usersSlice = createSlice({
     decrementFollowersCount: state => {
       if (state.currentUserProfile) {
         state.currentUserProfile.followersCount -= 1;
+      }
+    },
+    incrementRecipesCount: state => {
+      if (state.currentUserProfile) {
+        state.currentUserProfile.recipesCount =
+          (state.currentUserProfile.recipesCount || 0) + 1;
       }
     },
   },
@@ -183,6 +194,8 @@ export const {
   incrementFollowersCount,
   decrementFollowersCount,
   setIsFollowing,
+  incrementRecipesCount,
+  incrementFavoritesCount,
 } = usersSlice.actions;
 
 export default usersSlice.reducer;
