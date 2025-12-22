@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import { recipeService } from "../services/recipeService";
 import { addToFavorites, removeFromFavorites } from "../redux/slices/favoritesSlice";
 import { selectFavoriteRecipes } from "../redux/selectors/selectors";
+import { incrementFavoritesCount, decrementFavoritesCount } from "../redux/slices/usersSlice";
 
 export const useToggleFavorite = (recipeId) => {
   const dispatch = useDispatch();
@@ -26,11 +27,13 @@ export const useToggleFavorite = (recipeId) => {
       if (isFavorite) {
         await recipeService.removeFavorite(recipeId);
         dispatch(removeFromFavorites(recipeId));
+        dispatch(decrementFavoritesCount());
         setIsFavorite(false);
         toast.success("Recipe removed from favorites!");
       } else {
         await recipeService.addFavorite(recipeId);
         dispatch(addToFavorites(recipeId));
+        dispatch(incrementFavoritesCount());
         setIsFavorite(true);
         toast.success("Recipe added to favorites!");
       }
@@ -39,6 +42,7 @@ export const useToggleFavorite = (recipeId) => {
       if (error?.response?.status === 409) {
         toast("Recipe is already in your favorites!");
         dispatch(addToFavorites(recipeId));
+        dispatch(incrementFavoritesCount());
         setIsFavorite(true);
       } else {
         toast.error("Failed to update favorites");

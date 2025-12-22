@@ -119,19 +119,21 @@
 
 .images {
   position: absolute;
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  align-self: center;
+  gap: 40px;
   bottom: 80px;
   left: 50%;
   transform: translateX(-50%);
-
-  width: 500px;
-  height: 330px;
 }
 
 .bigCard,
 .smallCard {
-  position: absolute;
-  display: block;
-
   object-fit: cover;
   overflow: hidden;
 
@@ -150,9 +152,6 @@
   height: 273px;
   border-radius: 30px;
 
-  right: 0;
-  top: 0;
-
   transform: rotate(-12deg);
   transform-origin: center;
 
@@ -163,13 +162,10 @@
 
 .smallCard {
   z-index: 3;
-
+  margin-top: 150px;
   width: 128px;
   height: 116px;
   border-radius: 15px;
-
-  left: 0;
-  bottom: 0;
 
   transform: rotate(11deg);
   transform-origin: center;
@@ -296,8 +292,7 @@
     height: 70px;
     border-radius: 10px;
 
-    left: 0;
-    bottom: 0;
+    margin-top: 100px;
     transform: rotate(11deg);
   }
 }

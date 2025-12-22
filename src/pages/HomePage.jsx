@@ -1,8 +1,10 @@
 import { Categories } from "../components/layout/Categories";
 import { Hero } from "../components/Hero/Hero";
-import Testemonials from "../components/layout/Testemonials/Testemonials";
-import { useEffect, useState, useCallback } from "react";
+import { lazy, Suspense, useEffect, useState, useCallback, useRef } from "react";
 import { Recipes } from "../components/layout/Recipes";
+
+// Lazy load Testimonials since it's below the fold and uses heavy Swiper library
+const Testemonials = lazy(() => import("../components/layout/Testemonials/Testemonials"));
 import { fetchCategories } from "../redux/slices/categoriesSlice";
 import { fetchAreas } from "../redux/slices/areasSlice";
 import { fetchIngredients } from "../redux/slices/ingredientsSlice";
@@ -11,8 +13,10 @@ import { recipeService } from "../services";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { ROUTES } from "../constants";
 import { Modal } from "../components/common/Modal/Modal";
-import { SignInModal } from "../components/modals/SignInModal";
-import { SignUpModal } from "../components/modals/SignUpModal";
+
+// Lazy load modals - not needed on initial render
+const SignInModal = lazy(() => import("../components/modals/SignInModal").then(m => ({ default: m.SignInModal })));
+const SignUpModal = lazy(() => import("../components/modals/SignUpModal").then(m => ({ default: m.SignUpModal })));
 
 const defaultMeta = {
   title: 'Categories',
@@ -39,6 +43,7 @@ export const HomePage = () => {
 
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [authModalType, setAuthModalType] = useState('signin');
+  const recipesRef = useRef(null);
 
   useEffect(() => {
     if (location.state?.authRequired) {
@@ -121,6 +126,14 @@ export const HomePage = () => {
     } else {
       navigate(ROUTES.CATEGORY.replace(':category', category.name.toLowerCase()));
     }
+
+    // Scroll to recipes section after React finishes rendering
+    requestAnimationFrame(() => {
+      if (recipesRef.current) {
+        const top = recipesRef.current.getBoundingClientRect().top + window.scrollY - 20;
+        window.scrollTo({ top, behavior: 'smooth' });
+      }
+    });
   };
 
   const handlePageChange = useCallback((page) => {
@@ -133,6 +146,14 @@ export const HomePage = () => {
           fetchRecipes(category, page, currentFilters);
         }
       }
+
+      // Scroll to category name after page change
+      requestAnimationFrame(() => {
+        if (recipesRef.current) {
+          const top = recipesRef.current.getBoundingClientRect().top + window.scrollY - 20;
+          window.scrollTo({ top, behavior: 'smooth' });
+        }
+      });
     }
   }, [currentCategory, categoryName, categories, currentFilters, fetchRecipes]);
 
@@ -158,7 +179,7 @@ export const HomePage = () => {
     <div className="flex flex-col gap-16 tablet:gap-[100px] desktop:gap-[120px]">
       <Hero />
 
-      <div className="w-full max-w-[1280px] mx-auto px-4 sm:px-6">
+      <div ref={recipesRef} className="w-full max-w-[1280px] mx-auto px-4 sm:px-6">
         {categoryName ? (
           <Recipes
             meta={meta}
@@ -181,21 +202,25 @@ export const HomePage = () => {
       </div>
 
       <div className="w-full max-w-[1280px] mx-auto px-4 sm:px-6">
-        <Testemonials />
+        <Suspense fallback={<div className="h-[300px]" />}>
+          <Testemonials />
+        </Suspense>
       </div>
 
       <Modal isOpen={isAuthModalOpen} onClose={handleCloseAuthModal}>
-        {authModalType === 'signin' ? (
-          <SignInModal
-            onClose={handleCloseAuthModal}
-            onSwitchToSignUp={handleSwitchToSignUp}
-          />
-        ) : (
-          <SignUpModal
-            onClose={handleCloseAuthModal}
-            onSwitchToSignIn={handleSwitchToSignIn}
-          />
-        )}
+        <Suspense fallback={null}>
+          {authModalType === 'signin' ? (
+            <SignInModal
+              onClose={handleCloseAuthModal}
+              onSwitchToSignUp={handleSwitchToSignUp}
+            />
+          ) : (
+            <SignUpModal
+              onClose={handleCloseAuthModal}
+              onSwitchToSignIn={handleSwitchToSignIn}
+            />
+          )}
+        </Suspense>
       </Modal>
     </div>
   );

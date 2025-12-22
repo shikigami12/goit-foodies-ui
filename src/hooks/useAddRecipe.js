@@ -1,11 +1,14 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { referenceService } from "../services/referenceService";
-import { recipeService } from "../services/recipeService";
+import { useRef, useState, useEffect, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { referenceService } from '../services/referenceService';
+import { recipeService } from '../services/recipeService';
+import { incrementRecipesCount } from '../redux/slices/usersSlice';
 
 export const useAddRecipe = () => {
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [isDragging, setIsDragging] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -241,6 +244,7 @@ export const useAddRecipe = () => {
       }
 
       clearAll();
+      dispatch(incrementRecipesCount());
       navigate(`/recipe/${createdId}`, { replace: true });
     } catch (error) {
       const msg =

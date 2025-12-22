@@ -4,6 +4,31 @@
  */
 
 /**
+ * ViewBox mapping for each icon based on their native dimensions in sprite.svg
+ * This ensures icons scale correctly at any size
+ */
+const ICON_VIEWBOX = {
+  facebook: '0 0 20 20',
+  youtube: '0 0 20 20',
+  instagram: '0 0 20 20',
+  'logo-footer': '0 0 83 28',
+  quote: '0 0 32 32',
+  burger: '0 0 28 28',
+  'arrow-up-right': '0 0 18 18',
+  'chevron-up': '0 0 32 32',
+  'chevron-down': '0 0 18 18',
+  'eye-off': '0 0 20 20',
+  eye: '0 0 20 20',
+  'upload-photo': '0 0 32 32',
+  heart: '0 0 18 18',
+  minus: '0 0 32 32',
+  plus: '0 0 32 32',
+  trash: '0 0 32 32',
+  check: '0 0 32 32',
+  x: '0 0 28 28',
+};
+
+/**
  * Renders an SVG icon using an external sprite sheet.
  *
  * @component
@@ -32,6 +57,7 @@ export const Icon = ({ name, color, size = 20, className = '', stroke }) => {
       aria-hidden="true"
       width={size}
       height={size}
+      viewBox={ICON_VIEWBOX[name]}
       fill={isStrokeIcon ? 'none' : fillColor}
       stroke={isStrokeIcon ? strokeColor : undefined}
       strokeWidth={isStrokeIcon ? '1.8' : undefined}

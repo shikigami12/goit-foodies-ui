@@ -1,5 +1,5 @@
 import styles from "./IconButton.module.css";
-import cx from "classnames";
+import clsx from "clsx";
 
 import { Icon } from "../Icon/Icon.jsx";
 
@@ -16,7 +16,7 @@ const IconButton = ({
     return (
         <button
             type={type}
-            className={cx(styles.button, style)}
+            className={clsx(styles.button, style)}
             onClick={onClick}
             disabled={disabled}
         >

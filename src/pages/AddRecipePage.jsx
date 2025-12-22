@@ -170,7 +170,7 @@ export const AddRecipePage = () => {
                       <Icon name="minus" size={24} stroke="#050505" />
                     </button>
 
-                    <span className="font-medium text-base leading-6 tracking-[-0.02em] text-[#bfbebe] min-w-[60px] text-center">
+                    <span className="font-medium text-base leading-6 tracking-[-0.02em] min-w-[60px] text-center">
                       {form.cookingTimeMin} min
                     </span>
 
@@ -250,19 +250,19 @@ export const AddRecipePage = () => {
                 {ingredients.map((ing, idx) => (
                   <div
                     key={`${ing.ingredientId}-${idx}`}
-                    className="relative flex items-center gap-3 rounded-[30px] border border-[#bfbebe] bg-white px-4 py-3"
+                    className="relative flex items-center gap-3 rounded-[30px] bg-white px-4 py-3"
                   >
                     <button
                       type="button"
                       onClick={() => removeIngredientAt(idx)}
                       disabled={isSubmitting}
-                      className="absolute -right-2 -top-2 flex size-7 items-center justify-center rounded-full border border-[#bfbebe] bg-white text-[#1a1a1a] hover:bg-[#f5f5f5] disabled:opacity-60 cursor-pointer"
+                      className="absolute right-0 top-0 flex size-7 items-center justify-center rounded-full bg-white hover:bg-[#f5f5f5] disabled:opacity-60 cursor-pointer"
                       aria-label="Remove ingredient"
                     >
                       <Icon name="x" size={14} />
                     </button>
 
-                    <div className="flex size-14 items-center justify-center overflow-hidden rounded-[15px] bg-[#f5f5f5]">
+                    <div className="flex size-[90px] items-center justify-center overflow-hidden rounded-[15px] border border-[#bfbebe]" >
                       {ing.img ? (
                         <img src={ing.img} alt={ing.label} className="h-full w-full object-cover" />
                       ) : (
@@ -270,7 +270,7 @@ export const AddRecipePage = () => {
                       )}
                     </div>
 
-                    <div className="min-w-[90px]">
+                    <div className="min-w-[75px]">
                       <div className="font-medium text-sm text-[#050505]">{ing.label}</div>
                       <div className="text-xs text-[#bfbebe]">{ing.measure}</div>
                     </div>
